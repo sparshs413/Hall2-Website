@@ -97,52 +97,24 @@ class AskTheHab extends Component {
                 onChange={this.onChange}
                 placeholder="Ex - President"
               /> */}
-              <div>
-                <div className="row">
-                  <div className="col-md-6 offset-md-3">
-                    <div className="form-row">
-                      <div className="form-group col-md-6">
-                        <select
-                          className="form-control"
-                          name="post"
-                          onChange={this.handleInputChange}
-                        >
-                          <option selected>Choose the HEC Member to Ask</option>
-                          <option value="President">President</option>
-                          <option value="Mess Secretary">Mess Secretary</option>
-                          <option value="Cultural Secretary">
-                            Cultural Secretary
-                          </option>
-                          <option value="Sports Secretary">
-                            Sports Secretary
-                          </option>
-                          <option value="Finance Secretary">
-                            Finance Secretary
-                          </option>
-                          <option value="Common Room Secretary">
-                            Mess Secretary
-                          </option>
-                          <option value="Cultural Secretary">
-                            Common Room Secretary
-                          </option>
-                          <option value="Web Secretary">Web Secretary</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* <div className="form-row">
-                      <div className="col-md-12 text-center">
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                          onClick={() => this.submit()}
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </div> */}
-                  </div>
-                </div>
+              <div className="form-group">
+                <select
+                  className="form-control"
+                  name="post"
+                  onChange={this.handleInputChange}
+                >
+                  <option selected>Choose the HEC Member to Ask</option>
+                  <option value="President">President</option>
+                  <option value="Mess Secretary">Mess Secretary</option>
+                  <option value="Cultural Secretary">Cultural Secretary</option>
+                  <option value="Sports Secretary">Sports Secretary</option>
+                  <option value="Finance Secretary">Finance Secretary</option>
+                  <option value="Common Room Secretary">Mess Secretary</option>
+                  <option value="Cultural Secretary">
+                    Common Room Secretary
+                  </option>
+                  <option value="Web Secretary">Web Secretary</option>
+                </select>
               </div>
             </div>
 
