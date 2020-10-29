@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/Hall2-Website/static/css/main.b80c7652.chunk.css",
+    "main.js": "/Hall2-Website/static/js/main.dc622bf9.chunk.js",
+    "main.js.map": "/Hall2-Website/static/js/main.dc622bf9.chunk.js.map",
+    "runtime-main.js": "/Hall2-Website/static/js/runtime-main.ee76e945.js",
+    "runtime-main.js.map": "/Hall2-Website/static/js/runtime-main.ee76e945.js.map",
+    "static/css/2.bc4213de.chunk.css": "/Hall2-Website/static/css/2.bc4213de.chunk.css",
+    "static/js/2.b7c97c3f.chunk.js": "/Hall2-Website/static/js/2.b7c97c3f.chunk.js",
+    "static/js/2.b7c97c3f.chunk.js.map": "/Hall2-Website/static/js/2.b7c97c3f.chunk.js.map",
+    "index.html": "/Hall2-Website/index.html",
+    "precache-manifest.e262897b70db291d9a7fb9f2d6371a85.js": "/Hall2-Website/precache-manifest.e262897b70db291d9a7fb9f2d6371a85.js",
+    "service-worker.js": "/Hall2-Website/service-worker.js",
+    "static/css/2.bc4213de.chunk.css.map": "/Hall2-Website/static/css/2.bc4213de.chunk.css.map",
+    "static/css/main.b80c7652.chunk.css.map": "/Hall2-Website/static/css/main.b80c7652.chunk.css.map",
+    "static/js/2.b7c97c3f.chunk.js.LICENSE.txt": "/Hall2-Website/static/js/2.b7c97c3f.chunk.js.LICENSE.txt",
+    "static/media/mdb.css": "/Hall2-Website/static/media/arrow_right.8ef6a08c.svg",
+    "static/media/all.min.css": "/Hall2-Website/static/media/fa-solid-900.8e1ed89b.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ee76e945.js",
+    "static/css/2.bc4213de.chunk.css",
+    "static/js/2.b7c97c3f.chunk.js",
+    "static/css/main.b80c7652.chunk.css",
+    "static/js/main.dc622bf9.chunk.js"
+  ]
+}
