@@ -1,0 +1,9 @@
+.light {
+    color: rgb(107, 103, 103);
+    font-size: 0.9em;
+}
+
+.top-buttons {
+    border: solid ;
+    border-width: 0 2px;
+}

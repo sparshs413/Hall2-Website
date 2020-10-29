@@ -1,0 +1,40 @@
+.cards {
+    font: 1.1em arial, sans-serif;
+    width: 100%;
+}
+
+.card-body hr{
+    border-bottom: 2px solid rgb(223, 217, 217);
+}
+
+.info {
+    font:bold 1.1em Arial, sans-serif;
+    color: rgb(15, 15, 15);
+}
+
+.card-body img {
+    float: right;
+    position: relative;
+    top: 0;
+    height: 130px;
+}
+
+.contact {
+    font: 1.1em arial;
+    color: rgb(18, 84, 128);
+}
+
+.top-buttons {
+    border: solid ;
+    border-width: 0 2px;
+}
+
+.activated {
+    background-color: #ffffff;
+    font-size: 1.1em;
+    padding: auto 0px !important;
+    color: rgb(18, 77, 153);
+    font-weight: bold;
+    padding: auto 0;
+    box-shadow: 0;
+}
