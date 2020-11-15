@@ -43,3 +43,4 @@ export const getFoundItems = () => (dispatch, getState) => {
         })
         .catch(err => console.log(err));
 };
+

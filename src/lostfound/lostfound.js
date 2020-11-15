@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { useState } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { addlostfound } from "../actions/lostfound";
@@ -8,6 +7,7 @@ import "./lostfound.css";
 import { Button } from "react-bootstrap";
 import history from "./../history";
 import firebase from "../Firebase";
+
 export class Form extends Component {
   componentDidMount() {
     $(".custom-file-input").on("change", function () {
@@ -32,6 +32,7 @@ export class Form extends Component {
       message: "",
       name: "",
       phone: "",
+      email: "",
     };
   }
 
@@ -122,6 +123,7 @@ export class Form extends Component {
       name,
       url,
       phone,
+      email,
     } = this.state;
     const lostfound = {
       option,
@@ -133,6 +135,7 @@ export class Form extends Component {
       name,
       url,
       phone,
+      email,
     };
 
     console.log(lostfound.option);
@@ -146,15 +149,9 @@ export class Form extends Component {
       where: lostfound.place,
       when: lostfound.time,
       url: this.state.url,
+      email: this.state.email,
+      timestamp:firebase.firestore.FieldValue.serverTimestamp()
     });
-    // db.collection("users")
-    //   .get()
-    //   .then(function (querySnapshot) {
-    //     querySnapshot.forEach(function (doc) {
-    //       // doc.data() is never undefined for query doc snapshots
-    //       console.log(doc.id, " => ", doc.data().option);
-    //     });
-    //   });
     e.target.reset();
 
     this.props.addlostfound(lostfound);
@@ -167,6 +164,7 @@ export class Form extends Component {
       message: "",
       name: "",
       phone: "",
+      email: "",
     });
   };
 
@@ -175,10 +173,10 @@ export class Form extends Component {
       return (
         <div>
           <div className="form-group mt-3">
-            <label>What you have found/lost? *</label>
+            <label>What you have lost? *</label>
             <input
               className="form-control"
-              type="object"
+              type="text"
               name="object"
               onChange={this.onChange}
               value={this.state.what}
@@ -186,7 +184,7 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Where did you found/lost it? *</label>
+            <label>Where did you lost it? *</label>
             <input
               className="form-control"
               type="text"
@@ -197,7 +195,7 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Aprrox. time and date of lost/found *</label>
+            <label>Aprrox. time and date of lost *</label>
             <input
               className="form-control"
               type="text"
@@ -255,13 +253,24 @@ export class Form extends Component {
               required
             />
           </div>
+          <div className="form-group">
+            <label>Email Id *</label>
+            <input
+              className="form-control"
+              type="email"
+              name="email"
+              onChange={this.onChange}
+              value={this.state.email}
+              required
+            />
+          </div>
         </div>
       );
     } else {
       return (
         <div>
           <div className="form-group mt-3">
-            <label>What you have found/lost? *</label>
+            <label>What you have found? *</label>
             <input
               className="form-control"
               type="object"
@@ -272,7 +281,7 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Where did you found/lost it? *</label>
+            <label>Where did you found it? *</label>
             <input
               className="form-control"
               type="text"
@@ -283,7 +292,7 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Aprrox. time and date of lost/found *</label>
+            <label>Aprrox. time and date of found *</label>
             <input
               className="form-control"
               type="text"
@@ -292,22 +301,6 @@ export class Form extends Component {
               value={this.state.when}
               required
             />
-          </div>
-          <span className="form-group">
-            <label>Image *</label>
-          </span>
-          <div className="custom-file">
-            <input
-              type="file"
-              name="image"
-              className="custom-file-input"
-              id="customFile"
-              onChange={this.onImageChange}
-              required
-            />
-            <label className="custom-file-label" for="customFile">
-              Choose file
-            </label>
           </div>
           <div className="form-group mt-3">
             <label>Message *</label>
@@ -343,6 +336,17 @@ export class Form extends Component {
               required
             />
           </div>
+          <div className="form-group">
+            <label>Email Id *</label>
+            <input
+              className="form-control"
+              type="email"
+              name="email"
+              onChange={this.onChange}
+              value={this.state.email}
+              required
+            />
+          </div>
         </div>
       );
     }
@@ -361,14 +365,14 @@ export class Form extends Component {
     } = this.state;
 
     return (
-      <div className="col-sm-9 col-lg-6 m-auto">
-        <div className="card card-body mt-4 mb-4 ">
+      <div className=" col-sm-9 col-lg-6 m-auto">
+        <div className=" form card card-body mt-4 mb-4 ">
           <div className="btn-group">
             <Button
               variant="btn btn-primary top-buttons"
               onClick={() => history.push("/LostItems")}
             >
-              all lost items
+              all lost items 
             </Button>
             <Button
               variant="btn btn-primary top-buttons"
@@ -418,7 +422,7 @@ export class Form extends Component {
               : console.log("false")}
             {this.makeUI()}
 
-            <div className="form-group">
+            <div className="form-group lostfound_submit">
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>

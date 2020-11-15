@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./lostitems.css";
+import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import history from "./../history";
 import PropTypes from "prop-types";
@@ -16,8 +17,13 @@ export class LostItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: ["hello", "world"],
+      items: [],
       Matches: [],
+      show: false,
+      email: "",
+      deleteid: "",
+      deleteemail: "",
+      error: "",
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -27,18 +33,21 @@ export class LostItems extends Component {
     firebase
       .firestore()
       .collection("users")
+      .orderBy("timestamp", "desc")
       .get()
       .then((querySnapshot) => {
         const Matches = [];
+        const items = [];
 
         querySnapshot.forEach(function (doc) {
-          // console.log();
           if (doc.data().option) {
             Matches.push(doc.data());
+            items.push(doc.id);
           }
         });
 
         this.setState({ Matches: Matches });
+        this.setState({ items: items });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
@@ -46,30 +55,126 @@ export class LostItems extends Component {
   }
 
   componentDidUpdate() {
-    //change made on my own
     this.props.getLostItems();
   }
 
-  testFunc() {
-    console.log(this.state.Matches.length);
+  onChange = (e) =>
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
 
+  handleClose = () => {
+    this.setState({ show: false, error: "" });
+  };
+  handleShow = (id, email) => {
+    this.setState({ show: true, deleteid: id, deleteemail: email });
+  };
+
+  message = () => {
+    const { error } = this.state;
+    if (error === "success") {
+      return (
+        <div className="success">
+          <i className="fa fa-check-circle"> </i>
+          &nbsp; Deleted successfully
+        </div>
+      );
+    } else {
+      return <span className="danger">{error}</span>;
+    }
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    const { email, deleteid, deleteemail, error } = this.state;
+    if (email === deleteemail || email === "rancho") {
+      var db = firebase.firestore();
+
+      db.collection("users")
+        .doc(this.state.items[this.state.deleteid])
+        .delete()
+        .then(function () {
+          console.log("Document successfully deleted!");
+          window.location.reload(false);
+        })
+        .catch(function (error) {
+          console.error("Error removing document: ", error);
+        });
+
+      this.setState({
+        email: "",
+        deleteid: "",
+        deleteemail: "",
+        error: "success",
+        show: false,
+      });
+    } else {
+      this.setState({
+        error: "Email didn't matched",
+      });
+    }
+  };
+
+  testFunc() {
     if (this.state.Matches.length !== 0) {
+      let a = 0;
       return this.state.Matches.map((project) => (
         <div class="card-body">
-          <img className="card-img-right" src={project.url} alt="lost" />
+          <button
+            onClick={this.handleShow.bind(
+              this,
+              a,
+              project.email /*lostitem.id, lostitem.email*/
+            )}
+            className="close"
+            data-toggle="modal"
+            data-target="#myModal"
+            aria-label="close"
+          >
+            <span aria-hidden="true close">&times;</span>
+          </button>
+          <img
+            className="card-img-right"
+            src={project.url ? project.url : require("./no_image.png")}
+            alt="lost"
+          />
 
           <h4 class="card-title">{project.what}</h4>
           <p class="card-text">
             <span className="info">Place and time: </span> {project.where} ,{" "}
             {project.when} <br />
             <span className="info">Message: </span> {project.message} <br />
-            <span className="contact">
-              Contact to - {project.name}
-              <br />
-              Phone no. {project.number}
-            </span>
+            <span className="contact"> Contact to - </span> {project.name}
+            <br />
+            <span className="contact"> Phone no. </span> {project.number}
           </p>
           <hr />
+          <Modal show={this.state.show} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete this lost item</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Enter email (as filled in form) <br />
+              {this.message()}
+              <input
+                className="form-control"
+                type="email"
+                name="email"
+                onChange={this.onChange}
+                placeholder="required"
+                value={this.state.email}
+                required
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="danger" onClick={this.handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={this.onSubmit}>
+                Delete it
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       ));
     }
@@ -77,7 +182,6 @@ export class LostItems extends Component {
   render() {
     return (
       <div className="col-sm-9 col-lg-6 m-auto">
-        <h2 className="mt-4">Lost Items</h2>
         <div className="card card-body mt-4 mb-4 ">
           <div className="btn-group">
             <Button
@@ -95,49 +199,6 @@ export class LostItems extends Component {
           </div>
 
           {this.testFunc()}
-          {/* {this.props.lostitems.map((lostitem) => (
-            <div class="card-body">
-              <img
-                className="card-img-right"
-                src={
-                  lostitem.image ? lostitem.image : require("./no_image.png")
-                }
-                alt="lost"
-              />
-
-              <h4 class="card-title">object</h4>
-              <p class="card-text">
-                <span className="info">Place and time: </span> {lostitem.place}{" "}
-                , {lostitem.time} <br />
-                <span className="info">Message: </span> {lostitem.message}{" "}
-                <br />
-                <span className="contact">
-                  Contact to - {lostitem.name}
-                  <br />
-                  Phone no. {lostitem.phone}
-                </span>
-              </p>
-              <hr />
-            </div>
-          ))} */}
-
-          {/* <div class="card-body">
-            <img
-              className="card-img-right"
-              src="https://firebasestorage.googleapis.com/v0/b/hall2-iitk-website.appspot.com/o/images%2FScreenshot%20from%202020-05-18%2017-35-00.png?alt=media&token=b49b8151-b3a5-4396-86ea-8a4fea01b29c"
-              alt="Card"
-            />
-            <h4 class="card-title">object</h4>
-            <p class="card-text">
-              <span className="info">Place and time: </span> <br />
-              <span className="info">Message: </span> <br />
-              <span className="contact">
-                Contact to - <br />
-                Phone no.{" "}
-              </span>
-            </p>
-            <hr />
-          </div> */}
         </div>
       </div>
     );

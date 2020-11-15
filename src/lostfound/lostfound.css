@@ -7,3 +7,17 @@
     border: solid ;
     border-width: 0 2px;
 }
+
+.form {
+
+  background-image: url("rajput.jpg");
+  background-repeat: no-repeat;
+  /* background-size: 50%; */
+  background-position: 45% 5%;
+}
+
+.lostfound_submit button:hover {
+  background-color: rgb(45, 131, 189) !important;
+  color: white   !important;
+  font-weight: bold;
+}

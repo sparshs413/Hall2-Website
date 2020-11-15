@@ -1,6 +1,7 @@
 .cards {
     font: 1.1em arial, sans-serif;
     width: 100%;
+    color: black !important;
 }
 
 .card-body hr{
@@ -11,7 +12,9 @@
     font:bold 1.1em Arial, sans-serif;
     color: rgb(15, 15, 15);
 }
-
+.card-text {
+    color: black !important;
+}
 .card-body img {
     float: right;
     position: relative;
@@ -38,3 +41,17 @@
     padding: auto 0;
     box-shadow: 0;
 }
+
+
+@media screen and (max-width: 400px) {
+    .top-buttons {
+        padding: 7px 0;
+    font-size: 0.8em;
+
+    }
+    .activated {
+        padding: 7px 0 !important;
+    font-size: 0.8em;
+
+    }
+  }

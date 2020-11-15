@@ -1,6 +1,7 @@
 .Home .lander {
-    padding: 80px 0;
+    padding: 20px 0;
     text-align: center;
+    margin-top: -320px;
   }
   
 .Home .lander h1 {
@@ -11,4 +12,73 @@
 .Home .lander p {
     color: #999;
 }
+
+ 
+.Home .card-body {
+    background-color: rgba(255, 255, 255,0.82);
+    border-radius: 8px;
+    /* border: 3px solid rgba(74, 165, 218, 0.9); */
+    margin: 20px 20px 40px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.2);
+    padding: 15px 25px !important;
+    text-align: left !important;
+    /* display: block; */
+    /* width: 300px !important; */
+    height: 220px !important;
+    overflow-y: scroll;
+    /* border: 3px solid rgb(26, 131, 180) ; */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.card-body::-webkit-scrollbar {
+    display: none;
+  }
   
+  
+
+.home-announce h4 {
+    font-size: 1.4em;
+    font-weight: bold !important;
+}
+
+.home-announce .message {
+    color: rgb(61, 60, 60);
+    font: 1em sans-serif;
+}
+
+
+.carousel-item {
+    height: 300px;
+}
+
+.react-multi-carousel-dot button {
+  background-color: #ffffff;
+}
+
+
+@media screen and (max-width: 664px) {
+    .Home .card-body {
+        padding: 10px 20px !important;
+        margin: 25px 9px 55px !important;
+        box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 -2px 5px 0 rgba(0,0,0,0.2);
+    }
+    .home-announce .message {
+        font: 0.95em sans-serif;
+    }
+    .react-multiple-carousel__arrow {
+        margin-top: 250px;
+        min-width: 35px !important;
+        min-height: 35px !important;
+    }
+  }
+
+
+
+
+
+
+
+
+
+

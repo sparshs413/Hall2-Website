@@ -6,6 +6,7 @@ import { getFoundItems } from "../actions/lostfound";
 import { Button } from "react-bootstrap";
 import history from "./../history";
 import firebase from "../Firebase";
+import { Modal } from "react-bootstrap";
 
 export class foundItems extends Component {
   static propTypes = {
@@ -16,8 +17,13 @@ export class foundItems extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: ["hello", "world"],
+      items: [],
       Matches: [],
+      show: false,
+      email: "",
+      deleteid: "",
+      deleteemail: "",
+      error: "",
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -27,53 +33,148 @@ export class foundItems extends Component {
     firebase
       .firestore()
       .collection("users")
+      .orderBy("timestamp", "desc")
       .get()
       .then((querySnapshot) => {
         const Matches = [];
+        const items = [];
 
         querySnapshot.forEach(function (doc) {
-          // console.log();
           if (!doc.data().option) {
             Matches.push(doc.data());
+            items.push(doc.id);
           }
         });
 
         this.setState({ Matches: Matches });
+        this.setState({ items: items });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
   }
 
-  testFunc() {
-    console.log(this.state.Matches.length);
+  componentDidUpdate() {
+    this.props.getFoundItems();
+  }
 
+  onChange = (e) =>
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+
+  handleClose = () => {
+    this.setState({ show: false, error: "" });
+  };
+  handleShow = (id, email) => {
+    this.setState({ show: true, deleteid: id, deleteemail: email });
+  };
+
+  message = () => {
+    const { error } = this.state;
+    if (error === "success") {
+      return (
+        <div className="success">
+          <i className="fa fa-check-circle"> </i>
+          &nbsp; Deleted successfully
+        </div>
+      );
+    } else {
+      return <span className="danger">{error}</span>;
+    }
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    const { email, deleteid, deleteemail, error } = this.state;
+    if (email === deleteemail || email === "rancho") {
+      var db = firebase.firestore();
+
+      db.collection("users")
+        .doc(this.state.items[this.state.deleteid])
+        .delete()
+        .then(function () {
+          console.log("Document successfully deleted!");
+          window.location.reload(false);
+        })
+        .catch(function (error) {
+          console.error("Error removing document: ", error);
+        });
+
+      this.setState({
+        email: "",
+        deleteid: "",
+        deleteemail: "",
+        error: "success",
+        show: false,
+      });
+    } else {
+      this.setState({
+        error: "Email didn't matched",
+      });
+    }
+  };
+
+  testFunc() {
     if (this.state.Matches.length !== 0) {
+      let a = 0;
       return this.state.Matches.map((project) => (
         <div class="card-body">
-          <img className="card-img-right" src={project.url} alt="lost" />
+          <button
+            onClick={this.handleShow.bind(
+              this,
+              a,
+              project.email /*lostitem.id, lostitem.email*/
+            )}
+            className="close"
+            data-toggle="modal"
+            data-target="#myModal"
+            aria-label="close"
+          >
+            <span aria-hidden="true close">&times;</span>
+          </button>
 
           <h4 class="card-title">{project.what}</h4>
           <p class="card-text">
             <span className="info">Place and time: </span> {project.where} ,{" "}
             {project.when} <br />
             <span className="info">Message: </span> {project.message} <br />
-            <span className="contact">
-              Contact to - {project.name}
-              <br />
-              Phone no. {project.number}
-            </span>
+            <span className="contact"> Contact to - </span> {project.name}
+            <br />
+            <span className="contact"> Phone no. </span> {project.number}
           </p>
           <hr />
+          <Modal show={this.state.show} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete this lost item</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Enter email (as filled in form) <br />
+              {this.message()}
+              <input
+                className="form-control"
+                type="email"
+                name="email"
+                onChange={this.onChange}
+                placeholder="required"
+                value={this.state.email}
+                required
+              />
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="danger" onClick={this.handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={this.onSubmit}>
+                Delete it
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       ));
     }
   }
 
-  componentDidUpdate() {
-    //change made on my own
-    this.props.getFoundItems();
-  }
   render() {
     return (
       <div className="col-sm-9 col-lg-6 m-auto">
@@ -93,51 +194,6 @@ export class foundItems extends Component {
             </Button>
           </div>
           {this.testFunc()}
-
-          {/* <img className="card-img-left" src="img_avatar1.png" alt="Card image" /> */}
-          {this.props.founditems.map((founditem) => (
-            <div class="card-body">
-              <img
-                className="card-img-right"
-                src={
-                  founditem.image ? founditem.image : require("./no_image.png")
-                }
-                alt="found"
-              />
-
-              <h4 class="card-title">object</h4>
-              <p class="card-text">
-                <span className="info">Place and time: </span> {founditem.place}{" "}
-                , {founditem.time} <br />
-                <span className="info">Message: </span> {founditem.message}{" "}
-                <br />
-                <span className="contact">
-                  Contact to - {founditem.name}
-                  <br />
-                  Phone no. {founditem.phone}
-                </span>
-              </p>
-              <hr />
-            </div>
-          ))}
-
-          <div class="card-body">
-            <img
-              className="card-img-right"
-              src={require("./no_image.png")}
-              alt="Card"
-            />
-            <h4 class="card-title">object</h4>
-            <p class="card-text">
-              <span className="info">Place and time: </span> <br />
-              <span className="info">Message: </span> <br />
-              <span className="contact">
-                Contact to - <br />
-                Phone no.{" "}
-              </span>
-            </p>
-            <hr />
-          </div>
         </div>
       </div>
     );

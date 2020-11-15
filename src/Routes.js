@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Router, Switch, Route } from "react-router-dom";
-
 import About from "./About/About";
-import Contact from "./Contact/Contact";
+import Announcements from "./Announcements/announcements";
+import AnnounceForm from "./Announcements/form";
 import Products from "./Product/Products";
 import Home from "./Home/Home";
 import lostfound from "./lostfound/lostfound";
@@ -18,7 +18,8 @@ export default class Routes extends Component {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/About" component={About} />
-          <Route path="/Contact" component={Contact} />
+          <Route path="/Announce" component={Announcements} />
+          <Route path="/form" component={AnnounceForm} />
           <Route path="/Products" component={Products} />
           <Route path="/lostfound" component={lostfound} />
           <Route path="/lostitems" component={lostitems} />

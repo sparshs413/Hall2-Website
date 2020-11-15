@@ -1,3 +1,112 @@
 .btn-space {
     margin-right: 5px;
 }
+
+.nav-link {
+  color: white !important;
+}
+
+.width {
+  height: 50px !important;
+  position: fixed;
+width: 100%;
+top: 0;
+  z-index: 2000;
+margin: 0px;
+}
+
+#bars_container {
+    /* position: absolute; */
+    /* display: inline-block; */
+    cursor: pointer;
+    margin-right: 15px;
+    /* left: 15px; */
+    /* top: 3px; */
+  }
+  
+  .bar1, .bar2, .bar3 {
+    width: 35px;
+    height: 5px;
+    background-color: #ffffff;
+    margin: 6px 0;
+    transition: 0.4s;
+  }
+  
+  .change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+    transform: rotate(-45deg) translate(-9px, 6px);
+  }
+  
+  .change .bar2 {opacity: 0;}
+  
+  .change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px);
+    transform: rotate(45deg) translate(-8px, -8px);
+  }
+  
+  body {
+    font-family: "Lato", sans-serif;
+    transition: background-color .5s;
+    padding-top: 60px;
+  }
+  
+
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0,0.8);
+    margin-top: 50px;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  
+  .sidenav a, .sidenav span {
+    padding: 0px 2px 0px 32px;
+    text-decoration: none;
+    font-size: 1.3em;
+    color: #b1abab;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .sidenav a {
+    border: 3px solid rgb(22, 159, 238, 0.9);
+    margin: 15px 10px;
+  }
+
+  .sidenav a:hover, .sidenav span:hover {
+    color: #f1f1f1;
+  }
+
+  .sidenav a:active {
+    border: 4px solid rgb(212, 129, 33);
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  #main {
+    transition: margin-left .5s;
+    padding: 16px;
+  }
+  
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
+  @media screen and (max-width: 610px) {
+    .nav_items {
+      display: none;
+    }
+  }

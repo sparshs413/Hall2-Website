@@ -7,9 +7,10 @@ import store from "./store";
 
 function App() {
   return (
+    
     <Provider store={store}>
       <Fragment>
-        <div className="App">
+        <div className="App" >
           <Navigation />
           <Routes />
         </div>
