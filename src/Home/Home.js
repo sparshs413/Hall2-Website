@@ -170,79 +170,7 @@ export default class Home extends Component {
               itemClass="carousel-item-padding-40-px"
               // partialVisbile={true}
             >
-              {/* <div class="card-body home-announce">
-                <h4 class="card-title home-announce">object</h4>
-                <div className="by">president </div>
-                <span className="time1">4 min before </span>
-
-                <p class="card-text">
-                  <span className="message">
-                    0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px
-                    4px 0 rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2) 0 4px 4px 0 rgba(0,0,0,0.2) 0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)0 4px 4px 0 rgba(0,0,0,0.2)0 4px 4px 0
-                    rgba(0,0,0,0.2)
-                  </span>
-                </p>
-              </div> */}
-
               {this.makeAnnouncement()}
-
-              <div class="card-body home-announce">
-                <h4 class="card-title home-announce">2</h4>
-                <div className="by">president </div>
-                <span className="time1">4 min before </span>
-
-                <p class="card-text">
-                  <span className="message">message</span>
-                </p>
-              </div>
-
-              <div class="card-body home-announce">
-                <h4 class="card-title home-announce">haa</h4>
-                <div className="by">president mun </div>
-                <span className="time1">4 min before </span>
-
-                <p class="card-text">
-                  <span className="message">abc sssssssss j</span>
-                </p>
-              </div>
-
-              <div class="card-body home-announce">
-                <h4 class="card-title home-announce">object3</h4>
-                <div className="by">president </div>
-                <span className="time1">4 min before </span>
-
-                <p class="card-text">
-                  <span className="message">message</span>
-                </p>
-              </div>
-
-              <div class="card-body home-announce">
-                <h4 class="card-title home-announce">object4</h4>
-                <div className="by">president </div>
-                <span className="time1">4 min before </span>
-                <p class="card-text">
-                  <span className="message">message</span>
-                </p>
-              </div>
             </Carousel>
           </div>
 
