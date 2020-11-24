@@ -66,7 +66,7 @@ export class foundItems extends Component {
   handleClose = () => {
     this.setState({ show: false, error: "" });
   };
-  handleShow = (id, email) => {
+  handleShow = (email, id) => {
     this.setState({ show: true, deleteid: id, deleteemail: email });
   };
 
@@ -87,11 +87,27 @@ export class foundItems extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     const { email, deleteid, deleteemail, error } = this.state;
+
+    var docRef = firebase.firestore().collection("users").doc(deleteid);
+
+    docRef
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          email = doc.data().email;
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+
     if (email === deleteemail || email === "rancho") {
       var db = firebase.firestore();
 
       db.collection("users")
-        .doc(this.state.items[this.state.deleteid])
+        .doc(deleteid)
         .delete()
         .then(function () {
           console.log("Document successfully deleted!");
@@ -117,14 +133,14 @@ export class foundItems extends Component {
 
   testFunc() {
     if (this.state.Matches.length !== 0) {
-      let a = 0;
+      let b = 0;
       return this.state.Matches.map((project) => (
         <div class="card-body">
           <button
             onClick={this.handleShow.bind(
               this,
-              a,
-              project.email /*lostitem.id, lostitem.email*/
+              project.email /*lostitem.id, lostitem.email*/,
+              this.state.items[b++]
             )}
             className="close"
             data-toggle="modal"

@@ -61,15 +61,12 @@ export default class Home extends Component {
         const Matches = [];
 
         querySnapshot.forEach(function (doc) {
-          console.log(doc.data());
           if (doc.data()) {
             Matches.push(doc.data());
           }
         });
-        console.log(Matches);
 
         this.setState({ Matches: Matches });
-        console.log(this.state.Matches);
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
@@ -81,15 +78,16 @@ export default class Home extends Component {
     if (number != 8) {
       return this.state.Matches.map((project) => (
         <div class="card-body home-announce">
-                <h4 class="card-title home-announce">{project.title}</h4>
-                <div className="by">{project.whom}</div>
-                <span className="time1">{project.timestamp.toDate().toDateString()}</span>
+          <h4 class="card-title home-announce">{project.title}</h4>
+          <div className="by">{project.whom}</div>
+          <span className="time1">
+            {project.timestamp.toDate().toDateString()}
+          </span>
 
-                <p class="card-text">
-                  <span className="message">{project.announcement}</span>
-                </p>
-              </div>
-        
+          <p class="card-text">
+            <span className="message">{project.announcement}</span>
+          </p>
+        </div>
       ));
     }
   }
