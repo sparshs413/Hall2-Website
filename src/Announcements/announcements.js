@@ -6,6 +6,7 @@ import { Accordion, Button } from 'react-bootstrap'
 import { addAnnounce, getAnnounce } from "../actions/announce";
 import PropTypes from "prop-types";
 import firebase from "../Firebase";
+import TimeAgo from 'react-timeago';
 
 export class Announcements extends Component {
 
@@ -61,35 +62,6 @@ export class Announcements extends Component {
     this.props.getAnnounce();
   }
 
-  onChange = (e) =>
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    const {
-      title,
-      password, 
-      message,
-      from,
-    } = this.state;
-    const announce = {
-      title,
-      password,
-      message,
-      from,
-    };
-
-    this.props.addAnnounce(announce);
-    this.setState({
-      title: "",
-      password: "",
-      message: "",
-      from: "",
-    });
-  };
-
   makeUI() {
     console.log(this.state.Matches);
     console.log(this.state.Matches.length);
@@ -98,9 +70,9 @@ export class Announcements extends Component {
         <div class="card-body announce">
         <h4 class="card-title announce">{project.title}</h4>
         <div className="by">{project.whom}</div>
-        <span className="time1">4 days before</span>
+        <span className="time1"><TimeAgo date={project.timestamp.toDate()} minPeriod='5' /></span>
         <span className="time2">{project.timestamp.toDate().toDateString()}</span>
-        <p class="card-text">
+        <p class="card-text"> 
           <span className="message">
             {project.announcement}
           </span>
@@ -121,14 +93,14 @@ export class Announcements extends Component {
           
             <div className="col-sm-9 margin0 col-lg-6 m-auto">
               <div className="card card-body mt-4 mb-4 ">
-          <h2>Announcements</h2>
+              <h2>Announcements</h2>
               
                 
               {this.props.announces.map((announce) => (
                 <div class="card-body announce">
                   <h4 class="card-title announce">{announce.title}</h4>
                   <div className="by">{announce.from} </div>
-                  <span className="time1">4 min before </span>
+                  {/* <span className="time1"><TimeAgo date={project.timestamp.toDate().toDateString()} /></span> */}
                   <span className="time2">time, date </span>
                   <p class="card-text">
                     <span className="message">

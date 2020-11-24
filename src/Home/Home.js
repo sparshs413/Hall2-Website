@@ -207,13 +207,23 @@ export default class Home extends Component {
 
               {this.makeAnnouncement()}
 
-              {/* <div class="card-body home-announce">
+              <div class="card-body home-announce">
                 <h4 class="card-title home-announce">2</h4>
                 <div className="by">president </div>
                 <span className="time1">4 min before </span>
 
                 <p class="card-text">
                   <span className="message">message</span>
+                </p>
+              </div>
+
+              <div class="card-body home-announce">
+                <h4 class="card-title home-announce">haa</h4>
+                <div className="by">president mun </div>
+                <span className="time1">4 min before </span>
+
+                <p class="card-text">
+                  <span className="message">abc sssssssss j</span>
                 </p>
               </div>
 
@@ -234,7 +244,7 @@ export default class Home extends Component {
                 <p class="card-text">
                   <span className="message">message</span>
                 </p>
-              </div> */}
+              </div>
             </Carousel>
           </div>
 
@@ -454,9 +464,9 @@ export default class Home extends Component {
                     </li>
                   </ul>
                 </div>
-                <a href="gallery_index.html">
+                {/* <a href="gallery_index.html">
                   <button className="gallery_button">VIEW FULL GALLERY</button>
-                </a>
+                </a> */}
               </div>
             </div>
             {/* Modal for full size images on click*/}
@@ -502,11 +512,11 @@ export default class Home extends Component {
               {/* <div class="w3-row w3-padding-32 w3-section"> */}
               <div className="w3-col m4 w3-container">
                 {/* Add Google Maps */}
-                <div
+                {/* <div
                   id="googleMap"
                   className="w3-round-large w3-greyscale"
                   style={{ width: "100%", height: "400px" }}
-                />
+                /> */}
               </div>
               <div className="w3-col m8 w3-panel">
                 <div className="w3-large w3-margin-bottom">
@@ -523,7 +533,7 @@ export default class Home extends Component {
                 <p>
                   Let' talk <i className="fa fa-coffee" />
                 </p>
-                <form action="/action_page.php" target="_blank">
+                {/* <form action="/action_page.php" target="_blank">
                   <div
                     className="w3-row-padding"
                     style={{ margin: "0 -16px 8px -16px" }}
@@ -560,7 +570,7 @@ export default class Home extends Component {
                   >
                     <i className="fa fa-paper-plane" /> SEND MESSAGE
                   </button>
-                </form>
+                </form> */}
               </div>
               {/* </div> */}
             </div>

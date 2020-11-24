@@ -74,13 +74,13 @@ export class foundItems extends Component {
     const { error } = this.state;
     if (error === "success") {
       return (
-        <div className="success">
+        <div className="greenfont">
           <i className="fa fa-check-circle"> </i>
           &nbsp; Deleted successfully
         </div>
       );
     } else {
-      return <span className="danger">{error}</span>;
+      return <span className="redfont">{error}</span>;
     }
   };
 
@@ -106,7 +106,7 @@ export class foundItems extends Component {
         deleteid: "",
         deleteemail: "",
         error: "success",
-        show: false,
+        show: true,
       });
     } else {
       this.setState({
@@ -146,7 +146,7 @@ export class foundItems extends Component {
           <hr />
           <Modal show={this.state.show} onHide={this.handleClose}>
             <Modal.Header closeButton>
-              <Modal.Title>Delete this lost item</Modal.Title>
+              <Modal.Title>Delete this found item</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               Enter email (as filled in form) <br />

@@ -4,9 +4,11 @@ import PropTypes from "prop-types";
 import { addlostfound } from "../actions/lostfound";
 import $ from "jquery";
 import "./lostfound.css";
+import { Modal } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import history from "./../history";
 import firebase from "../Firebase";
+
 
 export class Form extends Component {
   componentDidMount() {
@@ -33,11 +35,16 @@ export class Form extends Component {
       name: "",
       phone: "",
       email: "",
+      smShow: false,
     };
   }
 
   static propTypes = {
     addlostfound: PropTypes.func.isRequired,
+  };
+
+  handleClose = () => {
+    this.setState({ smShow: false });
   };
 
   onChange = (e) =>
@@ -165,13 +172,14 @@ export class Form extends Component {
       name: "",
       phone: "",
       email: "",
+      smShow: true,
     });
   };
 
   makeUI() {
     if (this.state.option == "lost") {
       return (
-        <div>
+        <div className="lostfound">
           <div className="form-group mt-3">
             <label>What you have lost? *</label>
             <input
@@ -232,14 +240,13 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Your good Name *</label>
+            <label>Your good Name</label>
             <input
               className="form-control"
               type="text"
               name="name"
               onChange={this.onChange}
               value={this.state.name}
-              required
             />
           </div>
           <div className="form-group">
@@ -259,6 +266,7 @@ export class Form extends Component {
               className="form-control"
               type="email"
               name="email"
+              placeholder="required during deleting"
               onChange={this.onChange}
               value={this.state.email}
               required
@@ -268,7 +276,7 @@ export class Form extends Component {
       );
     } else {
       return (
-        <div>
+        <div className="lostfound">
           <div className="form-group mt-3">
             <label>What you have found? *</label>
             <input
@@ -315,14 +323,13 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Your good Name *</label>
+            <label>Your good Name</label>
             <input
               className="form-control"
               type="text"
               name="name"
               onChange={this.onChange}
               value={this.state.name}
-              required
             />
           </div>
           <div className="form-group">
@@ -342,6 +349,7 @@ export class Form extends Component {
               className="form-control"
               type="email"
               name="email"
+              placeholder="required during deleting"
               onChange={this.onChange}
               value={this.state.email}
               required
@@ -365,7 +373,7 @@ export class Form extends Component {
     } = this.state;
 
     return (
-      <div className=" col-sm-9 col-lg-6 m-auto">
+      <div className=" col-sm-9 col-lg-6 m-auto lostfound">
         <div className=" form card card-body mt-4 mb-4 ">
           <div className="btn-group">
             <Button
@@ -429,6 +437,21 @@ export class Form extends Component {
             </div>
           </form>
         </div>
+
+        <Modal
+          size="sm"
+          show={this.state.smShow}
+          className="lf-modal"
+          onHide={() => this.handleClose()}
+          aria-labelledby="example-modal-sizes-title-sm"
+        >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-sm">
+            Posted Successfully
+          </Modal.Title>
+        </Modal.Header>
+        </Modal>
+
       </div>
     );
   }

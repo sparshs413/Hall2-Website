@@ -21,6 +21,14 @@
     text-decoration: none !important;
 }
 
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    padding: .4rem .9rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+}
+
 .btn-link{
     padding: 10px 12px !important;
     /* height: 30px; */
@@ -85,12 +93,13 @@
     color: gray;
 }
 .time2 {
+    margin-top: -20px;
     color: gray;
     float: right;
 }
 
 .announce h4 {
-    font-size: 1.3em !important;
+    font-size: 1.15em !important;
 }
 
 .announce .card-text {
@@ -116,20 +125,26 @@
     font-weight: bold;
 }
 
+.announce_form1 h3 {
+    font-size: 1.4em;
+    margin-bottom: 30px;
+}
 .announce_form .card-body {
     padding: 0 !important;
 }
+
 
 @media screen and (max-width: 600px) {
     .margin0 {
       padding: 0 !important;
     }
-    .card-body {
-        padding: 0.4em !important;
-    }
+    .announce_form1 .card-body {
+        padding: 0.5em !important;
+        /* margin: 0.1em !important; */
+    }    
     .announce_form1 {
         padding: 0 !important;
         margin: 0 !important;
     }
-    
+       
   }
