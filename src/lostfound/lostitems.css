@@ -30,6 +30,10 @@
     height: 130px;
 }
 
+.fade {
+    background-color: rgba(0, 0, 0, 0.25) ;
+}
+
 .contact {
     font: 1.1em arial;
     color: rgb(18, 84, 128);

@@ -12,7 +12,8 @@ export class Navigation extends Component {
     this.state = {
       sidecss: {},
       maincss: {},
-      bars_class: ""
+      bars_class: "",
+      isAdmin: true
     };
 
     this.openNav = this.openNav.bind(this);
@@ -87,9 +88,10 @@ render(){
         class="sidenav">
           {/* <span href="javascript:void(0)" class="closebtn" onClick={this.openNav}>&times;</span> */}
           <a href="/LostFound">Lost or Found</a>
-          <a href="/Announce">Announcements</a>
+          <a href= {this.state.isAdmin ? '/form' : "/Announce"}>Announcements</a>
           <a href="/ask-the-hab">Ask The Hab</a>
           <a href="/Contact">Contact</a>
+          <a href="/login">Admin Login</a>
         </div>
 
          
@@ -98,7 +100,7 @@ render(){
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto nav_items">
             <Nav.Link href="/LostFound">Lost or Found</Nav.Link>
-            <Nav.Link href="/Announce">Announcements</Nav.Link>
+            <Nav.Link href= {this.state.isAdmin ? '/form' : "/Announce"}>Announcements</Nav.Link>
             <Nav.Link href="/Products">Products</Nav.Link>
             <Nav.Link href="/ask-the-hab">Ask The Hab</Nav.Link>
           </Nav>

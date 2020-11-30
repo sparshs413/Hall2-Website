@@ -24,6 +24,7 @@ export class foundItems extends Component {
       deleteid: "",
       deleteemail: "",
       error: "",
+      isAdmin: false
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -86,7 +87,7 @@ export class foundItems extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const { email, deleteid, deleteemail, error } = this.state;
+    const { email, deleteid, deleteemail, error, isAdmin } = this.state;
 
     var docRef = firebase.firestore().collection("users").doc(deleteid);
 
@@ -103,7 +104,7 @@ export class foundItems extends Component {
         console.log("Error getting document:", error);
       });
 
-    if (email === deleteemail || email === "rancho") {
+    if (email === deleteemail || email === "rancho" || isAdmin) {
       var db = firebase.firestore();
 
       db.collection("users")
@@ -164,6 +165,7 @@ export class foundItems extends Component {
             <Modal.Header closeButton>
               <Modal.Title>Delete this found item</Modal.Title>
             </Modal.Header>
+            {!this.state.isAdmin  &&
             <Modal.Body>
               Enter email (as filled in form) <br />
               {this.message()}
@@ -177,6 +179,7 @@ export class foundItems extends Component {
                 required
               />
             </Modal.Body>
+            }
             <Modal.Footer>
               <Button variant="danger" onClick={this.handleClose}>
                 Close

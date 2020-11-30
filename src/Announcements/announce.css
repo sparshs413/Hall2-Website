@@ -4,22 +4,6 @@
     box-shadow: none !important;
     background-color: white;
  }
- .accordion .card {
-    box-shadow: none !important;
-
- }
-
- .accordion .btn-link {
-    border: 3px solid rgba(74, 165, 218, 0.9);
-
-    border-radius: 40px;
-    float: right;
-    /* padding: 0 !important; */
-    margin: 0 !important;
-    /* width: 150px; */
-    /* height: 40px;  */
-    text-decoration: none !important;
-}
 
 .btn {
     display: inline-block;
@@ -28,21 +12,7 @@
     font-size: 1rem;
     border-radius: .25rem;
 }
-
-.btn-link{
-    padding: 10px 12px !important;
-    /* height: 30px; */
-}
-
-.accordion .plus {
-    color: rgba(74, 165, 218, 0.9);
-    font-weight: bold;
-    font-size: 2em;
-    transition: 0.4s;
-    display: block;
-
-}
-
+ 
 .announce_submit {
     float: right;
     font-weight: bold;

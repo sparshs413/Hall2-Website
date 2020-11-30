@@ -1,0 +1,52 @@
+.askthehab .accordion .card {
+  box-shadow: none !important;
+
+}
+
+
+.askthehab .accordion .btn-link {
+  /* border: 3px solid rgba(74, 165, 218, 0.9); */
+  background-color: rgba(48, 131, 179, 0.9);
+  border-radius: 40px;
+  float: right;
+  /* padding: 0 !important; */
+  margin: 0 !important;
+  /* width: 150px; */
+  /* height: 40px;  */
+  text-decoration: none !important;
+  color: #ffffff;
+  font-weight: bolder;
+}
+
+.askthehab .accordion .btn-link:active {
+  background-color: rgba(88, 177, 228, 0.9);
+}
+
+
+.askthehab .btn-link{
+  padding: 10px 12px !important;
+  /* height: 30px; */
+}
+
+
+.askthehab .askedto {
+  color: rgb(20, 92, 175)  !important;
+}
+
+.askthehab .change-status {
+  font-size: 0.9em;
+  padding: 0.3em 0.5em !important;
+  float:  left !important;
+  border-radius: 2px !important;
+}
+
+
+@media screen and (max-width: 600px) {
+  .askthehab {
+    padding: 0 !important;
+  }
+  .askthehab .card-body {
+    padding: 0.5em !important ;
+  }
+     
+}
