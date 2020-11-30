@@ -132,7 +132,7 @@ export class LostItems extends Component {
     }
   };
 
-  testFunc() {
+  developUI() {
     if (this.state.Matches.length !== 0) {
       let a = 0;
       var b = 0;
@@ -218,7 +218,7 @@ export class LostItems extends Component {
             </Button>
           </div>
 
-          {this.testFunc()}
+          {this.developUI()}
         </div>
       </div>
     );

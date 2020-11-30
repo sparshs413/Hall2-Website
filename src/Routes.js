@@ -11,6 +11,7 @@ import founditems from "./lostfound/founditems";
 import history from "./history";
 import AskTheHab from "./AskTheHab/AskTheHab";
 import LoginForm from "./LoginForm/LoginForm";
+import AdminPage from "./AdminPage/AdminPage";
 
 export default class Routes extends Component {
   render() {
@@ -27,6 +28,7 @@ export default class Routes extends Component {
           <Route path="/founditems" component={founditems} />
           <Route path="/ask-the-hab" component={AskTheHab} />
           <Route path="/login" component={LoginForm} />
+          <Route path="/admin" component={AdminPage} />
         </Switch>
       </Router>
     );
