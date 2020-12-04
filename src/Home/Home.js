@@ -52,6 +52,7 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
+    let a = 0;
     firebase
       .firestore()
       .collection("announcements")
@@ -61,9 +62,10 @@ export default class Home extends Component {
         const Matches = [];
 
         querySnapshot.forEach(function (doc) {
-          if (doc.data()) {
+          if (doc.data() && a < 7) {
             Matches.push(doc.data());
           }
+          a++;
         });
 
         this.setState({ Matches: Matches });
@@ -83,7 +85,6 @@ export default class Home extends Component {
           <span className="time1">
             {project.timestamp.toDate().toDateString()}
           </span>
-
           <p class="card-text">
             <span className="message">{project.announcement}</span>
           </p>

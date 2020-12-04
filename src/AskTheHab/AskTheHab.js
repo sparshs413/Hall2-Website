@@ -158,6 +158,7 @@ class AskTheHab extends Component {
 
   handleClose = () => {
     this.setState({ modalShow: false });
+    window.location.reload(false);
   };
 
   onSubmit = (e) => {
@@ -192,7 +193,7 @@ class AskTheHab extends Component {
     //   );
     e.target.reset();
     this.setState({ modalShow: true });
-    window.location.reload(false);
+    // window.location.reload(false);
   };
 
   developUI() {

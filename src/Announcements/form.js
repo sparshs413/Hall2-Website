@@ -44,6 +44,8 @@ export class AnnounceForm extends Component {
       error: "",
       showDeleteModal: false,
     });
+
+    window.location.reload(false);
   };
 
   message = () => {
@@ -91,6 +93,8 @@ export class AnnounceForm extends Component {
         show: true,
         error: "Annnouncement Added Successfully",
       });
+
+      // window.location.reload(false);
     } else {
       this.setState({
         title: "",

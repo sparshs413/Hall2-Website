@@ -53,7 +53,7 @@ class LoginForm extends Component {
         console.log(token);
 
         let history = createHistory();
-        history.push("/");
+        history.push("/admin");
         let pathUrl = window.location.href;
         window.location.href = pathUrl;
 
