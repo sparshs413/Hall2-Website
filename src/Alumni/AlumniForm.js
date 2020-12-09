@@ -265,8 +265,13 @@ export class AlumniForm extends Component {
         image1: this.state.image1,
         image2: this.state.image2,
         image3: this.state.image3,
+        numberLike: 0,
+        numberComment: 0,
         timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
       });
+
+      // var messageRef = db.collection('rooms').doc('roomA')
+      //           .collection('messages').doc('message1');
     }
   };
 

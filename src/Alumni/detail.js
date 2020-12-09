@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
   Container,
   Comment,
@@ -7,28 +7,26 @@ import {
   Feed,
   Icon,
   Segment,
-} from 'semantic-ui-react';
+} from "semantic-ui-react";
 import history from "./../history";
 import "./detail.css";
 import { Button, Accordion, Card, Modal } from "react-bootstrap";
 
 class Detail extends Component {
-
-
   constructor(props) {
     super(props);
 
     this.state = {
-        modalShow: false,
-        deleteModalShow: false,
-        modalImg: null,
-        reply_form: '1',
-        error: '',
-        comments: [],
-        response:'',
-        user:'logged in username',
-        total_comments: 0,
-        total_likes: 0,
+      modalShow: false,
+      deleteModalShow: false,
+      modalImg: null,
+      reply_form: "1",
+      error: "",
+      comments: [],
+      response: "",
+      user: "logged in username",
+      total_comments: 0,
+      total_likes: 0,
     };
 
     this.enlargeImg = this.enlargeImg.bind(this);
@@ -37,253 +35,267 @@ class Detail extends Component {
   }
 
   reply_form() {
-    if(this.state.reply_form === '1'){
+    if (this.state.reply_form === "1") {
       this.setState({
-          reply_form: '0'
+        reply_form: "0",
       });
-    }else {
+    } else {
       this.setState({
-          reply_form : '1'
+        reply_form: "1",
       });
     }
-  };
+  }
 
   showDeleteModal() {
-    if(this.state.deleteModalShow){
+    if (this.state.deleteModalShow) {
       this.setState({
-          deleteModalShow: false
+        deleteModalShow: false,
       });
-    }else {
+    } else {
       this.setState({
-          deleteModalShow : true
+        deleteModalShow: true,
       });
     }
   }
 
   handleClose = () => {
-      this.setState({ modalShow: false, deleteModalShow: false});
+    this.setState({ modalShow: false, deleteModalShow: false });
   };
 
   enlargeImg(img) {
-
-      if(this.state.modalShow === false){
-          this.setState({
-              modalImg: img.src,
-              modalShow: true,
-          });
-      }else {
-          this.setState({
-              modalShow: false,
-          });
-      }
+    if (this.state.modalShow === false) {
+      this.setState({
+        modalImg: img.src,
+        modalShow: true,
+      });
+    } else {
+      this.setState({
+        modalShow: false,
+      });
+    }
   }
 
   addLike = () => {
     this.setState({
       total_likes: this.state.total_likes + 1,
-    }); 
-  }
-
+    });
+  };
 
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  }
+  };
 
   onSubmit = (e) => {
     e.preventDefault();
 
     this.reply_form();
-    var new_comment = {user: this.state.user, response: this.state.response};
+    var new_comment = { user: this.state.user, response: this.state.response };
     this.setState({
-      comments: [ new_comment, ...this.state.comments],
+      comments: [new_comment, ...this.state.comments],
       error: "Your comment added",
-      total_comments: this.state.total_comments + 1
-    }); 
+      total_comments: this.state.total_comments + 1,
+    });
 
     console.log(...this.state.comments);
-
   };
 
-
   render() {
-
     return (
-    <div className='alumni'>
-    
-    <Container text style={{ marginTop: '1em' }}>
-    
-    <span className='back_btn' onClick={() => history.push("/Alumni")}>
-          <a><Icon name='arrow alternate circle left outline' /></a>
-    </span>
-    
-    <Feed>        
-      <Feed.Event >
-      <Feed.Label image={require('./1.jpeg')} />
-      <Feed.Content >
-          <Feed.Summary>
-          <a>Helen Troy</a> added <a>2 new illustrations</a>
-          <Feed.Date>4 days ago</Feed.Date>
-          </Feed.Summary>
-          <Feed.Extra images>
-          <a>
-              <img 
-                  Style = {'transition : transform 0.25s ease !important'}
-                  src={require('../lostfound/no_image.png')}  
-                  onClick={this.enlargeImg} 
-              />
-          </a>
-          <a>
-          <img 
-              Style = {'transition : transform 0.25s ease !important'}
-              src={require('./1.jpeg')}  
-              onClick={this.enlargeImg} 
-          />
-          </a>
-          </Feed.Extra>
-          <Feed.Extra text>
-              Ours is a life of constant reruns. We're always circling back to where
-              we'd we started, then starting all over again. Even if we don't run
-              extra laps that day, we surely will come back for more of the same
-              another day soon.
-          </Feed.Extra>
-          <Feed.Meta>
-          <Feed.Like  onClick={this.addLike}>
-              <Icon name='like' />{this.state.total_likes}
-          </Feed.Like>
-          <span className='comment-box' onClick={this.reply_form}>
-          <Feed.Like>
-             <Icon name='comment' />{this.state.total_comments}
-          </Feed.Like>
+      <div className="alumni">
+        <Container text style={{ marginTop: "1em" }}>
+          <span className="back_btn" onClick={() => history.push("/Alumni")}>
+            <a>
+              <Icon name="arrow alternate circle left outline" />
+            </a>
           </span>
-      </Feed.Meta>
-      </Feed.Content>
-      </Feed.Event>
-      </Feed>
 
-    {this.state.error && <span style={{color: 'green', marginLeft: '40px'}}>
-      <Icon name='check circle' />{this.state.error}
-    </span>}
+          <Feed>
+            <Feed.Event>
+              <Feed.Label image={require("./1.jpeg")} />
+              <Feed.Content>
+                <Feed.Summary>
+                  <a>Helen Troy</a> added <a>2 new illustrations</a>
+                  <Feed.Date>4 days ago</Feed.Date>
+                </Feed.Summary>
+                <Feed.Extra images>
+                  <a>
+                    <img
+                      Style={"transition : transform 0.25s ease !important"}
+                      src={require("../lostfound/no_image.png")}
+                      onClick={this.enlargeImg}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      Style={"transition : transform 0.25s ease !important"}
+                      src={require("./1.jpeg")}
+                      onClick={this.enlargeImg}
+                    />
+                  </a>
+                </Feed.Extra>
+                <Feed.Extra text>
+                  Ours is a life of constant reruns. We're always circling back
+                  to where we'd we started, then starting all over again. Even
+                  if we don't run extra laps that day, we surely will come back
+                  for more of the same another day soon.
+                </Feed.Extra>
+                <Feed.Meta>
+                  <Feed.Like onClick={this.addLike}>
+                    <Icon name="like" />
+                    {this.state.total_likes}
+                  </Feed.Like>
+                  <span className="comment-box" onClick={this.reply_form}>
+                    <Feed.Like>
+                      <Icon name="comment" />
+                      {this.state.total_comments}
+                    </Feed.Like>
+                  </span>
+                </Feed.Meta>
+              </Feed.Content>
+            </Feed.Event>
+          </Feed>
 
-      <Accordion defaultActiveKey="0">
-          
-        <Accordion.Collapse eventKey={this.state.reply_form}>
-            <form>
-              <div className="form-group">
-                <textarea
-                  className="form-control"
-                  type="text"
-                  name="response"
-                  placeholder="Your comment..."
-                  onChange={this.onChange}
-                  value={this.state.response}
-                  rows="5"
-                  required
-                />
-              </div>
+          {this.state.error && (
+            <span style={{ color: "green", marginLeft: "40px" }}>
+              <Icon name="check circle" />
+              {this.state.error}
+            </span>
+          )}
 
-              <Button
-                type="submit"
-                className="btn btn-primary"
-                onClick={this.onSubmit}
-                disabled={this.state.response ? false : true}
-              >
-                Submit
-              </Button>
-            </form>
-        </Accordion.Collapse>
-    </Accordion>
-     
+          <Accordion defaultActiveKey="0">
+            <Accordion.Collapse eventKey={this.state.reply_form}>
+              <form>
+                <div className="form-group">
+                  <textarea
+                    className="form-control"
+                    type="text"
+                    name="response"
+                    placeholder="Your comment..."
+                    onChange={this.onChange}
+                    value={this.state.response}
+                    rows="5"
+                    required
+                  />
+                </div>
 
-    <Comment.Group>
+                <Button
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={this.onSubmit}
+                  disabled={this.state.response ? false : true}
+                >
+                  Submit
+                </Button>
+              </form>
+            </Accordion.Collapse>
+          </Accordion>
 
-    {this.state.comments.map((comment) => (
-    <Comment>
-      <Comment.Avatar src={require('./1.jpeg')} />
-      <Comment.Content>
-        <Comment.Author>{comment.user}</Comment.Author>
-        <Comment.Metadata>
-          <div>Just now</div>
+          <Comment.Group>
+            {this.state.comments.map((comment) => (
+              <Comment>
+                <Comment.Avatar src={require("./1.jpeg")} />
+                <Comment.Content>
+                  <Comment.Author>{comment.user}</Comment.Author>
+                  <Comment.Metadata>
+                    <div>Just now</div>
 
-          <Feed><Feed.Event><Feed.Content><Feed.Meta><Feed.Like>
-              <Icon name='like' />0
-          </Feed.Like></Feed.Meta></Feed.Content></Feed.Event></Feed>
+                    <Feed>
+                      <Feed.Event>
+                        <Feed.Content>
+                          <Feed.Meta>
+                            <Feed.Like>
+                              <Icon name="like" />0
+                            </Feed.Like>
+                          </Feed.Meta>
+                        </Feed.Content>
+                      </Feed.Event>
+                    </Feed>
+                  </Comment.Metadata>
+                  <Comment.Text>{comment.response}</Comment.Text>
+                </Comment.Content>
+              </Comment>
+            ))}
 
-        </Comment.Metadata>
-        <Comment.Text>{comment.response}</Comment.Text>
-      </Comment.Content>
-    </Comment>
-    ))}
+            <Comment>
+              <Comment.Avatar src={require("./1.jpeg")} />
+              <Comment.Content>
+                <span
+                  className="comment_cross_btn"
+                  onClick={this.showDeleteModal}
+                >
+                  <a>
+                    <Icon name="close" />
+                  </a>
+                </span>
+                <Comment.Author>Steve Jobes</Comment.Author>
+                <Comment.Metadata>
+                  <div>2 days ago</div>
 
-    <Comment>
-      <Comment.Avatar src={require('./1.jpeg')} />
-      <Comment.Content>
-        <span className='comment_cross_btn' onClick={this.showDeleteModal}>
-          <a><Icon name='close' /></a>
-        </span>
-        <Comment.Author>Steve Jobes</Comment.Author>
-        <Comment.Metadata>
-          <div>2 days ago</div>
+                  <Feed>
+                    <Feed.Event>
+                      <Feed.Content>
+                        <Feed.Meta>
+                          <Feed.Like>
+                            <Icon name="like" />1
+                          </Feed.Like>
+                        </Feed.Meta>
+                      </Feed.Content>
+                    </Feed.Event>
+                  </Feed>
+                </Comment.Metadata>
+                <Comment.Text>Revolutionary!</Comment.Text>
+              </Comment.Content>
+            </Comment>
+          </Comment.Group>
+        </Container>
 
-          <Feed><Feed.Event><Feed.Content><Feed.Meta><Feed.Like>
-              <Icon name='like' />1
-          </Feed.Like></Feed.Meta></Feed.Content></Feed.Event></Feed>
+        <Segment
+          inverted
+          vertical
+          style={{ margin: "15em 0em 0em", padding: "6em 0em" }}
+        >
+          <Container textAlign="center">
+            <List horizontal inverted divided link size="small">
+              <List.Item>Designed by Hall 2</List.Item>
+            </List>
+          </Container>
+        </Segment>
 
-        </Comment.Metadata>
-        <Comment.Text>Revolutionary!</Comment.Text>
-      </Comment.Content>
-    </Comment>
-    </Comment.Group>
+        <Modal
+          show={this.state.modalShow}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          onHide={() => this.handleClose()}
+          centered
+          className="alumni"
+        >
+          <Modal.Body>{/* <img  src={modalImg} />   */}</Modal.Body>
+        </Modal>
 
-      
-    </Container>
-
-    <Segment inverted vertical style={{ margin: '15em 0em 0em', padding: '6em 0em' }}>
-      <Container textAlign='center'>
-        <List horizontal inverted divided link size='small'>
-          <List.Item>
-            Designed by Hall 2
-          </List.Item>
-        </List>
-      </Container>
-    </Segment>
-
-
-    <Modal
-        show={this.state.modalShow}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        onHide={() => this.handleClose()}
-        centered
-        className='alumni'
-    >
-    <Modal.Body>
-        {/* <img  src={modalImg} />   */}
-    </Modal.Body>
-    </Modal>
-
-
-    <Modal
-      show={this.state.deleteModalShow}
-      size="sm"
-      aria-labelledby="contained-modal-title-vcenter"
-      onHide={() => this.handleClose()}
-      className='deleteModal'
-      centered
-    >
-      <Modal.Header style={{padding: '10px'}} closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Sure to delete ?
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Footer style={{padding: '0'}}>
-        <Button variant='link' style={{color: '#1f88be'}} onClick=''>Delete</Button>
-      </Modal.Footer>
-    </Modal>
-
-  </div>
-);
-}}
+        <Modal
+          show={this.state.deleteModalShow}
+          size="sm"
+          aria-labelledby="contained-modal-title-vcenter"
+          onHide={() => this.handleClose()}
+          className="deleteModal"
+          centered
+        >
+          <Modal.Header style={{ padding: "10px" }} closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Sure to delete ?
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Footer style={{ padding: "0" }}>
+            <Button variant="link" style={{ color: "#1f88be" }} onClick="">
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+}
 
 export default Detail;
