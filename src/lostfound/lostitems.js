@@ -151,12 +151,13 @@ export class LostItems extends Component {
           >
             <span aria-hidden="true close">&times;</span>
           </button>
+          {project.url &&
           <img
             className="card-img-right"
-            src={project.url ? project.url : require("./no_image.png")}
+            src={project.url}
             alt="lost"
           />
-
+          }
           <h4 class="card-title">{project.what}</h4>
           <p class="card-text">
             <span className="info">Place and time: </span> {project.where} ,{" "}
@@ -201,7 +202,7 @@ export class LostItems extends Component {
   }
   render() {
     return (
-      <div className="col-sm-9 col-lg-6 m-auto">
+      <div className="col-sm-9 col-lg-6 m-auto lostfound">
         <div className="card card-body mt-4 mb-4 ">
           <div className="btn-group">
             <Button

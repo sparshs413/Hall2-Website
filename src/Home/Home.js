@@ -5,6 +5,7 @@ import "./Home.css";
 import "./Home2.scss";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import TimeAgo from "react-timeago";
 import firebase from "../Firebase";
 
 const responsive = {
@@ -62,7 +63,7 @@ export default class Home extends Component {
         const Matches = [];
 
         querySnapshot.forEach(function (doc) {
-          if (doc.data() && a < 7) {
+          if (doc.data() && a < 6) {
             Matches.push(doc.data());
           }
           a++;
@@ -83,7 +84,7 @@ export default class Home extends Component {
           <h4 class="card-title home-announce">{project.title}</h4>
           <div className="by">{project.whom}</div>
           <span className="time1">
-            {project.timestamp.toDate().toDateString()}
+            <TimeAgo date={project.timestamp.toDate()} minPeriod="5" />
           </span>
           <p class="card-text">
             <span className="message">{project.announcement}</span>

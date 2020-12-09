@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { NavLink } from "react-router";
 import "./Navbar.css";
 import { Navbar, Nav, Form, Button } from "react-bootstrap";
@@ -15,6 +15,7 @@ export class Navigation extends Component {
       maincss: {},
       bars_class: "",
       isAdmin: true,
+      isLogin: true
     };
 
     this.openNav = this.openNav.bind(this);
@@ -105,22 +106,32 @@ export class Navigation extends Component {
           {/* <span href="javascript:void(0)" class="closebtn" onClick={this.openNav}>&times;</span> */}
           <a href="/LostFound">Lost or Found</a>
           <a href={this.state.isAdmin ? "/form" : "/Announce"}>Announcements</a>
-
+          <a href="/Alumni">Alumni Portal</a>
           <a href="/ask-the-hab">Ask The Hab</a>
-          <a href="/Contact">Contact</a>
-          <a href={this.state.isAdmin ? "/admin" : "/login"}>Admin Login</a>
+          {this.state.isLogin &&
+            <a href="/profile">Edit Profile</a>
+          }
+          {/* <a href={this.state.isAdmin ? "/admin" : "/login"}>Admin Login</a> */}
         </div>
 
         <Navbar.Brand href="/">Hall 2</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto nav_items">
-            <Nav.Link href="/LostFound">Lost or Found</Nav.Link>
-            <Nav.Link href={this.state.isAdmin ? "/form" : "/Announce"}>
+            <Nav.Link className='nav_hide' href="/LostFound">Lost or Found</Nav.Link>
+            <Nav.Link className='nav_hide' href={this.state.isAdmin ? "/form" : "/Announce"}>
               Announcements
             </Nav.Link>
-            <Nav.Link href="/Products">Products</Nav.Link>
-            <Nav.Link href="/ask-the-hab">Ask The Hab</Nav.Link>
+            <Nav.Link className='nav_hide' href="/Alumni">Alumni Portal</Nav.Link>
+            <Nav.Link className='nav_hide' href="/ask-the-hab">Ask The Hab</Nav.Link>
+            {!this.state.isLogin ? (
+              <Fragment>
+                <Nav.Link className='login' href="/login">Login</Nav.Link>
+                <Nav.Link className='login' href="/register">Register</Nav.Link>
+              </Fragment>
+            ):
+              <Nav.Link className='login' href="/admin">Logout</Nav.Link>
+            }
           </Nav>
         </Navbar.Collapse>
       </Navbar>

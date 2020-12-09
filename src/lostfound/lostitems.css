@@ -28,6 +28,7 @@
     position: relative;
     top: 0;
     height: 130px;
+    display: block;
 }
 
 .fade {
@@ -59,11 +60,15 @@
     .top-buttons {
         padding: 7px 0;
         font-size: 0.8em;
-
     }
     .activated {
         padding: 7px 0 !important;
     font-size: 0.8em;
-
+    }
+    .lostfound .card-body img {
+        float: none;
+    }
+    .lostfound .card-body {
+        padding: 1rem 0.5rem;
     }
   }

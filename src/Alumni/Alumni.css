@@ -1,0 +1,68 @@
+.alumni .ui.header {
+  color: rgb(53, 133, 199);
+}
+
+.alumni .label {
+  width: 3rem !important;
+}
+
+.alumni .content .extra.text {
+  max-width: unset !important;
+}
+
+.alumni .modal img {
+  width: 100%;
+}
+
+.alumni .modal-body{
+  padding: 0 !important;
+}
+
+.alumni .fix_btn {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  z-index: 1;
+}
+
+.fix_btn button.add_alumni {
+  padding: 4px 13px !important;
+  border-radius: 40px !important;
+  font-size: 3em !important;
+  float: right;
+}
+
+
+
+
+@media screen and (min-width: 400px) {
+  .modal-content{
+    height: auto !important;
+    width: 100% !important;
+    max-width: 500px;
+    max-height: 600px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .alumni .modal-body img {
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .modal-content{
+    display: block;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    /* height: 300px !important; */
+    width: 100% !important;
+  }
+  .alumni .modal-body img {
+    width: 100% !important;
+  }
+  .alumni .ui.container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+}

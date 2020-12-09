@@ -7,6 +7,7 @@ import { Button, Modal } from "react-bootstrap";
 import firebase from "../Firebase";
 import "./announce.css";
 import { addAnnounce, getAnnounce } from "../actions/announce";
+import Firebase from "../Firebase";
 import TimeAgo from "react-timeago";
 
 export class AnnounceForm extends Component {
@@ -109,10 +110,10 @@ export class AnnounceForm extends Component {
 
   onDeleteSubmit = (e) => {
     e.preventDefault();
-    const { password2, deleteid } = this.state;
+    const { password2, deleteid, isAdmin } = this.state;
     console.log(deleteid);
     
-    if (password2 === "12") {
+    if (isAdmin) {
       var db = firebase.firestore();
 
       db.collection("announcements")
@@ -130,15 +131,26 @@ export class AnnounceForm extends Component {
         error: "Annnouncement Deleted Successfully",
         showDeleteModal: true,
       });
-    } else if (password2 !== "") {
+    } else {
       this.setState({
         showDeleteModal: true,
-        error: "Password Wrong",
+        error: "Admin not Logged in",
       });
     }
   };
 
+  authListener() {
+    Firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ isAdmin: true });
+      } else {
+        this.setState({ isAdmin: false });
+      }
+    });
+  }
+
   componentDidMount() {
+    this.authListener();
     firebase
       .firestore()
       .collection("announcements")
@@ -348,18 +360,7 @@ export class AnnounceForm extends Component {
           <Modal.Header closeButton>
             <Modal.Title>Delete this Annnouncement</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
             {this.message()} {this.state.error}
-            <input
-              className="form-control"
-              type="password"
-              name="password2"
-              value={this.state.password2}
-              onChange={this.onChange}
-              placeholder="Password"
-              required
-            />
-          </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={this.handleClose}>
               Close

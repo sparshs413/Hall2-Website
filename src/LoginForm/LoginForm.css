@@ -1,0 +1,9 @@
+.login_main button:hover, .login_main button:active  {
+  background-color: rgb(8, 68, 92) !important;
+}
+.login_main h2 span {
+    color: #4285f4 !important;
+}
+.login_main button {
+  background-color: #4285f4 !important;
+}

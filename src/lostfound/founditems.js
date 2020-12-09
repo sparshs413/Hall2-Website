@@ -196,7 +196,7 @@ export class foundItems extends Component {
 
   render() {
     return (
-      <div className="col-sm-9 col-lg-6 m-auto">
+      <div className="col-sm-9 col-lg-6 m-auto lostfound">
         <div className="card card-body mt-4 mb-4 ">
           <div className="btn-group">
             <Button

@@ -1,0 +1,11 @@
+.register h2 {
+  color: #4285f4 !important;
+}
+
+.register button {
+  background-image: linear-gradient(to top, #5d96f1, #4285f4) !important;
+}
+
+.register button:hover, .register button:active {
+  background-image: linear-gradient(to top, #1952ad, #3b78db) !important;
+}

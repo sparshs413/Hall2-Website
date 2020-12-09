@@ -7,6 +7,7 @@ import {
   Message,
   Segment,
 } from "semantic-ui-react";
+import "./LoginForm.css";
 import Firebase from "../Firebase";
 import { Modal } from "react-bootstrap";
 
@@ -16,7 +17,7 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      email: '',
       password: "",
       error: "",
       user: {},
@@ -41,7 +42,7 @@ class LoginForm extends Component {
     });
   }
 
-  login(e) {
+  login = (e) => {
     e.preventDefault();
     Firebase.auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -90,31 +91,31 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <div className="login">
+      <div className="login_main">
         <Grid
           textAlign="center"
           style={{ height: "50vh" }}
           verticalAlign="middle"
         >
-          <Grid.Column style={{ maxWidth: 450 }}>
-            <Header as="h2" color="blue" className="py-2" textAlign="center">
-              <span Style="color:white">Log-in to Admin account</span>
+          <Grid.Column style={{ maxWidth: 450, margin: 20 }}>
+            <Header as="h2" className="py-2" textAlign="center">
+              <span Style="color:white">Log-in</span>
             </Header>
-            <Form size="large">
+            <Form size="large" onSubmit={this.login}>
               <Segment stacked>
                 <span style={{ color: "red", float: "left" }}>
                   {this.state.error}
                 </span>
-
                 <Form.Input
                   fluid
                   name="email"
-                  icon="people"
+                  icon="user"
                   iconPosition="left"
                   placeholder="EmailId"
                   type="email"
-                  onChange={this.onChange}
-                  value={this.state.email}
+                  
+
+                  
                   required
                 />
 
@@ -130,13 +131,17 @@ class LoginForm extends Component {
                   required
                 />
 
-                <Button color="blue" fluid size="large" onClick={this.login}>
+                <Button color="blue" type='submit' fluid size="large">
                   Login
                 </Button>
               </Segment>
             </Form>
+            <Message>
+              New here ? <a href="/register">Register</a>
+            </Message>
           </Grid.Column>
         </Grid>
+
         <Modal
           size="sm"
           show={this.state.modalShow}

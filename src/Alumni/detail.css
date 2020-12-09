@@ -1,0 +1,20 @@
+.alumni .comment-box:hover i{
+  color: #1f88be !important;
+}
+
+.alumni .back_btn i {
+  float: left;
+  font-size: 2em;
+  color: #217ba8 !important;
+  margin-bottom: 10px;
+  margin-top: -20px !important;
+  margin-left: -11px;
+}
+
+.deleteModal  .modal-content {
+  max-width: 300px;
+}
+
+.comment_cross_btn {
+  float: right;
+}

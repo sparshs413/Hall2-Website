@@ -67,6 +67,7 @@ class AskTheHab extends Component {
 
         this.setState({ Matches: Matches });
         this.setState({ items: items });
+        console.log(this.state.Matches);
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
@@ -74,10 +75,11 @@ class AskTheHab extends Component {
   }
 
   response = (response) => {
-    if (response === "") {
-      return <span>No Response</span>;
-    } else if (response !== "") {
-      return <span Style={"color:rgb(53, 100, 53)"}>{response}</span>;
+    if (response === '') {
+      return <span Style={"color:red"}>Not Answered</span>;
+    } 
+    else {
+      return <span Style={"color:rgb(53, 100, 53)"}>Answered</span>;
     }
   };
 
@@ -85,7 +87,8 @@ class AskTheHab extends Component {
     this.setState({ responseId: id });
   };
 
-  isAdmin = (status) => {
+  isAdmin = (status,b) => {
+    var m = {...this.state.Matches[b]};
     if (this.state.isAdmin) {
       return (
         <Accordion defaultActiveKey="0">
@@ -111,15 +114,17 @@ class AskTheHab extends Component {
                       name="response"
                       placeholder="Type your answer here."
                       onChange={this.onChange}
+                      defaultValue={m.response}
                       rows="5"
                       required
                     />
+            
                   </div>
 
                   <Button
                     type="submit"
                     className="btn btn-primary"
-                    onClick={this.onSubmit_status}
+                    onClick={this.onSubmit_status.bind(this, b)}
                   >
                     Submit
                   </Button>
@@ -137,7 +142,10 @@ class AskTheHab extends Component {
       [e.target.name]: e.target.value,
     });
 
-  onSubmit_status = (e) => {
+  onSubmit_status = (b, e) => {
+    var m1 = {...this.state.Matches};
+    var m2 = m1[b];
+
     e.preventDefault();
     // change status to new value
     const response = this.state.response;
@@ -152,10 +160,14 @@ class AskTheHab extends Component {
         doc.ref.update({ response: response });
         doc.ref.update({ answered: true });
       });
-    this.setState({ isanswered: true });
+      // if(!m2.reponse){
+
+      // }
+    m2.response = this.state.response;
+    this.setState({ isanswered: true, m1});
     // window.location.reload(false);
   };
-
+ 
   handleClose = () => {
     this.setState({ modalShow: false });
     window.location.reload(false);
@@ -212,16 +224,23 @@ class AskTheHab extends Component {
           <Card.Text>{project.message}</Card.Text>
           <Card.Text>
             <span Style={"font-weight:bold"}> Status : </span>
-            {project.answered ? "Answered" : "Unanswered"}
+            {this.response(project.response)}
           </Card.Text>
-          {project.answered ? (
+          {project.response !== '' && !this.state.isAdmin ? (
             <Card.Text>
               <span Style={"font-weight:bold"}> Response : </span>
-              {project.answered ? project.response : "Unanswered"}
+              {project.response}
             </Card.Text>
           ) : null}
 
-          {this.isAdmin(this.state.items[b++])}
+          {this.state.isAdmin ? (
+            <Card.Text>
+            <span Style={"font-weight:bold"}> Response : </span>
+            {project.response}
+            </Card.Text>
+          ) : null}
+
+          {this.isAdmin(this.state.items[b++],b-1)}
           <hr />
         </Card.Body>
       ));
@@ -332,29 +351,8 @@ class AskTheHab extends Component {
 
           {this.developUI()}
 
-          <Card.Body>
-            <Card.Title>Subject</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted askedto">
-              To mess secy
-            </Card.Subtitle>
-            <Card.Subtitle className="mb-2 text-muted">
-              {" "}
-              1 day ago{" "}
-              {/*<TimeAgo date={project.timestamp.toDate()} minPeriod='5' /> */}{" "}
-            </Card.Subtitle>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
-            <Card.Text>
-              <span Style={"font-weight:bold"}> Status : </span>
-              {this.response("mango")}
-            </Card.Text>
-
-            {this.isAdmin("status")}
-            <hr />
-          </Card.Body>
-        </div>
+         </div>
+         
         <Modal
           size="sm"
           show={this.state.modalShow}

@@ -1,0 +1,28 @@
+.AlumniForm .alumni_form_image{
+  margin:0 0 15px 0;
+}
+
+.AlumniForm .cross_btn i {
+  float: left;
+  font-size: 1.5em;
+  color: #1f88be !important;
+}
+
+button.alumni_form_button {
+  float: right;
+  margin-top: -40px !important;
+  margin-bottom: 20px !important;
+  padding: 10px 10px !important;
+}
+
+.AlumniForm ::placeholder {
+  color: rgb(97, 94, 94) !important;
+}
+
+
+@media screen and (max-width: 600px) {
+  .AlumniForm .ui.container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}

@@ -240,7 +240,7 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Your good Name</label>
+            <label>Your Name</label>
             <input
               className="form-control"
               type="text"
@@ -323,7 +323,7 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Your good Name</label>
+            <label>Your Name</label>
             <input
               className="form-control"
               type="text"

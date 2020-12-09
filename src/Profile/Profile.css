@@ -1,0 +1,28 @@
+.Profile .profile_email {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.Profile .profile_email input {
+  border: 1px solid rgb(171, 189, 194) !important;
+}
+
+.Profile .profile_email ::placeholder {
+  color: rgb(105, 102, 102) !important;
+}
+
+.Profile img {
+  max-width: 200px;
+  max-height: 250px;
+}
+
+@media screen and (max-width: 450px) {
+  .Profile .ui.container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }  
+  .Profile img {
+    max-width: 170px;
+    max-height: 150px;
+  }
+}

@@ -6,7 +6,13 @@
   color: white !important;
 }
 
-.width {
+.nav_items a.login{
+  margin-left: 10px;
+  border: 2px solid #ffffff;
+  padding: 5px;
+}
+
+.width { 
   height: 50px !important;
   position: fixed;
   width: 100%;
@@ -115,7 +121,7 @@ body {
 }
 
 @media screen and (max-width: 610px) {
-  .nav_items {
+  .nav_hide {
     display: none;
   }
 }

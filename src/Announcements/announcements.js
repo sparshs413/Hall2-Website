@@ -20,6 +20,7 @@ export class Announcements extends Component {
       btn_class: "",
       items: ["hello", "world"],
       Matches: [],
+      isAdmin: ''
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -80,7 +81,7 @@ export class Announcements extends Component {
 
   render() {
     return (
-      <div className="col-sm-9 margin0 col-lg-6 m-auto">
+      <div className="col-sm-9 margin0 col-lg-6 m-auto announce-form1">
         <div className="card card-body mt-4 mb-4 ">
           <h2>Announcements</h2>
 
