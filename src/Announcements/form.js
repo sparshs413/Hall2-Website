@@ -140,7 +140,7 @@ export class AnnounceForm extends Component {
   };
 
   authListener() {
-    Firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({ isAdmin: true });
       } else {

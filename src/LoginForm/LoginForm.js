@@ -17,7 +17,7 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      email: "",
       password: "",
       error: "",
       user: {},
@@ -27,43 +27,58 @@ class LoginForm extends Component {
     this.login = this.login.bind(this);
   }
 
-  componentDidMount() {
-    this.authListener();
-  }
+  // componentDidMount() {
+  //   this.authListener();
+  // }
 
-  authListener() {
-    Firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ user });
-        console.log("Tue");
-      } else {
-        this.setState({ user: null });
-      }
-    });
-  }
+  // authListener() {
+  //   Firebase.auth().onAuthStateChanged((user) => {
+  //     if (user) {
+  //       this.setState({ user });
+  //       console.log("Tue");
+  //     } else {
+  //       this.setState({ user: null });
+  //     }
+  //   });
+  // }
 
   login = (e) => {
     e.preventDefault();
-    Firebase.auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then((u) => {
-        console.log(u);
-        return u.user.getIdToken();
-      })
-      .then((token) => {
-        console.log(token);
+    // Firebase.auth()
+    //   .signInWithEmailAndPassword(this.state.email, this.state.password)
+    //   .then((u) => {
+    //     console.log(u);
+    //     return u.user.getIdToken();
+    //   })
+    //   .then((token) => {
+    //     console.log(token);
 
+
+
+    //     // window.location.reload(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    console.log(this.state.email);
+    Firebase
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then((user) => {
+        // Signed in
+        // ...
+        console.log(user);
+        console.log(user.user.email);
         let history = createHistory();
         history.push("/admin");
         let pathUrl = window.location.href;
         window.location.href = pathUrl;
-
-        // window.location.reload(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
       });
-  }
+  };
 
   onChange = (e) =>
     this.setState({
@@ -71,8 +86,8 @@ class LoginForm extends Component {
     });
 
   handleClose = () => {
-      this.setState({ modalShow: false });
-    };
+    this.setState({ modalShow: false });
+  };
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -101,7 +116,7 @@ class LoginForm extends Component {
             <Header as="h2" className="py-2" textAlign="center">
               <span Style="color:white">Log-in</span>
             </Header>
-            <Form size="large" onSubmit={this.login}>
+            <Form size="large">
               <Segment stacked>
                 <span style={{ color: "red", float: "left" }}>
                   {this.state.error}
@@ -113,9 +128,8 @@ class LoginForm extends Component {
                   iconPosition="left"
                   placeholder="EmailId"
                   type="email"
-                  
-
-                  
+                  onChange={this.onChange}
+                  value={this.state.email}
                   required
                 />
 
@@ -131,7 +145,13 @@ class LoginForm extends Component {
                   required
                 />
 
-                <Button color="blue" type='submit' fluid size="large">
+                <Button
+                  color="blue"
+                  type="submit"
+                  fluid
+                  size="large"
+                  onClick={this.login}
+                >
                   Login
                 </Button>
               </Segment>

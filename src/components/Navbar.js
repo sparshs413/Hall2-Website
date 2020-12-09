@@ -14,8 +14,8 @@ export class Navigation extends Component {
       sidecss: {},
       maincss: {},
       bars_class: "",
-      isAdmin: true,
-      isLogin: true
+      isAdmin: '',
+      isLogin: false,
     };
 
     this.openNav = this.openNav.bind(this);
@@ -28,9 +28,15 @@ export class Navigation extends Component {
   authListener() {
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ isAdmin: true });
+        this.setState({ isLogin: true });
+        console.log(user);
+        console.log(this.state.isLogin);
+        if(user.email === 'demo@gmail.com') {
+          this.setState({ isAdmin: true});
+          console.log(this.state.isAdmin);
+        }
       } else {
-        this.setState({ isAdmin: false });
+        this.setState({ isLogin: false });
       }
     });
   }

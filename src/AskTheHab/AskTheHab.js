@@ -40,7 +40,7 @@ class AskTheHab extends Component {
 
   authListener() {
     Firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+      if (user.email === 'demo@gmail.com') {
         this.setState({ isAdmin: true });
       } else {
         this.setState({ isAdmin: false });

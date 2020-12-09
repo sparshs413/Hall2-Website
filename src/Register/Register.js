@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react'
 import { Button, Form, Grid, Header, Icon, Message, Segment } from 'semantic-ui-react'
 import './Register.css';
+import Firebase from "../Firebase";
 
 
 class Register extends Component {
@@ -25,6 +26,7 @@ class Register extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+
     const { password1, password2 } = this.state;
     if (password1 !== password2) {
       this.setState({
@@ -33,10 +35,25 @@ class Register extends Component {
     } else {
       this.setState({
         error: "",
-        success: true
+        success: true,
+      });
+
+      Firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password1)
+      .then((user) => {
+          return user.user.updateProfile({
+            displayName: this.state.name,
+          })
+          console.log(user);
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ..
       });
     }
   };
+
+
 
 
   render() {
