@@ -22,6 +22,7 @@ export class AlumniForm extends Component {
     this.state = {
       name: "",
       email: "",
+      userImage: "",
       message: "",
       image1: "",
       image2: "",
@@ -49,7 +50,7 @@ export class AlumniForm extends Component {
   authListener() {
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ isLogin: true, name: user.displayName, email: user.email });
+        this.setState({ isLogin: true, name: user.displayName, email: user.email, userImage: user.photoURL });
         console.log(this.state);
       } else {
         this.setState({ isLogin: false });
@@ -261,6 +262,7 @@ export class AlumniForm extends Component {
       const userRef = db.collection("alumniportal").add({
         name: this.state.name,
         email: this.state.email,
+        userImage: this.state.userImage,
         message: this.state.message,
         image1: this.state.image1,
         image2: this.state.image2,
@@ -322,7 +324,9 @@ export class AlumniForm extends Component {
             </div>
 
             <div className="custom-file alumni_form_image">
-              <input
+    
+            // var messageRef = db.collection('rooms').doc('roomA')
+      //           .collection('messages').doc('message1');          <input
                 type="file"
                 name="image"
                 className="custom-file-input"

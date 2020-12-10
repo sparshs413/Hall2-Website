@@ -8,12 +8,14 @@ import {
   Container,
   Header,
   Image,
+  Comment,
 } from "semantic-ui-react";
 import { Accordion, Card, Modal } from "react-bootstrap";
 import history from "./../history";
 import "./Alumni.css";
 import TimeAgo from "react-timeago";
 import Firebase from "../Firebase";
+import Detail from "./detail";
 
 class Alumni extends Component {
   constructor(props) {
@@ -25,13 +27,17 @@ class Alumni extends Component {
       modalImg: null,
       posts: [],
       items: [],
-      Matches: [],
+      matches: [],
       isLogin: "",
       numberLike: 0,
       like: false,
+      details: false,
+      response: "",
+      username: "",
+      userImage: "",
     };
 
-    // this.enlargeImg = this.enlargeImg.bind(this);
+    this.openComments = this.openComments.bind(this);
   }
 
   addLike = (a, b, e) => {
@@ -52,10 +58,26 @@ class Alumni extends Component {
     }
   };
 
+  openComments() {
+    if (this.state.openComments === "1") {
+      this.setState({
+        openComments: "0",
+      });
+    } else {
+      this.setState({
+        openComments: "1",
+      });
+    }
+  }
+
   authListener() {
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ isLogin: true });
+        this.setState({
+          isLogin: true,
+          username: user.displayName,
+          userImage: user.photoURL,
+        });
       } else {
         this.setState({ isLogin: false });
       }
@@ -64,6 +86,12 @@ class Alumni extends Component {
 
   handleClose = () => {
     this.setState({ modalShow: false });
+  };
+
+  onChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   };
 
   enlargeImg(img) {
@@ -86,32 +114,88 @@ class Alumni extends Component {
       .orderBy("timestamp", "desc")
       .get()
       .then((querySnapshot) => {
-        const Matches = [];
+        const matches = [];
         const items = [];
 
         querySnapshot.forEach(function (doc) {
           if (doc.data()) {
-            Matches.push(doc.data());
+            matches.push(doc.data());
             items.push(doc.id);
           }
         });
 
-        this.setState({ Matches: Matches });
-        this.setState({ items: items });
+        this.setState({ matches: matches, items: items });
+        // this.setState({  });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
   }
 
+  onSubmit = (e) => {
+    e.preventDefault();
+
+    this.openComments();
+
+    var new_comment = {
+      username: this.state.username,
+      response: this.state.response,
+      photo: this.state.userImage,
+    };
+
+    this.setState({
+      error: "Your comment added",
+      total_comments: this.state.total_comments + 1,
+    });
+  };
+
+  makeComments() {
+    return (
+      <>
+        <React.Fragment>
+          <Comment>
+            <Comment.Avatar src={require("./1.jpeg")} />
+            <Comment.Content>
+              <span
+                className="comment_cross_btn"
+                onClick={this.showDeleteModal}
+              >
+                <a>
+                  <Icon name="close" />
+                </a>
+              </span>
+              <Comment.Author>Steve Jobes</Comment.Author>
+              <Comment.Metadata>
+                <div>2 days ago</div>
+
+                <Feed>
+                  <Feed.Event>
+                    <Feed.Content>
+                      <Feed.Meta>
+                        <Feed.Like>
+                          <Icon name="like" />1
+                        </Feed.Like>
+                      </Feed.Meta>
+                    </Feed.Content>
+                  </Feed.Event>
+                </Feed>
+              </Comment.Metadata>
+              <Comment.Text>Revolutionary!</Comment.Text>
+            </Comment.Content>
+          </Comment>
+        </React.Fragment>
+      </>
+    );
+  }
+
   makeUI() {
     var a = 0;
-    if (this.state.Matches.length !== 0) {
-      return this.state.Matches.map((project) => (
+    if (this.state.matches.length !== 0) {
+      return this.state.matches.map((project) => (
         <div>
           <Feed>
             <Feed.Event>
-              <Feed.Label image={require("./1.jpeg")} />
+              <Feed.Label image={project.userImage} />
               <Feed.Content>
                 <Feed.Summary onClick={() => history.push("/detail")}>
                   <a>{project.name}</a>
@@ -157,7 +241,7 @@ class Alumni extends Component {
                     <Icon name="like" />
                     {project.numberLike}
                   </Feed.Like>
-                  <span className="comment-box">
+                  <span className="comment-box" onClick={this.openComments}>
                     <Feed.Like>
                       <Icon name="comment" />
                       {project.numberComment}
@@ -167,6 +251,34 @@ class Alumni extends Component {
               </Feed.Content>
             </Feed.Event>
           </Feed>
+
+          <Accordion defaultActiveKey="0">
+            <Accordion.Collapse eventKey={this.state.openComments}>
+              <form>
+                <div className="form-group">
+                  <textarea
+                    className="form-control"
+                    type="text"
+                    name="response"
+                    placeholder="Your comment..."
+                    onChange={this.onChange}
+                    value={this.state.response}
+                    rows="5"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={this.onSubmit}
+                  disabled={this.state.response ? false : true}
+                >
+                  Submit
+                </Button>
+              </form>
+            </Accordion.Collapse>
+          </Accordion>
         </div>
       ));
     }
@@ -174,7 +286,7 @@ class Alumni extends Component {
 
   render() {
     return (
-      <div className="alumni">
+      <div className="alumni">        
         <Container className="alumni">
           <Header as="h2" icon textAlign="center">
             <Icon name="users" circular />

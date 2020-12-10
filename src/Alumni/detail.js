@@ -116,8 +116,8 @@ class Detail extends Component {
               <Feed.Label image={require("./1.jpeg")} />
               <Feed.Content>
                 <Feed.Summary>
-                  <a>Helen Troy</a> added <a>2 new illustrations</a>
-                  <Feed.Date>4 days ago</Feed.Date>
+                  <a>{this.props.name}</a>
+                  <Feed.Date>{this.props.time}</Feed.Date>
                 </Feed.Summary>
                 <Feed.Extra images>
                   <a>
@@ -135,21 +135,16 @@ class Detail extends Component {
                     />
                   </a>
                 </Feed.Extra>
-                <Feed.Extra text>
-                  Ours is a life of constant reruns. We're always circling back
-                  to where we'd we started, then starting all over again. Even
-                  if we don't run extra laps that day, we surely will come back
-                  for more of the same another day soon.
-                </Feed.Extra>
+                <Feed.Extra text>{this.props.message}</Feed.Extra>
                 <Feed.Meta>
                   <Feed.Like onClick={this.addLike}>
                     <Icon name="like" />
-                    {this.state.total_likes}
+                    {this.props.likes}
                   </Feed.Like>
                   <span className="comment-box" onClick={this.reply_form}>
                     <Feed.Like>
                       <Icon name="comment" />
-                      {this.state.total_comments}
+                      {this.props.comments}
                     </Feed.Like>
                   </span>
                 </Feed.Meta>

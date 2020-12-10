@@ -27,48 +27,11 @@ class LoginForm extends Component {
     this.login = this.login.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.authListener();
-  // }
-
-  // authListener() {
-  //   Firebase.auth().onAuthStateChanged((user) => {
-  //     if (user) {
-  //       this.setState({ user });
-  //       console.log("Tue");
-  //     } else {
-  //       this.setState({ user: null });
-  //     }
-  //   });
-  // }
-
   login = (e) => {
     e.preventDefault();
-    // Firebase.auth()
-    //   .signInWithEmailAndPassword(this.state.email, this.state.password)
-    //   .then((u) => {
-    //     console.log(u);
-    //     return u.user.getIdToken();
-    //   })
-    //   .then((token) => {
-    //     console.log(token);
-
-
-
-    //     // window.location.reload(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    console.log(this.state.email);
-    Firebase
-      .auth()
+    Firebase.auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then((user) => {
-        // Signed in
-        // ...
-        console.log(user);
-        console.log(user.user.email);
         let history = createHistory();
         history.push("/admin");
         let pathUrl = window.location.href;
@@ -77,6 +40,7 @@ class LoginForm extends Component {
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
+        alert(error.message);
       });
   };
 
@@ -87,21 +51,6 @@ class LoginForm extends Component {
 
   handleClose = () => {
     this.setState({ modalShow: false });
-  };
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    const { password } = this.state;
-    if (password !== "12") {
-      this.setState({
-        error: "Incorrect Password",
-      });
-    } else {
-      this.setState({
-        error: "",
-      });
-      // login
-    }
   };
 
   render() {
@@ -156,6 +105,9 @@ class LoginForm extends Component {
                 </Button>
               </Segment>
             </Form>
+            <Message>
+              Forgot your password? <a href="/resetpassword">Click Here</a>
+            </Message>
             <Message>
               New here ? <a href="/register">Register</a>
             </Message>

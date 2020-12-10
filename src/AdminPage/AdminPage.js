@@ -14,6 +14,9 @@ class LoginForm extends Component {
       password: "",
       error: '',
       user: {},
+      names: "",
+      userImage: "",
+      isLogin: "",
     };
     
     this.signOut = this.signOut.bind(this);
@@ -26,7 +29,13 @@ class LoginForm extends Component {
   authListener() {
     Firebase.auth().onAuthStateChanged((user) => {
       if(user) {
-        this.setState({user})
+        this.setState({user});
+        this.setState({
+          isLogin: true,
+          names: user.displayName,
+          email: user.email,
+          userImage: user.photoURL,
+        });
       }
       else {
         this.setState({user: null});
@@ -58,7 +67,7 @@ class LoginForm extends Component {
       <Grid textAlign='center' style={{ height: '50vh' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as='h2' color='blue' className='py-2' textAlign='center'>
-            <span Style='color:white'>You are now Logged in</span>
+            <span Style='color:white'>Hello, {this.state.names}!</span>
           </Header>
           <Form size='large'>
             <Segment stacked>

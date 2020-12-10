@@ -16,6 +16,7 @@ import LoginForm from "./LoginForm/LoginForm";
 import Register from "./Register/Register";
 import AdminPage from "./AdminPage/AdminPage";
 import Profile from "./Profile/Profile";
+import ResetPassword from "./ResetPassword/Reset";
 
 export default class Routes extends Component {
   render() {
@@ -37,6 +38,7 @@ export default class Routes extends Component {
           <Route path="/register" component={Register} />
           <Route path="/admin" component={AdminPage} />
           <Route path="/profile" component={Profile} />
+          <Route path="/resetpassword" component={ResetPassword} />
         </Switch>
       </Router>
     );
