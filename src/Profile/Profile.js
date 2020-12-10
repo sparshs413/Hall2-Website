@@ -25,6 +25,10 @@ export class Profile extends Component {
       userImage: "",
       changeName: "",
       isLogin: "",
+      docs: [],
+      docsItems: [],
+      alumniDocs: [],
+      alumniID: [],
     };
 
     this.changeUserData = this.changeUserData.bind(this);
@@ -42,6 +46,8 @@ export class Profile extends Component {
   }
 
   authListener() {
+    let email = "";
+
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
@@ -50,11 +56,58 @@ export class Profile extends Component {
           email: user.email,
           userImage: user.photoURL,
         });
+        email = user.email;
         console.log(this.state);
       } else {
         this.setState({ isLogin: false });
       }
     });
+
+    Firebase.firestore()
+      .collection("users-data")
+      .orderBy("timestamp", "desc")
+      .get()
+      .then((querySnapshot) => {
+        const matches = [];
+        const items = [];
+
+        querySnapshot.forEach(function (doc) {
+          if (doc.data() && email === doc.data().email) {
+            matches.push(doc.data());
+            items.push(doc.id);
+          }
+        });
+
+        this.setState({ docs: matches });
+        this.setState({ docsItems: items });
+        console.log(this.state.docsItems);
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+
+    Firebase.firestore()
+      .collection("alumniportal")
+      .orderBy("timestamp", "desc")
+      .get()
+      .then((querySnapshot) => {
+        const matches = [];
+        const items = [];
+
+        querySnapshot.forEach(function (doc) {
+          if (doc.data() && email === doc.data().email) {
+            matches.push(doc.data());
+            items.push(doc.id);
+          }
+        });
+
+        this.setState({ alumniDocs: matches });
+        this.setState({ alumniID: items });
+        console.log(this.state.alumniDocs);
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
   }
 
   onImageChange1 = async (e) => {
@@ -114,8 +167,6 @@ export class Profile extends Component {
 
       console.log(url);
       this.setState({ userImage: url });
-      console.log(this.state.url);
-      // console.log(urls);
     } else {
       console.log("hello ");
       this.setState(() => ({ image: "image" }));
@@ -123,30 +174,51 @@ export class Profile extends Component {
   };
 
   changeUserData() {
-    // e.preventDefault();
-
+    // e.preventDefault();c
+    const name =
+      this.state.changeName == "" ? this.state.name : this.state.changeName;
+    const userImages = this.state.userImage;
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        const name = this.state.changeName == '' ? this.state.name : this.state.changeName;
-        const userImage = this.state.userImage;
         user
-        .updateProfile({
-          displayName: name,
-          photoURL: userImage,
-        })
-        .then(function () {
-          // Update successful.
-          console.log("Successfully updated");
-          window.location.reload(false);
-        })
-        .catch(function (error) {
-          // An error happened.
-        });
+          .updateProfile({
+            displayName: name,
+            photoURL: userImages,
+          })
+          .then(function () {
+            // Update successful.
+            console.log("Successfully updated");
+            // window.location.reload(false);
+          })
+          .catch(function (error) {
+            // An error happened.
+          });
       } else {
         this.setState({ isLogin: false });
       }
-
     });
+
+    Firebase.firestore()
+      .collection("users-data")
+      .doc(this.state.docsItems[0])
+      .get()
+      .then(function (doc) {
+        console.log(doc.id, " => ", doc.data());
+        doc.ref.update({ name: name });
+        doc.ref.update({ photoURL: userImages });
+      });
+
+    for (var i = 0; i < this.state.alumniID.length ; i++) {
+      Firebase.firestore()
+      .collection("alumniportal")
+      .doc(this.state.alumniID[i])
+      .get()
+      .then(function (doc) {
+        console.log(doc.id, " => ", doc.data());
+        doc.ref.update({ userImage: userImages });
+        doc.ref.update({ name: name });
+      });
+    }
 
 
   }
@@ -162,7 +234,12 @@ export class Profile extends Component {
         <Container text style={{ marginTop: "1em" }}>
           <Header as="h3">Edit Profile</Header>
 
-          <Button type="submit" color="linkedin" className="alumni_form_button"  onClick={this.changeUserData}>
+          <Button
+            type="submit"
+            color="linkedin"
+            className="alumni_form_button"
+            onClick={this.changeUserData}
+          >
             Change
           </Button>
 
@@ -199,7 +276,10 @@ export class Profile extends Component {
               />
             </div>
           </Form>
-          <p>After uploading the Profile Photo, dont click on the submit button untill the photo is being displayed on the page.</p>
+          <p>
+            After uploading the Profile Photo, dont click on the submit button
+            untill the photo is being displayed on the page.
+          </p>
         </Container>
 
         <Segment

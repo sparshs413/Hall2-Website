@@ -73,16 +73,7 @@ class Alumni extends Component {
         openComments: "1",
       });
     }
-    // return (<Detail />)
-    //calculate your data here
-    //then redirect:
-    // this.context.router.browserHistory.push({ //browserHistory.push should also work here
-    //   pathname: "/detail",
-    //   state: {yourCalculatedData: this.state.like}
-    // });
-    console.log(b);
     this.setState({ redirect: true,  id: b});
-    console.log(this.state.id)
   }
 
   authListener() {
