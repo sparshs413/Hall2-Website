@@ -15,7 +15,9 @@ import history from "./../history";
 import "./Alumni.css";
 import TimeAgo from "react-timeago";
 import Firebase from "../Firebase";
+import { Link } from "react-router-dom";
 import Detail from "./detail";
+import { Redirect } from 'react-router';
 
 class Alumni extends Component {
   constructor(props) {
@@ -31,10 +33,12 @@ class Alumni extends Component {
       isLogin: "",
       numberLike: 0,
       like: false,
+      redirect: false,
       details: false,
       response: "",
       username: "",
       userImage: "",
+      id: 0,
     };
 
     this.openComments = this.openComments.bind(this);
@@ -58,7 +62,8 @@ class Alumni extends Component {
     }
   };
 
-  openComments() {
+  openComments(b, e) {
+    e.preventDefault();
     if (this.state.openComments === "1") {
       this.setState({
         openComments: "0",
@@ -68,6 +73,16 @@ class Alumni extends Component {
         openComments: "1",
       });
     }
+    // return (<Detail />)
+    //calculate your data here
+    //then redirect:
+    // this.context.router.browserHistory.push({ //browserHistory.push should also work here
+    //   pathname: "/detail",
+    //   state: {yourCalculatedData: this.state.like}
+    // });
+    console.log(b);
+    this.setState({ redirect: true,  id: b});
+    console.log(this.state.id)
   }
 
   authListener() {
@@ -78,6 +93,8 @@ class Alumni extends Component {
           username: user.displayName,
           userImage: user.photoURL,
         });
+        console.log(this.state);
+        console.log(user);
       } else {
         this.setState({ isLogin: false });
       }
@@ -143,6 +160,18 @@ class Alumni extends Component {
       photo: this.state.userImage,
     };
 
+    const db = Firebase.firestore();
+    var messageRef = db
+      .collection("alumniportal")
+      .doc("CoUClUAO9QngWZ5FtwGs")
+      .collection("comments")
+      .add({
+        name: new_comment.username,
+        photoURL: new_comment.photo,
+        comment: new_comment.response,
+        timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
     this.setState({
       error: "Your comment added",
       total_comments: this.state.total_comments + 1,
@@ -190,6 +219,7 @@ class Alumni extends Component {
 
   makeUI() {
     var a = 0;
+    var b = 0;
     if (this.state.matches.length !== 0) {
       return this.state.matches.map((project) => (
         <div>
@@ -241,7 +271,7 @@ class Alumni extends Component {
                     <Icon name="like" />
                     {project.numberLike}
                   </Feed.Like>
-                  <span className="comment-box" onClick={this.openComments}>
+                  <span className="comment-box" onClick={this.openComments.bind(this, b++)}>
                     <Feed.Like>
                       <Icon name="comment" />
                       {project.numberComment}
@@ -251,42 +281,31 @@ class Alumni extends Component {
               </Feed.Content>
             </Feed.Event>
           </Feed>
-
-          <Accordion defaultActiveKey="0">
-            <Accordion.Collapse eventKey={this.state.openComments}>
-              <form>
-                <div className="form-group">
-                  <textarea
-                    className="form-control"
-                    type="text"
-                    name="response"
-                    placeholder="Your comment..."
-                    onChange={this.onChange}
-                    value={this.state.response}
-                    rows="5"
-                    required
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={this.onSubmit}
-                  disabled={this.state.response ? false : true}
-                >
-                  Submit
-                </Button>
-              </form>
-            </Accordion.Collapse>
-          </Accordion>
         </div>
       ));
     }
   }
 
   render() {
+    // if (this.state.redirect) {
+    //   return <Redirect push to="./detail" data={this.state.link} />;
+    // }
+
+    if (this.state.redirect) {
+      const a = this.state.items[this.state.id];
+      console.log(a);
+      return (
+        <Redirect
+          to={{
+            pathname: "/detail",
+            state: { name: a },
+          }}
+        />
+      );
+        }
+
     return (
-      <div className="alumni">        
+      <div className="alumni">
         <Container className="alumni">
           <Header as="h2" icon textAlign="center">
             <Icon name="users" circular />
@@ -342,6 +361,34 @@ class Alumni extends Component {
               </Feed.Content>
             </Feed.Event>
           </Feed>
+
+          <Accordion defaultActiveKey="0">
+            <Accordion.Collapse eventKey={this.state.openComments}>
+              <form>
+                <div className="form-group">
+                  <textarea
+                    className="form-control"
+                    type="text"
+                    name="response"
+                    placeholder="Your comment..."
+                    onChange={this.onChange}
+                    value={this.state.response}
+                    rows="5"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="btn btn-primary"
+                  onClick={this.onSubmit}
+                  disabled={this.state.response ? false : true}
+                >
+                  Submit
+                </Button>
+              </form>
+            </Accordion.Collapse>
+          </Accordion>
 
           <Modal
             show={this.state.modalShow}

@@ -52,6 +52,7 @@ export class AlumniForm extends Component {
       if (user) {
         this.setState({ isLogin: true, name: user.displayName, email: user.email, userImage: user.photoURL });
         console.log(this.state);
+        console.log(user)
       } else {
         this.setState({ isLogin: false });
       }

@@ -11,6 +11,8 @@ import {
 import history from "./../history";
 import "./detail.css";
 import { Button, Accordion, Card, Modal } from "react-bootstrap";
+import Firebase from "../Firebase";
+import TimeAgo from "react-timeago";
 
 class Detail extends Component {
   constructor(props) {
@@ -22,16 +24,90 @@ class Detail extends Component {
       modalImg: null,
       reply_form: "1",
       error: "",
-      comments: [],
+      matches: [],
+      items: [],
+      docs: [],
+      docsItems: [],
       response: "",
-      user: "logged in username",
       total_comments: 0,
       total_likes: 0,
+      id: this.props.location.state.name,
+      name: "",
+      profileImage: "",
+      aimage1: "",
+      aimage2: "",
+      aimage3: "",
+      content: "",
+      numLikes: "",
+      numComments: "",
+      timestamp: "",
     };
 
     this.enlargeImg = this.enlargeImg.bind(this);
     this.reply_form = this.reply_form.bind(this);
     this.showDeleteModal = this.showDeleteModal.bind(this);
+  }
+
+  componentDidMount() {
+    const id = this.state.id;
+
+    Firebase.firestore()
+      .collection("alumniportal")
+      .orderBy("timestamp", "desc")
+      .get()
+      .then((querySnapshot) => {
+        const matches = [];
+        const items = [];
+
+        querySnapshot.forEach(function (doc) {
+          if (doc.data() && id === doc.id) {
+            matches.push(doc.data());
+            items.push(doc.id);
+          }
+        });
+
+        this.setState({ docs: matches });
+        this.setState({ docsItems: items });
+        this.setState({
+          name: this.state.docs[0].name,
+          profileImage: this.state.docs[0].userImage,
+          aimage1: this.state.docs[0].image1,
+          aimage2: this.state.docs[0].image2,
+          aimage3: this.state.docs[0].image3,
+          content: this.state.docs[0].message,
+          numLikes: this.state.docs[0].numberLike,
+          numComments: this.state.docs[0].numberComment,
+          timestamp: this.state.docs[0].timestamp
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+
+    Firebase.firestore()
+      .collection("alumniportal")
+      .doc(this.state.id)
+      .collection("comments")
+      .orderBy("timestamp", "desc")
+      .get()
+      .then((querySnapshot) => {
+        const matches = [];
+        const items = [];
+
+        querySnapshot.forEach(function (doc) {
+          if (doc.data()) {
+            matches.push(doc.data());
+            items.push(doc.id);
+          }
+        });
+        console.log(matches);
+
+        this.setState({ matches: matches });
+        this.setState({ items: items });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
   }
 
   reply_form() {
@@ -90,16 +166,68 @@ class Detail extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    this.reply_form();
-    var new_comment = { user: this.state.user, response: this.state.response };
+    var new_comment = {
+      username: this.state.username,
+      response: this.state.response,
+      photo: this.state.userImage,
+    };
+
+    const db = Firebase.firestore();
+    var messageRef = db
+      .collection("alumniportal")
+      .doc("CoUClUAO9QngWZ5FtwGs")
+      .collection("comments")
+      .add({
+        name: new_comment.username,
+        photoURL: new_comment.photo,
+        comment: new_comment.response,
+        timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
     this.setState({
-      comments: [new_comment, ...this.state.comments],
       error: "Your comment added",
       total_comments: this.state.total_comments + 1,
     });
-
-    console.log(...this.state.comments);
   };
+
+  developUI() {
+    if (this.state.matches.length !== 0) {
+      return this.state.matches.map((project) => (
+        <div>
+          <Comment>
+            <Comment.Avatar src={project.photoURL} />
+            <Comment.Content>
+              <span
+                className="comment_cross_btn"
+                onClick={this.showDeleteModal}
+              >
+                <a>
+                  <Icon name="close" />
+                </a>
+              </span>
+              <Comment.Author>{project.name}</Comment.Author>
+              <Comment.Metadata>
+                <TimeAgo date={project.timestamp.toDate()} minPeriod="5" />
+
+                <Feed>
+                  <Feed.Event>
+                    <Feed.Content>
+                      <Feed.Meta>
+                        <Feed.Like>
+                          <Icon name="like" />1
+                        </Feed.Like>
+                      </Feed.Meta>
+                    </Feed.Content>
+                  </Feed.Event>
+                </Feed>
+              </Comment.Metadata>
+              <Comment.Text>{project.comment}</Comment.Text>
+            </Comment.Content>
+          </Comment>
+        </div>
+      ));
+    }
+  }
 
   render() {
     return (
@@ -113,38 +241,45 @@ class Detail extends Component {
 
           <Feed>
             <Feed.Event>
-              <Feed.Label image={require("./1.jpeg")} />
+              <Feed.Label image={this.state.profileImage} />
               <Feed.Content>
                 <Feed.Summary>
-                  <a>{this.props.name}</a>
-                  <Feed.Date>{this.props.time}</Feed.Date>
+                  <a>{this.state.name}</a>
+                  {/* <Feed.Date><TimeAgo date={this.state.timestamp.toDate()} minPeriod="5" /></Feed.Date> */}
                 </Feed.Summary>
                 <Feed.Extra images>
                   <a>
                     <img
                       Style={"transition : transform 0.25s ease !important"}
-                      src={require("../lostfound/no_image.png")}
+                      src={this.state.aimage1}
                       onClick={this.enlargeImg}
                     />
                   </a>
                   <a>
                     <img
                       Style={"transition : transform 0.25s ease !important"}
-                      src={require("./1.jpeg")}
+                      src={this.state.aimage2}
+                      onClick={this.enlargeImg}
+                    />
+                  </a>
+                  <a>
+                    <img
+                      Style={"transition : transform 0.25s ease !important"}
+                      src={this.state.aimage3}
                       onClick={this.enlargeImg}
                     />
                   </a>
                 </Feed.Extra>
-                <Feed.Extra text>{this.props.message}</Feed.Extra>
+                <Feed.Extra text>{this.state.content}</Feed.Extra>
                 <Feed.Meta>
                   <Feed.Like onClick={this.addLike}>
                     <Icon name="like" />
-                    {this.props.likes}
+                    {this.state.numLikes}
                   </Feed.Like>
                   <span className="comment-box" onClick={this.reply_form}>
                     <Feed.Like>
                       <Icon name="comment" />
-                      {this.props.comments}
+                      {this.state.numComment}
                     </Feed.Like>
                   </span>
                 </Feed.Meta>
@@ -188,61 +323,7 @@ class Detail extends Component {
           </Accordion>
 
           <Comment.Group>
-            {this.state.comments.map((comment) => (
-              <Comment>
-                <Comment.Avatar src={require("./1.jpeg")} />
-                <Comment.Content>
-                  <Comment.Author>{comment.user}</Comment.Author>
-                  <Comment.Metadata>
-                    <div>Just now</div>
-
-                    <Feed>
-                      <Feed.Event>
-                        <Feed.Content>
-                          <Feed.Meta>
-                            <Feed.Like>
-                              <Icon name="like" />0
-                            </Feed.Like>
-                          </Feed.Meta>
-                        </Feed.Content>
-                      </Feed.Event>
-                    </Feed>
-                  </Comment.Metadata>
-                  <Comment.Text>{comment.response}</Comment.Text>
-                </Comment.Content>
-              </Comment>
-            ))}
-
-            <Comment>
-              <Comment.Avatar src={require("./1.jpeg")} />
-              <Comment.Content>
-                <span
-                  className="comment_cross_btn"
-                  onClick={this.showDeleteModal}
-                >
-                  <a>
-                    <Icon name="close" />
-                  </a>
-                </span>
-                <Comment.Author>Steve Jobes</Comment.Author>
-                <Comment.Metadata>
-                  <div>2 days ago</div>
-
-                  <Feed>
-                    <Feed.Event>
-                      <Feed.Content>
-                        <Feed.Meta>
-                          <Feed.Like>
-                            <Icon name="like" />1
-                          </Feed.Like>
-                        </Feed.Meta>
-                      </Feed.Content>
-                    </Feed.Event>
-                  </Feed>
-                </Comment.Metadata>
-                <Comment.Text>Revolutionary!</Comment.Text>
-              </Comment.Content>
-            </Comment>
+            {this.developUI()}
           </Comment.Group>
         </Container>
 

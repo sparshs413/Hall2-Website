@@ -127,13 +127,12 @@ export class Profile extends Component {
 
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        const name = this.state.changeName;
+        const name = this.state.changeName == '' ? this.state.name : this.state.changeName;
         const userImage = this.state.userImage;
         user
         .updateProfile({
           displayName: name,
           photoURL: userImage,
-          
         })
         .then(function () {
           // Update successful.
