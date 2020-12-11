@@ -29,13 +29,16 @@ export class Profile extends Component {
       docsItems: [],
       alumniDocs: [],
       alumniID: [],
+      userComments: [],
+      allPostIds: [],
+      isAdmin: false,
+      isLogin: false,
     };
 
     this.changeUserData = this.changeUserData.bind(this);
   }
 
   componentDidMount() {
-    this.authListener();
     $(".custom-file-input").on("change", function () {
       var fileName = $(this).val().split("\\").pop();
       $(this)
@@ -43,11 +46,28 @@ export class Profile extends Component {
         .addClass("selected")
         .html(fileName);
     });
+
+    Firebase.firestore()
+      .collection("alumniportal")
+      .orderBy("timestamp", "desc")
+      .get()
+      .then((querySnapshot) => {
+        const items = [];
+
+        querySnapshot.forEach(function (doc) {
+          items.push(doc.id);
+        });
+
+        this.setState({ allPostIds: items });
+        this.authListener();
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
   }
 
   authListener() {
     let email = "";
-
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
@@ -57,7 +77,9 @@ export class Profile extends Component {
           userImage: user.photoURL,
         });
         email = user.email;
-        console.log(this.state);
+        if(user.email === 'demo@gmail.com') {
+          this.setState({ isAdmin: true });
+        }
       } else {
         this.setState({ isLogin: false });
       }
@@ -80,7 +102,6 @@ export class Profile extends Component {
 
         this.setState({ docs: matches });
         this.setState({ docsItems: items });
-        console.log(this.state.docsItems);
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
@@ -103,11 +124,31 @@ export class Profile extends Component {
 
         this.setState({ alumniDocs: matches });
         this.setState({ alumniID: items });
-        console.log(this.state.alumniDocs);
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
+    const items = [];
+    for (var i = 0; i < this.state.allPostIds.length; i++) {
+      Firebase.firestore()
+        .collection("alumniportal")
+        .doc(this.state.allPostIds[i])
+        .collection("comments")
+        .orderBy("timestamp", "desc")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach(function (doc) {
+            if (doc.data() && email === doc.data().email) {
+              items.push(doc.data().email);
+            }
+          });
+
+          this.setState({ userComments: items });
+        })
+        .catch(function (error) {
+          console.log("Error getting documents: ", error);
+        });
+    }
   }
 
   onImageChange1 = async (e) => {
@@ -175,6 +216,7 @@ export class Profile extends Component {
 
   changeUserData() {
     // e.preventDefault();c
+    const email = this.state.email;
     const name =
       this.state.changeName == "" ? this.state.name : this.state.changeName;
     const userImages = this.state.userImage;
@@ -208,19 +250,39 @@ export class Profile extends Component {
         doc.ref.update({ photoURL: userImages });
       });
 
-    for (var i = 0; i < this.state.alumniID.length ; i++) {
+    for (var i = 0; i < this.state.alumniID.length; i++) {
       Firebase.firestore()
-      .collection("alumniportal")
-      .doc(this.state.alumniID[i])
-      .get()
-      .then(function (doc) {
-        console.log(doc.id, " => ", doc.data());
-        doc.ref.update({ userImage: userImages });
-        doc.ref.update({ name: name });
-      });
+        .collection("alumniportal")
+        .doc(this.state.alumniID[i])
+        .get()
+        .then(function (doc) {
+          console.log(doc.id, " => ", doc.data());
+          doc.ref.update({ userImage: userImages });
+          doc.ref.update({ name: name });
+        });
     }
 
+    for (var i = 0; i < this.state.allPostIds.length; i++) {
+      Firebase.firestore()
+        .collection("alumniportal")
+        .doc(this.state.allPostIds[i])
+        .collection("comments")
+        .orderBy("timestamp", "desc")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach(function (doc) {
+            if (doc.data() && email === doc.data().email) {
+              doc.ref.update({ photoURL: userImages });
+              doc.ref.update({ name: name });
+            }
+          });
 
+          // this.setState({ userComments: items });
+        })
+        .catch(function (error) {
+          console.log("Error getting documents: ", error);
+        });
+    }
   }
 
   onChange = (e) =>

@@ -270,6 +270,7 @@ export class AlumniForm extends Component {
         image3: this.state.image3,
         numberLike: 0,
         numberComment: 0,
+        isLiked: false,
         timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
       });
 

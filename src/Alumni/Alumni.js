@@ -17,7 +17,7 @@ import TimeAgo from "react-timeago";
 import Firebase from "../Firebase";
 import { Link } from "react-router-dom";
 import Detail from "./detail";
-import { Redirect } from 'react-router';
+import { Redirect } from "react-router";
 
 class Alumni extends Component {
   constructor(props) {
@@ -38,7 +38,10 @@ class Alumni extends Component {
       response: "",
       username: "",
       userImage: "",
+      useremail: "",
       id: 0,
+      isLiked: false,
+      numberComments: [],
     };
 
     this.openComments = this.openComments.bind(this);
@@ -48,32 +51,111 @@ class Alumni extends Component {
     // add likes to post
     e.preventDefault();
 
-    if (this.state.isLogin) {
-      Firebase.firestore()
-        .collection("alumniportal")
-        .doc(this.state.items[a])
-        .onSnapshot(function (doc) {
-          doc.ref.update({ numberLike: b + 1 });
-        });
+    const email = this.state.useremail;
 
-      this.setState({ like: true });
+    if (this.state.isLogin) {
+      let likeCheck = false;
+      const useremail = this.state.useremail;
+      const items = [];
+      const numLikes = [];
+
+      if (true) {
+        Firebase.firestore()
+          .collection("alumniportal")
+          .doc(this.state.items[a])
+          .collection("likes")
+          .orderBy("timestamp", "desc")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach(function (doc) {
+              numLikes.push(doc.data());
+              if (doc.data().email === useremail) {
+                likeCheck = true;
+                items.push(doc.data());
+              }
+            });
+
+            this.setState({ isLiked: likeCheck });
+            if (items.length === 0) {
+              this.setState({ isLiked: false });
+            }
+            this.likeAdd(a, numLikes.length);
+          })
+          .catch(function (error) {
+            console.log("Error getting documents: ", error);
+          });
+      }
     } else {
       alert("Login to Like/Comment on the Post!");
     }
   };
 
+  likeAdd(a, b) {
+    const useremail = this.state.useremail;
+    if (!this.state.isLiked) {
+      Firebase.firestore()
+        .collection("alumniportal")
+        .doc(this.state.items[a])
+        .onSnapshot(function (doc) {
+          doc.ref.update({ numberLike: b + 1 });
+          doc.ref.update({ isLiked: true });
+        });
+
+      Firebase.firestore()
+        .collection("alumniportal")
+        .doc(this.state.items[a])
+        .collection("likes")
+        .add({
+          email: useremail,
+          timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+        });
+    } else {
+      alert("You have already liked the Post");
+    }
+  }
+
   openComments(b, e) {
     e.preventDefault();
-    if (this.state.openComments === "1") {
-      this.setState({
-        openComments: "0",
-      });
-    } else {
-      this.setState({
-        openComments: "1",
-      });
+    this.setState({ redirect: true, id: b });
+  }
+
+  numOfComments() {
+    let Comment = [];
+    for (let i = 0; i < this.state.items.length; i++) {
+      let numComments = [];
+      
+      Firebase.firestore()
+          .collection("alumniportal")
+          .doc(this.state.items[i])
+          .collection("comments")
+          .orderBy("timestamp", "desc")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach(function (doc) {
+              numComments.push(doc.data());
+            });
+            Comment.push(numComments.length);
+
+            this.setState({ numberComments: Comment  });
+            this.updateCommentInUI();
+          })
+          .catch(function (error) {
+            console.log("Error getting documents: ", error);
+          });
     }
-    this.setState({ redirect: true,  id: b});
+  }
+
+  updateCommentInUI() {
+    let numComments = this.state.numberComments;
+    for (let i = 0; i < this.state.items.length; i++) {
+      Firebase.firestore()
+        .collection("alumniportal")
+        .doc(this.state.items[i])
+        .onSnapshot(function (doc) {
+          doc.ref.update({ numberComment: numComments[i] });
+          // doc.ref.update({ isLiked: true });
+        });
+    }
   }
 
   authListener() {
@@ -83,9 +165,9 @@ class Alumni extends Component {
           isLogin: true,
           username: user.displayName,
           userImage: user.photoURL,
+          useremail: user.email,
         });
-        console.log(this.state);
-        console.log(user);
+        
       } else {
         this.setState({ isLogin: false });
       }
@@ -134,78 +216,11 @@ class Alumni extends Component {
 
         this.setState({ matches: matches, items: items });
         // this.setState({  });
+        this.numOfComments();
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
-  }
-
-  onSubmit = (e) => {
-    e.preventDefault();
-
-    this.openComments();
-
-    var new_comment = {
-      username: this.state.username,
-      response: this.state.response,
-      photo: this.state.userImage,
-    };
-
-    const db = Firebase.firestore();
-    var messageRef = db
-      .collection("alumniportal")
-      .doc("CoUClUAO9QngWZ5FtwGs")
-      .collection("comments")
-      .add({
-        name: new_comment.username,
-        photoURL: new_comment.photo,
-        comment: new_comment.response,
-        timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
-      });
-
-    this.setState({
-      error: "Your comment added",
-      total_comments: this.state.total_comments + 1,
-    });
-  };
-
-  makeComments() {
-    return (
-      <>
-        <React.Fragment>
-          <Comment>
-            <Comment.Avatar src={require("./1.jpeg")} />
-            <Comment.Content>
-              <span
-                className="comment_cross_btn"
-                onClick={this.showDeleteModal}
-              >
-                <a>
-                  <Icon name="close" />
-                </a>
-              </span>
-              <Comment.Author>Steve Jobes</Comment.Author>
-              <Comment.Metadata>
-                <div>2 days ago</div>
-
-                <Feed>
-                  <Feed.Event>
-                    <Feed.Content>
-                      <Feed.Meta>
-                        <Feed.Like>
-                          <Icon name="like" />1
-                        </Feed.Like>
-                      </Feed.Meta>
-                    </Feed.Content>
-                  </Feed.Event>
-                </Feed>
-              </Comment.Metadata>
-              <Comment.Text>Revolutionary!</Comment.Text>
-            </Comment.Content>
-          </Comment>
-        </React.Fragment>
-      </>
-    );
   }
 
   makeUI() {
@@ -218,7 +233,7 @@ class Alumni extends Component {
             <Feed.Event>
               <Feed.Label image={project.userImage} />
               <Feed.Content>
-                <Feed.Summary onClick={() => history.push("/detail")}>
+                <Feed.Summary>
                   <a>{project.name}</a>
                   <Feed.Date>
                     <TimeAgo date={project.timestamp.toDate()} minPeriod="5" />
@@ -251,9 +266,7 @@ class Alumni extends Component {
                   </a>
                 </Feed.Extra>
                 <a>
-                  <Feed.Extra text onClick={() => history.push("/detail")}>
-                    {project.message}
-                  </Feed.Extra>
+                  <Feed.Extra text>{project.message}</Feed.Extra>
                 </a>
                 <Feed.Meta>
                   <Feed.Like
@@ -262,7 +275,10 @@ class Alumni extends Component {
                     <Icon name="like" />
                     {project.numberLike}
                   </Feed.Like>
-                  <span className="comment-box" onClick={this.openComments.bind(this, b++)}>
+                  <span
+                    className="comment-box"
+                    onClick={this.openComments.bind(this, b++)}
+                  >
                     <Feed.Like>
                       <Icon name="comment" />
                       {project.numberComment}
@@ -293,7 +309,7 @@ class Alumni extends Component {
           }}
         />
       );
-        }
+    }
 
     return (
       <div className="alumni">
@@ -352,34 +368,6 @@ class Alumni extends Component {
               </Feed.Content>
             </Feed.Event>
           </Feed>
-
-          <Accordion defaultActiveKey="0">
-            <Accordion.Collapse eventKey={this.state.openComments}>
-              <form>
-                <div className="form-group">
-                  <textarea
-                    className="form-control"
-                    type="text"
-                    name="response"
-                    placeholder="Your comment..."
-                    onChange={this.onChange}
-                    value={this.state.response}
-                    rows="5"
-                    required
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={this.onSubmit}
-                  disabled={this.state.response ? false : true}
-                >
-                  Submit
-                </Button>
-              </form>
-            </Accordion.Collapse>
-          </Accordion>
 
           <Modal
             show={this.state.modalShow}
