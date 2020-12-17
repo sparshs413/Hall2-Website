@@ -10,7 +10,7 @@ import {
 } from "semantic-ui-react";
 import history from "./../history";
 import "./detail.css";
-import { Button, Accordion, Card, Modal } from "react-bootstrap";
+import { Button, Accordion, Card, Modal, Spinner } from "react-bootstrap";
 import Firebase from "../Firebase";
 import TimeAgo from "react-timeago";
 
@@ -49,6 +49,7 @@ class Detail extends Component {
       isLogin: false,
       isLiked: false,
       isAdmin: false,
+      isLoading: true,
     };
 
     this.enlargeImg = this.enlargeImg.bind(this);
@@ -57,6 +58,7 @@ class Detail extends Component {
   }
 
   componentDidMount() {
+    this.setState({isLoading: true});
     const id = this.state.id;
     this.authListener();
 
@@ -111,7 +113,7 @@ class Detail extends Component {
         });
 
         this.setState({ matches: matches });
-        this.setState({ items: items });
+        this.setState({ items: items, isLoading: false });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
@@ -438,12 +440,18 @@ class Detail extends Component {
     return (
       <div className="alumni">
         <Container text style={{ marginTop: "1em" }}>
+        {this.state.isLoading &&
+          <div className='loader_center'>
+            <Spinner animation="border" variant="info" />
+          </div>        
+        }        
           <span className="back_btn" onClick={() => history.push("/Alumni")}>
             <a>
               <Icon name="arrow alternate circle left outline" />
             </a>
           </span>
-
+        {!this.state.isLoading &&
+        <>
           <Feed>
             <Feed.Event>
               <Feed.Label image={this.state.profileImage} />
@@ -534,6 +542,8 @@ class Detail extends Component {
           </Accordion>
 
           <Comment.Group>{this.developUI()}</Comment.Group>
+        </>
+        }
         </Container>
 
         <Segment

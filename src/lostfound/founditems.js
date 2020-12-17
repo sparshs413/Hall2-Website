@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import "./lostitems.css";
 import PropTypes from "prop-types";
 import { getFoundItems } from "../actions/lostfound";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import history from "./../history";
 import firebase from "../Firebase";
 import { Modal } from "react-bootstrap";
@@ -24,13 +24,15 @@ export class foundItems extends Component {
       deleteid: "",
       deleteemail: "",
       error: "",
-      isAdmin: false
+      isAdmin: false,
+      isLoading: true
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount() {
+    this.setState({isLoading: true});
     firebase
       .firestore()
       .collection("users")
@@ -48,10 +50,11 @@ export class foundItems extends Component {
         });
 
         this.setState({ Matches: Matches });
-        this.setState({ items: items });
+        this.setState({ items: items, isLoading: false });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
+        this.setState({ isLoading: false });
       });
   }
 
@@ -212,7 +215,15 @@ export class foundItems extends Component {
               all found items
             </Button>
           </div>
-          {this.testFunc()}
+          {this.state.isLoading ?
+            <div className='loader_center'>
+              <Spinner animation="border" variant="info" />
+            </div>    
+          :
+            <>
+              {this.testFunc()}
+            </>
+          }
         </div>
       </div>
     );

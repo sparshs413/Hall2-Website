@@ -33,6 +33,8 @@ export class Profile extends Component {
       allPostIds: [],
       isAdmin: false,
       isLogin: false,
+      progress_image1: 0,
+      success: false
     };
 
     this.changeUserData = this.changeUserData.bind(this);
@@ -168,6 +170,7 @@ export class Profile extends Component {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.setState({progress_image1 : progress});
           console.log("Upload is " + progress + "% done");
           switch (snapshot.state) {
             case Firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -177,7 +180,7 @@ export class Profile extends Component {
               console.log("Upload is running");
               break;
           }
-        },
+        }.bind(this),
         function (error) {
           // A full list of error codes is available at
           // https://firebase.google.com/docs/storage/web/handle-errors
@@ -230,6 +233,7 @@ export class Profile extends Component {
           .then(function () {
             // Update successful.
             console.log("Successfully updated");
+            this.state({success: true});
             // window.location.reload(false);
           })
           .catch(function (error) {
@@ -294,6 +298,9 @@ export class Profile extends Component {
     return (
       <div className="Profile">
         <Container text style={{ marginTop: "1em" }}>
+          {this.state.success &&
+            <span style={{color : 'green'}}><Icon name='check' />Successfully changed</span>
+          }
           <Header as="h3">Edit Profile</Header>
 
           <Button
@@ -312,6 +319,9 @@ export class Profile extends Component {
               onClick={this.enlargeImg}
             />
             <div className="custom-file profile_image">
+              <div className='upload_img_bar' 
+                style={{width: `${this.state.progress_image1}%`, backgroundColor: this.state.progress_image1 === 100 ? 'rgb(68, 197, 85)' : 'rgb(42, 160, 175)' }}>  
+              </div>
               <input
                 type="file"
                 name="image"
@@ -322,6 +332,7 @@ export class Profile extends Component {
               <label className="custom-file-label" for="customFile">
                 Change Image
               </label>
+              <span style={{color: 'red'}}>crop image in square shape before uploading for good cover</span>
             </div>
 
             <div className="form-group profile_email">

@@ -7,9 +7,9 @@
 }
 
 .nav_items a.login{
-  margin-left: 10px;
+  margin: auto 0 auto 10px !important;
   border: 2px solid #ffffff;
-  padding: 5px;
+  padding: 2px 6px !important;
 }
 
 .width { 
@@ -61,6 +61,7 @@ body {
 }
 
 .sidenav {
+  line-height: normal !important;
   height: 100%;
   width: 0;
   position: fixed;
@@ -79,7 +80,7 @@ body {
   padding: 5px 2px 5px 32px !important;
   text-decoration: none;
   font-size: 1.3em;
-  color: #b1abab;
+  color: #b1abab ;
   display: block;
   transition: 0.3s;
 }
@@ -89,13 +90,46 @@ body {
   margin: 15px 10px;
 }
 
-.sidenav a:hover,
-.sidenav span:hover {
-  color: #f1f1f1;
+.sidenav a:hover, .sidenav .ui .title:active,
+.sidenav span:hover, .sidenav .ui .title:hover,
+.sidenav .ui .content a:hover, .sidenav .ui .content a:hover {
+  color: #ffffff !important;
+  border: 4px solid rgb(212, 129, 33);
 }
 
-.sidenav a:active {
-  border: 4px solid rgb(212, 129, 33);
+
+.sidenav .ui {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  min-height: 0;
+}
+
+.sidenav .ui .title{
+  font-size: 1.3em !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #b1abab !important;
+  transition: 0.3s !important;
+  border: none !important;
+}
+
+.sidenav .ui .item{
+  margin: 0 !important;
+  color: #b1abab !important;
+  padding: 0 !important;
+}
+
+.sidenav .ui .item .content{
+  border: none !important;
+  margin: -10px 0 !important;
+  font-size: 1.3em !important;
+}
+
+.sidenav .ui .item .content a{
+  /* margin: 0 !important; */
+  padding: 0 !important;
+  border: none !important;
+  font-size: 1em !important;
 }
 
 .sidenav .closebtn {

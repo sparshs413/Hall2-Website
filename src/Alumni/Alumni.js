@@ -10,13 +10,14 @@ import {
   Image,
   Comment,
 } from "semantic-ui-react";
-import { Accordion, Card, Modal } from "react-bootstrap";
+import { Accordion, Card, Modal, Spinner } from "react-bootstrap";
 import history from "./../history";
 import "./Alumni.css";
 import TimeAgo from "react-timeago";
 import Firebase from "../Firebase";
 import { Link } from "react-router-dom";
-import Detail from "./detail";
+import Detail from "./detail";  
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { Redirect } from "react-router";
 
 class Alumni extends Component {
@@ -42,6 +43,8 @@ class Alumni extends Component {
       id: 0,
       isLiked: false,
       numberComments: [],
+      isLoading: true,
+      deleteModalShow: false,
     };
 
     this.openComments = this.openComments.bind(this);
@@ -119,6 +122,7 @@ class Alumni extends Component {
     this.setState({ redirect: true, id: b });
   }
 
+
   numOfComments() {
     let Comment = [];
     for (let i = 0; i < this.state.items.length; i++) {
@@ -175,7 +179,7 @@ class Alumni extends Component {
   }
 
   handleClose = () => {
-    this.setState({ modalShow: false });
+    this.setState({ modalShow: false, deleteModalShow: false });
   };
 
   onChange = (e) => {
@@ -198,6 +202,7 @@ class Alumni extends Component {
   }
 
   componentDidMount() {
+    this.setState({ isLoading: true });
     this.authListener();
     Firebase.firestore()
       .collection("alumniportal")
@@ -214,7 +219,7 @@ class Alumni extends Component {
           }
         });
 
-        this.setState({ matches: matches, items: items });
+        this.setState({ matches: matches, items: items, isLoading: false });
         // this.setState({  });
         this.numOfComments();
       })
@@ -227,11 +232,27 @@ class Alumni extends Component {
     var a = 0;
     var b = 0;
     if (this.state.matches.length !== 0) {
+
+
+    //   <InfiniteScroll
+      //   dataLength={items.length} //This is important field to render the next data
+      //   next={fetchData}
+      //   hasMore={true}
+      //   loader={<h4>Loading...</h4>}
+      //   endMessage={
+      //     <p style={{ textAlign: 'center' }}>
+      //       <b>Yay! You have seen it all</b>
+      //     </p>
+      //   }
+    //   >
+    //   {items}
+    // </InfiniteScroll>
+
       return this.state.matches.map((project) => (
         <div>
           <Feed>
             <Feed.Event>
-              <Feed.Label image={project.userImage} />
+              <Feed.Label ><div className='profile_pic' style={{backgroundImage: `url(${project.userImage})`}}></div></Feed.Label>
               <Feed.Content>
                 <Feed.Summary>
                   <a>{project.name}</a>
@@ -240,6 +261,7 @@ class Alumni extends Component {
                   </Feed.Date>
                 </Feed.Summary>
                 <Feed.Extra images>
+                  {(project.image1) &&
                   <a>
                     <img
                       className={this.state.img_class}
@@ -248,6 +270,8 @@ class Alumni extends Component {
                       onClick={this.enlargeImg.bind(this, project.image1)}
                     />
                   </a>
+                  }
+                  {(project.image2) &&
                   <a>
                     <img
                       className={this.state.img_class}
@@ -256,7 +280,9 @@ class Alumni extends Component {
                       onClick={this.enlargeImg.bind(this, project.image2)}
                     />
                   </a>
-                  <a>
+                  }
+                  {(project.image3) &&
+                    <a>
                     <img
                       className={this.state.img_class}
                       Style={"transition : transform 0.25s ease !important"}
@@ -264,9 +290,10 @@ class Alumni extends Component {
                       onClick={this.enlargeImg.bind(this, project.image3)}
                     />
                   </a>
+                  }
                 </Feed.Extra>
                 <a>
-                  <Feed.Extra text>{project.message}</Feed.Extra>
+                  <Feed.Extra text onClick={this.openComments.bind(this, b++)}>{project.message}</Feed.Extra>
                 </a>
                 <Feed.Meta>
                   <Feed.Like
@@ -311,23 +338,32 @@ class Alumni extends Component {
       );
     }
 
-    return (
+    return ( 
       <div className="alumni">
-        <Container className="alumni">
+        <Container className="alumni" text>
           <Header as="h2" icon textAlign="center">
+          {this.state.isLoading &&
+            <Spinner animation="border" variant="info" />
+          }
             <Icon name="users" circular />
             <Header.Content style={{ color: "black" }}>
               Alumni = Friends
             </Header.Content>
           </Header>
+          {!this.state.isLoading &&
+          <>
+
           {this.makeUI()}
           <Feed>
             <Feed.Event>
               <Feed.Label image={require("./1.jpeg")} />
               <Feed.Content>
-                <Feed.Summary onClick={() => history.push("/detail")}>
+                <Feed.Summary>
                   <a>Helen Troy</a>
                   <Feed.Date>4 days ago</Feed.Date>
+                  <span className='delete_post'>
+                    <a onClick={() => this.setState({deleteModalShow: true})}><Icon name='delete' /></a>
+                  </span>
                 </Feed.Summary>
                 <Feed.Extra images>
                   <a>
@@ -368,6 +404,8 @@ class Alumni extends Component {
               </Feed.Content>
             </Feed.Event>
           </Feed>
+          </>
+          }
 
           <Modal
             show={this.state.modalShow}
@@ -382,6 +420,28 @@ class Alumni extends Component {
               {/* <img  src={modalImg} /> */}
             </Modal.Body>
           </Modal>
+
+{/* delete modal */}
+        <Modal
+          show={this.state.deleteModalShow}
+          size="sm"
+          aria-labelledby="contained-modal-title-vcenter"
+          onHide={() => this.handleClose()}
+          className="deleteModal"
+          centered
+        >
+          <Modal.Header style={{ padding: "10px" }} closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Sure to delete ?
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Footer style={{ padding: "0" }}>
+            <Button variant="link" style={{ color: "#1f88be", backgroundColor: 'white' }} onClick={this.deleteComment}>
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         </Container>
 
         <div className="fix_btn">

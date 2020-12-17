@@ -1,0 +1,100 @@
+.extras .card {
+  box-shadow: none !important;
+  background-color: rgb(231, 231, 216, 0.3) !important;
+  margin: 10px auto !important;
+  width: 330px !important;
+}
+
+.extras .ui.cards {
+  margin: 0 !important;
+}
+
+.extras .ui.container {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.extras .item .header {
+  font-size: 1em !important;
+  color: rgb(61, 60, 60) !important;
+  font-weight: normal !important;
+}
+
+.extras .tabular a.active {
+  color: #1268a1 !important;
+  border-top: 2px solid rgb(18, 104, 161) !important;
+}
+
+.visible.transition {
+  display: inline-flex !important;
+}
+
+.extras .input-number {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 30px;
+  background-color: transparent;
+  overflow: hidden;
+  border-radius: 20px;
+  margin: -3px 0 0 0;
+  float: right;
+}
+
+.extras .input-number span {
+  position: absolute;
+  left: 50%;
+  margin-left: -15px;
+  display: inline-block;
+  background-color: white;
+  height: 100%;
+  width: 30px;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 32px;
+  font-size: 16px;
+  color: #1268a1;
+  letter-spacing: -1px;
+}
+
+.extras .input-number button {
+  display: inline-block;
+  width: 40px;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  color: white;
+  padding:0 8px;
+  font-size: 20px;
+  cursor: pointer;
+  background-color: rgba(18, 104, 161, .8);
+  transition: background-color .2s ease;
+}
+
+.extras .input-number button:nth-of-type(1) {
+  padding-right: 20px
+}
+
+.extras .input-number button:nth-of-type(2) {
+  padding-left: 20px;
+}
+
+.extras .input-number button:hover, .input-number button:active {
+  background-color: rgba(18, 104, 161);
+}
+
+@media screen and (max-width: 664px) {
+  .extras .tabular {
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .extras {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .extras .tabular::-webkit-scrollbar {
+    display: none;
+  }
+}

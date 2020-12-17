@@ -7,7 +7,7 @@ import "./AskTheHab.css";
 import TimeAgo from "react-timeago";
 import emailjs from "emailjs-com";
 import Firebase from "../Firebase";
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 
 class AskTheHab extends Component {
   constructor(props) {
@@ -27,6 +27,7 @@ class AskTheHab extends Component {
       Matches: [],
       responseId: "",
       modalShow: false,
+      isLoading: true,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -49,6 +50,7 @@ class AskTheHab extends Component {
   }
 
   componentDidMount() {
+    this.setState({isLoading: true});
     this.authListener();
     Firebase.firestore()
       .collection("askthehab")
@@ -66,11 +68,13 @@ class AskTheHab extends Component {
         });
 
         this.setState({ Matches: Matches });
-        this.setState({ items: items });
+        this.setState({ items: items, isLoading: false });
         console.log(this.state.Matches);
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
+        this.setState({isLoading: false});
+
       });
   }
 
@@ -349,7 +353,15 @@ class AskTheHab extends Component {
             </Card>
           </Accordion>
 
-          {this.developUI()}
+          {this.state.isLoading ?
+            <div className='loader_center'>
+              <Spinner animation="border" variant="info" />
+            </div>    
+          :
+          <>
+            {this.developUI()}
+          </>
+          }
 
          </div>
          

@@ -11,9 +11,11 @@ import {
   Form,
   Segment,
 } from "semantic-ui-react";
+import { Spinner } from "react-bootstrap";
 import history from "./../history";
 import "./AlumniForm.css";
 import Firebase from "../Firebase";
+import { Redirect } from "react-router";
 
 export class AlumniForm extends Component {
   constructor(props) {
@@ -27,7 +29,12 @@ export class AlumniForm extends Component {
       image1: "",
       image2: "",
       image3: "",
+      progress_image1: 0,
+      progress_image2: 0,
+      progress_image3: 0,
       isLogin: "",
+      isLoading: false,
+      disabled: false
     };
   }
 
@@ -76,6 +83,7 @@ export class AlumniForm extends Component {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.setState({progress_image1 : progress});
           console.log("Upload is " + progress + "% done");
           switch (snapshot.state) {
             case Firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -85,7 +93,7 @@ export class AlumniForm extends Component {
               console.log("Upload is running");
               break;
           }
-        },
+        }.bind(this),
         function (error) {
           // A full list of error codes is available at
           // https://firebase.google.com/docs/storage/web/handle-errors
@@ -141,6 +149,7 @@ export class AlumniForm extends Component {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.setState({progress_image2 : progress});
           console.log("Upload is " + progress + "% done");
           switch (snapshot.state) {
             case Firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -150,7 +159,7 @@ export class AlumniForm extends Component {
               console.log("Upload is running");
               break;
           }
-        },
+        }.bind(this),
         function (error) {
           // A full list of error codes is available at
           // https://firebase.google.com/docs/storage/web/handle-errors
@@ -206,6 +215,7 @@ export class AlumniForm extends Component {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.setState({progress_image3 : progress});
           console.log("Upload is " + progress + "% done");
           switch (snapshot.state) {
             case Firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -215,7 +225,7 @@ export class AlumniForm extends Component {
               console.log("Upload is running");
               break;
           }
-        },
+        }.bind(this),
         function (error) {
           // A full list of error codes is available at
           // https://firebase.google.com/docs/storage/web/handle-errors
@@ -256,9 +266,12 @@ export class AlumniForm extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
+    this.setState({ isLoading: true, disabled: true });
+
     if (!this.state.isLogin) {
       alert("Please Login to Post");
     } else {
+      this.setState({ isLoading: true });
       const db = Firebase.firestore();
       const userRef = db.collection("alumniportal").add({
         name: this.state.name,
@@ -274,15 +287,24 @@ export class AlumniForm extends Component {
         timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
       });
 
+
       // var messageRef = db.collection('rooms').doc('roomA')
       //           .collection('messages').doc('message1');
     }
+    this.setState({ isLoading: false, disabled: true });
+    // redirect to alumni
+
   };
 
   render() {
     return (
       <div className="AlumniForm">
         <Container text style={{ marginTop: "1em" }}>
+        {this.state.isLoading &&
+          <div className='loader_center'>
+            <Spinner animation="border" variant="info" />
+          </div>        
+        }
           <span className="cross_btn" onClick={() => history.push("/Alumni")}>
             <a>
               <Icon name="close" />
@@ -290,15 +312,18 @@ export class AlumniForm extends Component {
           </span>
           <Header as="h3">Add Your Story</Header>
 
-          <Button
-            color="linkedin"
-            className="alumni_form_button"
-            onClick={this.onSubmit}
-          >
-            Post &nbsp; <Icon name="paper plane" />
-          </Button>
 
-          <Form>
+          <Form onSubmit={this.onSubmit}>
+
+            <Button
+              type = 'submit'
+              disabled={this.state.disabled}
+              color="linkedin"
+              className="alumni_form_button"
+            >
+              Post &nbsp; <Icon name="paper plane" />
+            </Button>
+            
             <div className="form-group">
               <textarea
                 rows="20"
@@ -312,7 +337,10 @@ export class AlumniForm extends Component {
               />
             </div>
 
-            <div className="custom-file alumni_form_image">
+            <div  className="custom-file alumni_form_image">
+              <div className='upload_img_bar' 
+                style={{width: `${this.state.progress_image1}%`, backgroundColor: this.state.progress_image1 === 100 ? 'rgb(68, 197, 85)' : 'rgb(42, 160, 175)' }}>  
+              </div>
               <input
                 type="file"
                 name="image"
@@ -326,9 +354,13 @@ export class AlumniForm extends Component {
             </div>
 
             <div className="custom-file alumni_form_image">
+              <div className='upload_img_bar' 
+                style={{width: `${this.state.progress_image2}%`, backgroundColor: this.state.progress_image1 === 100 ? 'rgb(68, 197, 85)' : 'rgb(42, 160, 175)' }}>  
+              </div>
     
-            // var messageRef = db.collection('rooms').doc('roomA')
-      //           .collection('messages').doc('message1');          <input
+             {/* var messageRef = db.collection('rooms').doc('roomA')
+                 .collection('messages').doc('message1');           */}
+              <input
                 type="file"
                 name="image"
                 className="custom-file-input"
@@ -341,6 +373,9 @@ export class AlumniForm extends Component {
             </div>
 
             <div className="custom-file alumni_form_image">
+              <div className='upload_img_bar' 
+                style={{width: `${this.state.progress_image3}%`, backgroundColor: this.state.progress_image1 === 100 ? 'rgb(68, 197, 85)' : 'rgb(42, 160, 175)' }}>  
+              </div>
               <input
                 type="file"
                 name="image"
@@ -353,7 +388,9 @@ export class AlumniForm extends Component {
               </label>
             </div>
           </Form>
+         
         </Container>
+        
 
         <Segment
           inverted

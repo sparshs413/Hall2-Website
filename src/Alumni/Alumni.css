@@ -2,7 +2,29 @@
   color: rgb(53, 133, 199);
 }
 
+.alumni .profile_pic {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.alumni .delete_post {
+  float: right;
+}
+
+.alumni .delete_post:hover, .alumni .delete_post:active {
+  color: red;
+}
+
+.alumni .profile_pic img {
+  border-radius: 0 !important;
+}
+
 .alumni .label {
+  margin-top: 15px;
   width: 3rem !important;
 }
 
@@ -18,11 +40,17 @@
   padding: 0 !important;
 }
 
+
 .alumni .fix_btn {
   position: fixed;
   bottom: 40px;
   right: 20px;
   z-index: 1;
+}
+
+
+.alumni .add_alumni{
+  box-shadow: 0px 8px 8px 1px rgba(0, 0, 0, 0.2) !important;
 }
 
 .fix_btn button.add_alumni {
@@ -32,10 +60,7 @@
   float: right;
 }
 
-
-
-
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 600px) {
   .modal-content{
     height: auto !important;
     width: 100% !important;
@@ -47,9 +72,15 @@
   .alumni .modal-body img {
     width: 100% !important;
   }
+  
+  .alumni .images img {
+    max-height: 100px;
+    max-width: 200px;
+    width: auto !important;
+  }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 600px) {
   .modal-content{
     display: block;
     margin-left: auto !important;
@@ -63,6 +94,13 @@
   .alumni .ui.container {
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+  .alumni .images img {
+    max-height: 86px;
+    margin: 0.3% !important;
+    width: auto !important;
+    max-width: 32% !important;
+
   }
   
 }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./announce.css";
 import Card from "react-bootstrap/Card";
-import { Accordion, Button } from "react-bootstrap";
+import { Accordion, Button, Spinner } from "react-bootstrap";
 import { addAnnounce, getAnnounce } from "../actions/announce";
 import PropTypes from "prop-types";
 import firebase from "../Firebase";
@@ -20,13 +20,15 @@ export class Announcements extends Component {
       btn_class: "",
       items: ["hello", "world"],
       Matches: [],
-      isAdmin: ''
+      isAdmin: '',
+      isLoading: true
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount() {
+    this.setState({isLoading: true});
     firebase
       .firestore()
       .collection("announcements")
@@ -41,10 +43,11 @@ export class Announcements extends Component {
           }
         });
 
-        this.setState({ Matches: Matches });
+        this.setState({ Matches: Matches, isLoading: false });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
+        this.setState({isLoading: false});
       });
   }
 
@@ -85,6 +88,12 @@ export class Announcements extends Component {
         <div className="card card-body mt-4 mb-4 ">
           <h2>Announcements</h2>
 
+          {this.state.isLoading ?
+            <div className='loader_center'>
+              <Spinner animation="border" variant="info" />
+            </div>    
+          :
+          <>
           {this.props.announces.map((announce) => (
             <div class="card-body announce">
               <h4 class="card-title announce">{announce.title}</h4>
@@ -99,6 +108,8 @@ export class Announcements extends Component {
           ))}
 
           {this.makeUI()}
+        </>
+        }
         </div>
       </div>
     );

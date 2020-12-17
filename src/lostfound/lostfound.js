@@ -266,7 +266,7 @@ export class Form extends Component {
               className="form-control"
               type="email"
               name="email"
-              placeholder="required during deleting"
+              placeholder="required by u during deleting this post"
               onChange={this.onChange}
               value={this.state.email}
               required
@@ -349,7 +349,7 @@ export class Form extends Component {
               className="form-control"
               type="email"
               name="email"
-              placeholder="required during deleting"
+              placeholder="required by u during deleting this post"
               onChange={this.onChange}
               value={this.state.email}
               required

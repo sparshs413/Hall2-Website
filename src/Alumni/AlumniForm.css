@@ -19,6 +19,12 @@ button.alumni_form_button {
   color: rgb(97, 94, 94) !important;
 }
 
+.upload_img_bar {
+  display: block;
+  height: 3px;
+  margin-top: -3px;
+}
+
 
 @media screen and (max-width: 600px) {
   .AlumniForm .ui.container {

@@ -4,6 +4,7 @@ import "./Navbar.css";
 import { Navbar, Nav, Form, Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import Firebase from "../Firebase";
+import { Menu, Accordion, Transition } from "semantic-ui-react";
 
 export class Navigation extends Component {
   // console.log(props)
@@ -16,6 +17,7 @@ export class Navigation extends Component {
       bars_class: "",
       isAdmin: '',
       isLogin: false,
+      activeIndex: 1,
     };
 
     this.openNav = this.openNav.bind(this);
@@ -65,6 +67,15 @@ export class Navigation extends Component {
     });
   }
 
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps
+    const { activeIndex } = this.state
+    const newIndex = activeIndex === index ? -1 : index
+
+    this.setState({ activeIndex: newIndex })
+  }
+
+
   openNav() {
     var css = this.state.bars_class === "change" ? "" : "change";
     if (css === "change") {
@@ -73,7 +84,6 @@ export class Navigation extends Component {
         maincss: { "margin-left": "250px" },
         bars_class: css,
       });
-      document.body.style = "background: rgba(17, 17, 17,0.5)";
     } else {
       this.setState({
         sidecss: { width: "0px" },
@@ -114,6 +124,31 @@ export class Navigation extends Component {
           <a href={this.state.isAdmin ? "/form" : "/Announce"}>Announcements</a>
           <a href="/Alumni">Alumni Portal</a>
           <a href="/ask-the-hab">Ask The Hab</a>
+          <a>
+          <Accordion as={Menu} vertical>
+            <Menu.Item >
+              <Accordion.Title
+                active={this.state.activeIndex === 0}
+                content='Mess Portal'
+                index={0}
+                onClick={this.handleClick}
+                
+              />
+              <Accordion.Content active={this.state.activeIndex === 0} >
+                <Transition animation='browse' visible={!this.state.activeIndex} duration={500}>
+                  <a href="/mess-extras">Mess Extras</a>
+                </Transition>
+                <Transition animation='browse' visible={!this.state.activeIndex} duration={500}>
+                  <a href="/mess-extras">Time Table</a>
+                </Transition>
+                <Transition animation='browse' visible={!this.state.activeIndex} duration={500}>
+                  <a href="/mess-extras">Bills & History</a>
+                </Transition>
+              </Accordion.Content>
+              
+            </Menu.Item>
+          </Accordion>
+        </a>
           {this.state.isLogin &&
             <a href="/profile">Edit Profile</a>
           }

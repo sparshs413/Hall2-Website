@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import "./announce.css";
 import Card from "react-bootstrap/Card";
 import PropTypes from "prop-types";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Spinner } from "react-bootstrap";
 import firebase from "../Firebase";
 import "./announce.css";
 import { addAnnounce, getAnnounce } from "../actions/announce";
@@ -27,6 +27,7 @@ export class AnnounceForm extends Component {
       error: "",
       showDeleteModal: false,
       deleteid: "",
+      isLoading:true
     };
     this.componentDidMount = this.componentDidMount.bind(this);
   }
@@ -150,6 +151,7 @@ export class AnnounceForm extends Component {
   }
 
   componentDidMount() {
+    this.setState({isLoading: true});
     this.authListener();
     firebase
       .firestore()
@@ -170,11 +172,13 @@ export class AnnounceForm extends Component {
         // console.log(Matches);
 
         this.setState({ Matches: Matches });
-        this.setState({ id: id });
+        this.setState({ id: id, isLoading: false });
         // console.log(this.state.Matches);
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
+        this.setState({isLoading: false});
+
       });
   }
 
@@ -351,8 +355,15 @@ export class AnnounceForm extends Component {
               </p>
               <hr />
             </div> */}
-
-            {this.makeUI()}
+            {this.state.isLoading ?
+            <div className='loader_center'>
+              <Spinner animation="border" variant="info" />
+            </div>    
+            :
+            <>
+              {this.makeUI()}
+            </>
+            }
           </div>
         </div>
 

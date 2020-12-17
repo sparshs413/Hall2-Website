@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./lostitems.css";
 import { Modal } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import history from "./../history";
 import PropTypes from "prop-types";
 import { getLostItems } from "../actions/lostfound";
@@ -24,13 +24,15 @@ export class LostItems extends Component {
       deleteid: "",
       deleteemail: "",
       error: "",
-      isAdmin: false
+      isAdmin: false,
+      isLoading: true,
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount() {
+    this.setState({ isLoading: true});
     firebase
       .firestore()
       .collection("users")
@@ -48,10 +50,12 @@ export class LostItems extends Component {
         });
 
         this.setState({ Matches: Matches });
-        this.setState({ items: items });
+        this.setState({ items: items, isLoading:false });
       })
       .catch(function (error) {
         console.log("Error getting documents: ", error);
+        this.setState({ isLoading: false});
+
       });
   }
 
@@ -218,8 +222,15 @@ export class LostItems extends Component {
               all found items
             </Button>
           </div>
-
-          {this.developUI()}
+          {this.state.isLoading ?
+            <div className='loader_center'>
+              <Spinner animation="border" variant="info" />
+            </div>    
+          :
+            <>
+              {this.developUI()}
+            </>
+          }
         </div>
       </div>
     );

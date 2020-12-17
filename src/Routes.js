@@ -17,6 +17,8 @@ import Register from "./Register/Register";
 import AdminPage from "./AdminPage/AdminPage";
 import Profile from "./Profile/Profile";
 import ResetPassword from "./ResetPassword/Reset";
+import Extras from "./Mess/Extras";
+
 
 export default class Routes extends Component {
   render() {
@@ -38,6 +40,7 @@ export default class Routes extends Component {
           <Route path="/register" component={Register} />
           <Route path="/admin" component={AdminPage} />
           <Route path="/profile" component={Profile} />
+          <Route path="/mess-extras" component={Extras} />
           <Route path="/resetpassword" component={ResetPassword} />
         </Switch>
       </Router>
