@@ -24,16 +24,17 @@ class Extras extends Component {
   }
 
   change(){
+    // setTimeout(()=>{this.setState({visible: false});},11)
     this.setState({visible: false});
     // this.setState({visible: true});
-    setTimeout(()=>{this.setState({visible: true});},100)
+    setTimeout(()=>{this.setState({visible: true});},300)
   }
 
   group(){
 
     return(
     <Container className='extras card_set'>
-      <Transition.Group animation='drop' duration={0,500} visible={this.state.visible}>
+      <Transition.Group animation='browse' duration={400} >
       {this.state.visible &&
       <Card.Group >
         <Card>
