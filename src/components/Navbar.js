@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { NavLink } from "react-router";
 import "./Navbar.css";
-import { Navbar, Nav, Form, Button } from "react-bootstrap";
+import { Navbar, Nav, Form, Button, NavDropdown } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import Firebase from "../Firebase";
 import { Menu, Accordion, Transition } from "semantic-ui-react";
@@ -10,6 +10,7 @@ export class Navigation extends Component {
   // console.log(props)
   constructor(props) {
     super(props);
+    this.listener = null;
 
     this.state = {
       sidecss: {},
@@ -60,6 +61,7 @@ export class Navigation extends Component {
     }
   }
 
+
   myFunction() {
     var css = this.state.bars_class === "change" ? "" : "change";
     this.setState({
@@ -101,6 +103,7 @@ export class Navigation extends Component {
         bg="primary"
         className="width"
         variant="dark"
+        id='navbar'
       >
         <div class="opennav">
           <div
@@ -139,16 +142,19 @@ export class Navigation extends Component {
                   <a href="/mess-extras">Mess Extras</a>
                 </Transition>
                 <Transition animation='browse' visible={!this.state.activeIndex} duration={500}>
-                  <a href="/mess-extras">Time Table</a>
+                  <a href="/time-table">Time Table</a>
                 </Transition>
                 <Transition animation='browse' visible={!this.state.activeIndex} duration={500}>
-                  <a href="/mess-extras">Bills & History</a>
+                  <a href="/BillHistory">Bills & History</a>
                 </Transition>
               </Accordion.Content>
               
             </Menu.Item>
           </Accordion>
         </a>
+        {!this.state.isAdmin &&
+          <a href='/edit-accounts'>Edit Other Accounts</a>
+        }
           {this.state.isLogin &&
             <a href="/profile">Edit Profile</a>
           }
@@ -165,6 +171,11 @@ export class Navigation extends Component {
             </Nav.Link>
             <Nav.Link className='nav_hide' href="/Alumni">Alumni Portal</Nav.Link>
             <Nav.Link className='nav_hide' href="/ask-the-hab">Ask The Hab</Nav.Link>
+            <NavDropdown className='nav_hide' title="Mess Portal" id="basic-nav-dropdown">
+              <NavDropdown.Item href="/mess-extras">Mess Extras</NavDropdown.Item>
+              <NavDropdown.Item href="/time-table">Time Table</NavDropdown.Item>
+              <NavDropdown.Item href="/BillHistory">Bills & History</NavDropdown.Item>
+            </NavDropdown>
             {!this.state.isLogin ? (
               <Fragment>
                 <Nav.Link className='login' href="/login">Login</Nav.Link>

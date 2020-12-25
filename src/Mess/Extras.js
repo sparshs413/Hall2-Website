@@ -1,7 +1,8 @@
+import { object } from 'prop-types';
 import React, { Component } from 'react'
 import { Tab, Container, Loader, Card, Button, Item, Label, Icon, Transition } from 'semantic-ui-react'
 import "./Extras.css";
-
+import InputNumber from './IncDec';
 
 
 
@@ -11,55 +12,53 @@ class Extras extends Component {
 
     this.state = {
       name: "",
+      extras_copy: {},
       email: "",
+      current_day: 0,
+      is_mess_admin: true,
+      value: 0,
       isLoading: true,
       visible: false,
+      extras: [{sunday:{'zxaa':{price:30, available: 6},'c':{price:30, available: 5}}, monday:{'zxaa':{price:30, available: 4},'c':{price:30, available: 4}}},
+                {sunday:{'zxaa':{price:30, available: 5},'c':{price:30, available: 4}}, monday:{'zxaa':{price:30, available: 4},'c':{price:30, available: 4}}},
+                {sunday:{'zxaa':{price:30, available: 3},'c':{price:30, available: 4}}, monday:{'zxaa':{price:30, available: 4},'c':{price:30, available: 4}}}],
+
     };
     this.change = this.change.bind(this);
+    this.changeNum = this.changeNum.bind(this);
 
   }
 
   componentDidMount() {
-    this.setState({visible: true});
+    var d = new Date();
+    this.setState({visible: true, current_day: d.getDay()});
+  }
+
+  changeNum = (n, i, day, k, value_display) => {
+    var extras = {...this.state.extras};
+    var extras_copy = {...this.state.extras_copy};
+    extras[i][day][k]['available'] -= n;
+    extras_copy[`${i}${day}${k}`] = value_display;
+    this.setState({extras, extras_copy});
   }
 
   change(){
-    // setTimeout(()=>{this.setState({visible: false});},11)
     this.setState({visible: false});
-    // this.setState({visible: true});
     setTimeout(()=>{this.setState({visible: true});},300)
   }
 
-  group(){
+  group(day){
+
+    var extras = {...this.state.extras};
+    var extras_copy = {...this.state.extras_copy};
+  
 
     return(
     <Container className='extras card_set'>
-      <Transition.Group animation='browse' duration={400} >
-      {this.state.visible &&
+      <Transition animation='zoom' duration={300} visible={this.state.visible}>
       <Card.Group >
-        <Card>
-          <Card.Content>
-            <Button primary floated='right' style={{marginBottom: '15px'}}>
-              Book
-              <Icon name='right chevron' />
-            </Button>
-            <Card.Header>Breakfast</Card.Header>           
-            <Card.Description>
-            <Item.Group divided>
-
-            <Item>
-              <Item.Content>
-                <Item.Header>My Neighbor Totoro</Item.Header>
-                <Label>4</Label>
-                <InputNumber min={0} max={10} />
-              </Item.Content>
-            </Item>
-
-            </Item.Group>
-            </Card.Description>
-          </Card.Content>
-        </Card>
-
+      {[...Array(3)].map((e,i) => {
+        return (
 
         <Card>
           <Card.Content>
@@ -67,49 +66,47 @@ class Extras extends Component {
               Book
               <Icon name='right chevron' />
             </Button>
-            <Card.Header>Lunch</Card.Header>           
+            <Card.Header>
+              {i==0 ? 'Breakfast' : i==1 ? 'Lunch' : 'Dinner'}  
+            </Card.Header>            
             <Card.Description>
             <Item.Group divided>
 
-            <Item>
-              <Item.Content>
-                <Item.Header>My Neighbor Totoro</Item.Header>
-                <Label>4</Label>
-                <InputNumber min={0} max={10} />
-              </Item.Content>
-            </Item>
+                {/* {console.log(extras[i][day])} */}
+                {Object.keys(extras[i][day]).map((key, value) => { 
+                  return (
+                  <Item style={{padding: '12px 0 6px 0'}}>
+                  <Item.Content>
+                  <Item.Header>{key}</Item.Header>
+                    <Label style={{margin: '0 0 6px 0', borderRadius: '20px'}}>{extras[i][day][key]['available']}</Label>
+                    <span style={{float: 'right '}}>
+                      <InputNumber 
+                        min={0} 
+                        max={extras[i][day][key]['available']+extras_copy[`${i}${day}${key}`]+1} 
+                        // max={extras_copy[i][day][key]['available']>10 ? 10 : extras_copy[i][day][key]['available']} 
+                        i={i} 
+                        day={day} 
+                        k={key}
+                        changeNum={this.changeNum} 
+                      />
+                    </span>
+                    <Label style={{float: 'right'}}>₹ {extras[i][day][key]['price']}</Label>
+                  </Item.Content>
+                  </Item>
+                  )}
+                )}
 
             </Item.Group>
             </Card.Description>
           </Card.Content>
         </Card>
 
+        )}
+      )}
 
-        <Card>
-          <Card.Content>
-            <Button primary floated='right' style={{marginBottom: '15px'}}>
-              Book
-              <Icon name='right chevron' />
-            </Button>
-            <Card.Header>Dinner</Card.Header>           
-            <Card.Description>
-            <Item.Group divided>
-
-            <Item>
-              <Item.Content>
-                <Item.Header>My Neighbor Totoro</Item.Header>
-                <Label>4</Label>
-                <InputNumber min={0} max={10} />
-              </Item.Content>
-            </Item>
-
-            </Item.Group>
-            </Card.Description>
-          </Card.Content>
-        </Card>
-        
-      </Card.Group>}
-      </Transition.Group>
+      </Card.Group>
+      {/* } */}
+      </Transition>
     </Container>
     )
   }
@@ -117,17 +114,18 @@ class Extras extends Component {
 
   render(){
 
+
     const panes = [
       { menuItem: 'Sunday', render: () => 
         <Tab.Pane>
           Sunday
-          {this.group()}
+          {this.group('sunday')}
         </Tab.Pane> 
       },
       { menuItem: 'Monday', render: () => 
         <Tab.Pane>
           Monday
-          {this.group()}
+          {this.group('monday')}
         </Tab.Pane> 
       },
       { menuItem: 'Tuesday', render: () => 
@@ -166,167 +164,19 @@ class Extras extends Component {
     return (
     <Container className='extras'>
       
-      <h3>Mess Extras Booking</h3>
-      <Tab panes={panes} defaultActiveIndex={0} onTabChange={this.change} />
+      <h3>Mess Extras Booking
+      {this.state.is_mess_admin &&
+      <Button primary floated='right' href='/form-extras'>
+        Edit Extras
+        <Icon name='right chevron' />
+      </Button>
+      }
+      </h3>
+      <Tab panes={panes} defaultActiveIndex={this.state.current_day} onTabChange={this.change} />
     </Container>
     );
   }
 }
-
-
-
-class Groups extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      name: "",
-      email: "",
-      isLoading: true,
-      visible: null
-    };
-
-    // this.animation_fun = this.animation_fun.bind(this);
-    // this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-
-  componentDidMount() {
-    this.setState({visible: true});
-  }
-
-  render(){
-    const breakfast = this.props.data;
-    
-  
-    return (
-    <Container className='extras card_set'>
-      {/* <Transition.Group animation='drop' duration={500} visible={this.state.visible}> */}
-      {this.state.visible &&
-      <Card.Group >
-        <Card>
-          <Card.Content>
-            <Button primary floated='right' style={{marginBottom: '15px'}}>
-              Book
-              <Icon name='right chevron' />
-            </Button>
-            <Card.Header>Breakfast</Card.Header>           
-            <Card.Description>
-            <Item.Group divided>
-
-            <Item>
-              <Item.Content>
-                <Item.Header>My Neighbor Totoro</Item.Header>
-                <Label>4</Label>
-                <InputNumber min={0} max={10} />
-              </Item.Content>
-            </Item>
-
-            </Item.Group>
-            </Card.Description>
-          </Card.Content>
-        </Card>
-
-
-        <Card>
-          <Card.Content>
-            <Button primary floated='right' style={{marginBottom: '15px'}}>
-              Book
-              <Icon name='right chevron' />
-            </Button>
-            <Card.Header>Lunch</Card.Header>           
-            <Card.Description>
-            <Item.Group divided>
-
-            <Item>
-              <Item.Content>
-                <Item.Header>My Neighbor Totoro</Item.Header>
-                <Label>4</Label>
-                <InputNumber min={0} max={10} />
-              </Item.Content>
-            </Item>
-
-            </Item.Group>
-            </Card.Description>
-          </Card.Content>
-        </Card>
-
-
-        <Card>
-          <Card.Content>
-            <Button primary floated='right' style={{marginBottom: '15px'}}>
-              Book
-              <Icon name='right chevron' />
-            </Button>
-            <Card.Header>Dinner</Card.Header>           
-            <Card.Description>
-            <Item.Group divided>
-
-            <Item>
-              <Item.Content>
-                <Item.Header>My Neighbor Totoro</Item.Header>
-                <Label>4</Label>
-                <InputNumber min={0} max={10} />
-              </Item.Content>
-            </Item>
-
-            </Item.Group>
-            </Card.Description>
-          </Card.Content>
-        </Card>
-        
-      </Card.Group>}
-      {/* </Transition.Group> */}
-    </Container>
-    );
-  }
-}
-
-
-// for +- no.
-class InputNumber extends Component {
-  state = {
-    value: 0,
-  }
-
-  constructor() {
-    super();
-    
-    this.increment = this.increment.bind(this);
-    this.decrement = this.decrement.bind(this);
-  }
-  
-  get value() {
-    return this.state.value;
-  }
-
-  increment() {
-    const { max } = this.props;
-    
-    if (typeof max === 'number' && this.value >= max) return;
-    
-    this.setState({ value: this.value + 1 });
-  }
-
-  decrement() {
-    const { min } = this.props;
-    
-    if (typeof min === 'number' && this.value <= min) return;
-    
-    this.setState({ value: this.value - 1 });
-  }
-
-  render() {
-    return (
-      <div className="input-number" style={this.props.style}>
-        <button type="button" onClick={this.decrement}>&minus;</button>
-        <span>{this.value}</span>
-        <button type="button" onClick={this.increment}>&#43;</button>     
-      </div>
-    )
-  }
-}
-
 
 
 export default Extras;

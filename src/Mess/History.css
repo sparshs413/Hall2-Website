@@ -1,0 +1,83 @@
+.history {
+  background-image:linear-gradient(to bottom right, rgb(25, 83, 190), rgb(34, 124, 184), rgb(10, 101, 204));
+  margin-top: -4.3em;
+  padding-top: 50px;
+}
+
+.history .header {
+  font-size: 1.5em;
+  text-align: center;
+  color: #f1f2f8;
+  font-weight: bolder;
+  border-radius: 6px;
+  margin: 10px 0px;
+  backdrop-filter: blur(20px);
+}
+
+.history .month{
+  display: inline-block;
+  padding: 15px 5px;
+  margin:  0 0 -30px !important;
+}
+
+
+.history .total{
+  display: block;
+  /* position: absolute; */
+  float: right;
+  padding: 15px 5px;
+  margin:  0 0 -30px !important;
+}
+
+.history .accordion .card {
+  margin-bottom: 1.5em;
+  padding: 0px 5px 0px 10px;
+}
+
+.history .card-header {
+  border-bottom: 0 !important;
+}
+
+.history th {
+  font-weight: bold;
+  background-color: rgb(192, 187, 187, 0.4);
+}
+
+
+.history .accordion .btn-link {
+  /* border: 3px solid rgba(74, 165, 218, 0.9); */
+  /* background-color: rgba(48, 68, 179, 0.9) ; */
+  border-radius: 40px;
+  font-size: 2.2em;
+  float: right;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* width: 150px; */
+  /* height: 40px;  */
+  text-decoration: none !important;
+  color: #2c71c0;
+  font-weight: bolder;
+  transition: 0.2s;
+}
+
+.history .accordion .btn-link:active {
+  background-color: rgba(24, 117, 170, 0.8);
+}
+
+
+.history .btn-link{
+  padding: 10px 12px !important;
+  /* height: 30px; */
+}
+
+@media screen and (max-width: 400px) {
+
+  .history .ui.container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .history .card-body {
+    padding: 0.5rem;
+  }
+  
+}

@@ -50,10 +50,12 @@
 
 
 .alumni .add_alumni{
+  padding: 20px  !important;
   box-shadow: 0px 8px 8px 1px rgba(0, 0, 0, 0.2) !important;
 }
 
 .fix_btn button.add_alumni {
+  background-image: radial-gradient(rgb(51, 155, 204), rgb(8, 113, 161)) !important;
   padding: 4px 13px !important;
   border-radius: 40px !important;
   font-size: 3em !important;

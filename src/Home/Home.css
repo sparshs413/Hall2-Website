@@ -1,3 +1,7 @@
+body {
+    background-color: rgba(201, 187, 163, 0.1);
+}
+
 .Home .lander {
     padding: 20px 0;
     text-align: center;
@@ -15,7 +19,7 @@
 
  
 .Home .card-body {
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
     /* border: 3px solid rgba(74, 165, 218, 0.9); */
     margin: 20px 20px 40px;
@@ -33,7 +37,7 @@
 
 .card-body::-webkit-scrollbar {
     display: none;
-  }
+}
   
   
 .home-announce h4 {
@@ -53,6 +57,15 @@
 
 .react-multi-carousel-dot button {
   background-color: #ffffff;
+  height: 10px !important;
+  width: 10px !important;
+  transition: 500;
+}
+
+.react-multi-carousel-dot--active button {
+  height: 12px !important;
+  width: 12px !important;
+  background-color: black !important;
 }
 
 

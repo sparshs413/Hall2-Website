@@ -15,9 +15,14 @@ import AskTheHab from "./AskTheHab/AskTheHab";
 import LoginForm from "./LoginForm/LoginForm";
 import Register from "./Register/Register";
 import AdminPage from "./AdminPage/AdminPage";
+import EditAccounts from "./AdminPage/EditAccounts";
 import Profile from "./Profile/Profile";
 import ResetPassword from "./ResetPassword/Reset";
 import Extras from "./Mess/Extras";
+import TimeTable from "./Mess/TimeTable";
+import FormTimeTable from "./Mess/FormTimeTable";
+import FormExtras from "./Mess/FormExtras";
+import History from "./Mess/History";
 
 
 export default class Routes extends Component {
@@ -39,8 +44,13 @@ export default class Routes extends Component {
           <Route path="/login" component={LoginForm} />
           <Route path="/register" component={Register} />
           <Route path="/admin" component={AdminPage} />
+          <Route path="/edit-accounts" component={EditAccounts} />
           <Route path="/profile" component={Profile} />
           <Route path="/mess-extras" component={Extras} />
+          <Route path="/time-table" component={TimeTable} />
+          <Route path="/form-time-table" component={FormTimeTable} />
+          <Route path="/form-extras" component={FormExtras} />
+          <Route path="/BillHistory" component={History} />
           <Route path="/resetpassword" component={ResetPassword} />
         </Switch>
       </Router>

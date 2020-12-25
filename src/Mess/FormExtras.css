@@ -1,0 +1,72 @@
+.extrasform .price .label {
+  height: 22px;
+  /* width: 68px; */
+  padding:  1px 0 0 5px !important;
+  vertical-align: middle;
+  /* border-top-right-radius: 15px !important;
+  border-bottom-right-radius: 15px !important; */
+  /* margin-top: 6px !important; */
+  /* margin-right: -18px !important; */
+  /* border-radius: 15px; */
+  /* z-index: 2; */
+  border-right: none;
+  /* position: absolute; */
+  /* right: 40%; */
+  /* float: right; */
+  background-color: rgb(231, 236, 236);
+}
+
+.extrasform .price {
+  margin-left: 0px;
+}
+
+.extrasform .price input{
+  /* z-index: 1; */
+  /* background-color: yellow; */
+  margin: 0px 0px 0px 0px !important;
+  padding: 0px 0 0 5px !important;
+  height: 23px;
+  max-width: 35px !important;
+  border-radius: 0 !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+}
+
+.extrasform .price input.number {
+  /* background-color: rgb(25, 116, 55); */
+  /* margin-top: 0px !important; */
+  min-width: 40px !important;
+  height: 20px;
+  padding-left: 10px !important;
+}
+
+.extrasform .ui.input input:not(.price) {
+  padding-right: 5px !important;
+  border-radius: 0 !important;
+  margin-bottom: 0px;
+}
+
+.extrasform .ui.input input:not(.price):nth-child(n+1) {
+  margin-top: 10px;
+}
+
+.extrasform .price input.price {
+  /* position: absolute; */
+  /* margin-right: 5% !important; */
+  height: 20px;
+  background-color: transparent;
+  border-radius: 0 !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border: none !important;
+
+}
+
+.extrasform .price input.price:focus {
+  outline: none;
+}
+
+.extrasform input.remove {
+margin-top: 10px !important;
+margin-left: -10px !important;
+}

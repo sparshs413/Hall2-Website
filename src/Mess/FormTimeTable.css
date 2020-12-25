@@ -1,0 +1,73 @@
+.timetable .form .table-responsive {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
+}
+
+.timetable .table-responsive::-webkit-scrollbar {
+display: none !important;
+}
+
+.timetableform .submit_menu {
+  margin-bottom: 10px;
+}
+
+.timetableform td:not(:nth-child(4n+1)) {
+  min-width: 150px;
+}
+
+.timetableform tr:hover {
+  background-color: rgba(75, 184, 235, 0.3) !important;
+}
+
+.timetableform th {
+  font-size: 1em;
+  font-weight: bold;
+  background-color: rgba(203, 206, 207, 0.5) !important;
+}
+
+.timetableform .addbtn {
+  float: right;
+  border-radius: 15px;
+  color: #ffffff;
+  font-size: 1.6em;
+  font-weight: bold;
+  background-color: rgb(53, 146, 223);
+  border: none;
+  padding: 1px 6px 0px;
+}
+
+.timetableform .remove {
+  /* border-radius: 15px !important; */
+  color: #f01212 !important;
+  font-size: 1.3em;
+  font-weight: bolder !important;
+  background-color: rgba(138, 131, 131, 0) !important;
+  border: none !important;
+  /* padding: 0px 10px !important; */
+  margin: 0 2px 0 -10px !important;
+  /* width:20px !important; */
+}
+
+.ui.action.input:not([class*="left action"])>input{
+  /* border-bottom-right-radius: 15px !important;
+  border-top-right-radius: 15px !important; */
+  border-right-color: transparent !important;
+  padding: 6px 5px !important;
+  margin: 3px 0px;
+  width: 20px;
+  align-items: center;
+}
+
+.timetableform .ui.input {
+  transition: height 2s, transform 1s !important;
+  width: 100%;
+}
+
+.timetableform .ui.input input:not(.remove) {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  transition: visible 1s linear!important;
+  border-radius: 20px !important;
+  width: 90%;
+  margin-right: 10px;
+}

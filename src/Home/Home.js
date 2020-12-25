@@ -53,6 +53,18 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
+
+    document.querySelector('#navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.4) !important; ";
+
+    this.listener = document.addEventListener("scroll", e => {
+      var scrolled = document.scrollingElement.scrollTop;
+      if (scrolled >= 450) {
+          document.getElementById('navbar').style.cssText = "background-color: #4285f4 !important";
+      } else {
+          document.getElementById('navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.4) !important;";
+      }
+    });
+    
     let a = 0;
     firebase
       .firestore()
@@ -75,6 +87,18 @@ export default class Home extends Component {
         console.log("Error getting documents: ", error);
       });
   }
+
+  componentDidUpdate() {
+    document.removeEventListener("scroll", this.listener);
+
+  }
+
+  componentWillUnmount() {
+    document.getElementById('navbar').style.cssText = "background-color: #4285f4 !important";
+
+    window.removeEventListener("scroll", this.listener);
+  }
+
 
   makeAnnouncement() {
     let number = 0;
@@ -131,7 +155,7 @@ export default class Home extends Component {
             }}
           />
           {/* First Parallax Image with Logo Text */}
-          <div className="copied">
+          <div className="copied " style={{marginTop: '-60px'}}>
             <div
               className="bgimg-1 w3-display-container w3-opacity-min"
               id="home"

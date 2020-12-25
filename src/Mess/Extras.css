@@ -57,6 +57,10 @@
   letter-spacing: -1px;
 }
 
+.extras .label {
+  margin: 2px 4px !important;
+}
+
 .extras .input-number button {
   display: inline-block;
   width: 40px;
@@ -96,5 +100,13 @@
 
   .extras .tabular::-webkit-scrollbar {
     display: none;
+  }
+  .ui.card>.content, .ui.cards>.card>.content{
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+  }
+  .ui.segment{
+    padding-right: 0.5em;
+    padding-left: 0.5em;
   }
 }
