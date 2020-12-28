@@ -17,6 +17,8 @@ import "./AlumniForm.css";
 import Firebase from "../Firebase";
 import { Redirect } from "react-router";
 
+const createHistory = require("history").createBrowserHistory;
+
 export class AlumniForm extends Component {
   constructor(props) {
     super(props);
@@ -58,8 +60,6 @@ export class AlumniForm extends Component {
     Firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({ isLogin: true, name: user.displayName, email: user.email, userImage: user.photoURL });
-        console.log(this.state);
-        console.log(user)
       } else {
         this.setState({ isLogin: false });
       }
@@ -272,8 +272,9 @@ export class AlumniForm extends Component {
       alert("Please Login to Post");
     } else {
       this.setState({ isLoading: true });
-      const db = Firebase.firestore();
-      const userRef = db.collection("alumniportal").add({
+      const time = Date.now();
+      console.log(time);
+      Firebase.database().ref('alumni/').push().set({
         name: this.state.name,
         email: this.state.email,
         userImage: this.state.userImage,
@@ -284,14 +285,29 @@ export class AlumniForm extends Component {
         numberLike: 0,
         numberComment: 0,
         isLiked: false,
-        timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+        timestamp: Firebase.database.ServerValue.TIMESTAMP,
       });
-
-
-      // var messageRef = db.collection('rooms').doc('roomA')
-      //           .collection('messages').doc('message1');
+      // const db = Firebase.firestore();
+      // const userRef = db.collection("alumniportal").add({
+      //   name: this.state.name,
+      //   email: this.state.email,
+      //   userImage: this.state.userImage,
+      //   message: this.state.message,
+      //   image1: this.state.image1,
+      //   image2: this.state.image2,
+      //   image3: this.state.image3,
+      //   numberLike: 0,
+      //   numberComment: 0,
+      //   isLiked: false,
+      //   timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+      // });
+      // console.log(userRef);
     }
     this.setState({ isLoading: false, disabled: true });
+    // let history = createHistory();
+    // history.push("/");
+    // let pathUrl = window.location.href;
+    // window.location.href = pathUrl;
     // redirect to alumni
 
   };

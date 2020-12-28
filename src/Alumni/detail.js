@@ -17,12 +17,15 @@ import TimeAgo from "react-timeago";
 const createHistory = require("history").createBrowserHistory;
 
 class Detail extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
 
     this.state = {
       modalShow: false,
       deleteModalShow: false,
+      afterCommentDeleteModalShow: false,
       modalImg: null,
       reply_form: "1",
       error: "",
@@ -50,74 +53,141 @@ class Detail extends Component {
       isLiked: false,
       isAdmin: false,
       isLoading: true,
+      commentID: "",
     };
 
     this.enlargeImg = this.enlargeImg.bind(this);
     this.reply_form = this.reply_form.bind(this);
-    this.showDeleteModal = this.showDeleteModal.bind(this);
+    // this.showDeleteModal = this.showDeleteModal.bind(this);
+    this.deleteComment = this.deleteComment.bind(this);
   }
 
   componentDidMount() {
-    this.setState({isLoading: true});
+    this._isMounted = true;
+
+    this.setState({ isLoading: true });
     const id = this.state.id;
     this.authListener();
 
-    Firebase.firestore()
-      .collection("alumniportal")
-      .orderBy("timestamp", "desc")
-      .get()
-      .then((querySnapshot) => {
-        const matches = [];
-        const items = [];
-
-        querySnapshot.forEach(function (doc) {
-          if (doc.data() && id === doc.id) {
-            matches.push(doc.data());
-            items.push(doc.id);
+    Firebase.database()
+      .ref("alumni/")
+      .on("value", (snapshot) => {
+        let matches = [];
+        let items = [];
+        snapshot.forEach((snap) => {
+          if (id == snap.key) {
+            matches.push(snap.val());
+            items.push(snap.key);
           }
         });
 
-        this.setState({ docs: matches });
-        this.setState({ docsItems: items });
         this.setState({
-          name: this.state.docs[0].name,
-          profileImage: this.state.docs[0].userImage,
-          aimage1: this.state.docs[0].image1,
-          aimage2: this.state.docs[0].image2,
-          aimage3: this.state.docs[0].image3,
-          content: this.state.docs[0].message,
-          numLikes: this.state.docs[0].numberLike,
-          numComments: this.state.docs[0].numberComment,
-          timestamp: this.state.docs[0].timestamp,
+          name: matches[0].name,
+          profileImage: matches[0].userImage,
+          aimage1: matches[0].image1,
+          aimage2: matches[0].image2,
+          aimage3: matches[0].image3,
+          content: matches[0].message,
+          numLikes: matches[0].numberLike,
+          timestamp: matches[0].timestamp,
         });
-      })
-      .catch(function (error) {
-        console.log("Error getting documents: ", error);
       });
 
-    Firebase.firestore()
-      .collection("alumniportal")
-      .doc(this.state.id)
-      .collection("comments")
-      .orderBy("timestamp", "asc")
-      .get()
-      .then((querySnapshot) => {
-        const matches = [];
-        const items = [];
+    // Firebase.firestore()
+    //   .collection("alumniportal")
+    //   .orderBy("timestamp", "desc")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     const matches = [];
+    //     const items = [];
 
-        querySnapshot.forEach(function (doc) {
-          if (doc.data()) {
-            matches.push(doc.data());
-            items.push(doc.id);
+    //     querySnapshot.forEach(function (doc) {
+    //       if (doc.data() && id === doc.id) {
+    //         matches.push(doc.data());
+    //         items.push(doc.id);
+    //       }
+    //     });
+
+    //     this.setState({ docs: matches });
+    //     this.setState({ docsItems: items });
+
+    //     this.setState({
+    //       name: this.state.docs[0].name,
+    //       profileImage: this.state.docs[0].userImage,
+    //       aimage1: this.state.docs[0].image1,
+    //       aimage2: this.state.docs[0].image2,
+    //       aimage3: this.state.docs[0].image3,
+    //       content: this.state.docs[0].message,
+    //       numLikes: this.state.docs[0].numberLike,
+    //       numComments: this.state.docs[0].numberComment,
+    //       timestamp: this.state.docs[0].timestamp,
+    //     });
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Error getting documents: ", error);
+    //   });
+
+    // Firebase.firestore()
+    //   .collection("alumniportal")
+    //   .doc(this.state.id)
+    //   .collection("comments")
+    //   .orderBy("timestamp", "asc")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     const matches = [];
+    //     const items = [];
+
+    //     querySnapshot.forEach(function (doc) {
+    //       if (doc.data()) {
+    //         matches.push(doc.data());
+    //         items.push(doc.id);
+    //       }
+    //     });
+
+    //     this.setState({ matches: matches });
+    //     this.setState({ items: items, isLoading: false });
+    //   })
+    //   .catch(function (error) {
+    //     console.log("Error getting documents: ", error);
+    //   });
+
+    Firebase.database()
+      .ref("alumni/" + id)
+      .child("comments")
+      .on("value", (snapshot) => {
+        let matches = [];
+        let items = [];
+        let a = 0;
+        snapshot.forEach((snap) => {
+          if (
+            snap.key != "email" &&
+            snap.key != "image1" &&
+            snap.key != "image2" &&
+            snap.key != "image3" &&
+            snap.key != "isLiked" &&
+            snap.key != "message" &&
+            snap.key != "name" &&
+            snap.key != "numberComment" &&
+            snap.key != "numberLike" &&
+            snap.key != "timestamp" &&
+            snap.key != "userImage"
+          ) {
+            matches.push(snap.val());
+            items.push(snap.key);
+            a++;
           }
         });
-
         this.setState({ matches: matches });
+        this.setState({ numComments: a });
         this.setState({ items: items, isLoading: false });
-      })
-      .catch(function (error) {
-        console.log("Error getting documents: ", error);
       });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    this.setState = (state, callback) => {
+      return;
+    };
   }
 
   reply_form() {
@@ -132,7 +202,7 @@ class Detail extends Component {
     }
   }
 
-  showDeleteModal() {
+  showDeleteModal(a) {
     if (this.state.deleteModalShow) {
       this.setState({
         deleteModalShow: false,
@@ -140,12 +210,25 @@ class Detail extends Component {
     } else {
       this.setState({
         deleteModalShow: true,
+        commentID: this.state.items[a],
       });
     }
   }
 
+  deleteComment(e) {
+    e.preventDefault();
+    Firebase.database()
+      .ref("alumni/" + this.state.id)
+      .child("comments")
+      .child(this.state.commentID)
+      .remove();
+    
+    this.setState({ afterCommentDeleteModalShow: true });
+    this.setState({ deleteModalShow: false });
+  }
+
   handleClose = () => {
-    this.setState({ modalShow: false, deleteModalShow: false });
+    this.setState({ modalShow: false, deleteModalShow: false, afterCommentDeleteModalShow: false });
   };
 
   enlargeImg(img) {
@@ -185,174 +268,222 @@ class Detail extends Component {
     });
   };
 
-  addLike = (a, b, e) => {
-    // add likes to post
-    e.preventDefault();
+  // addLike = (a, b, e) => {
+  //   // add likes to post
+  //   e.preventDefault();
 
-    if (this.state.isLogin) {
-      let likeCheck = false;
-      const useremail = this.state.useremail;
-      const items = [];
-      const numLikes = [];
-      let collectionCheck = false;
+  //   if (this.state.isLogin) {
+  //     let likeCheck = false;
+  //     const useremail = this.state.useremail;
+  //     const items = [];
+  //     const numLikes = [];
+  //     let collectionCheck = false;
 
-      Firebase.firestore()
-        .collection("alumniportal")
-        .doc(this.state.id)
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            Firebase.firestore()
-              .collection("alumniportal")
-              .doc(this.state.id)
-              .collection("comments")
-              .doc(this.state.items[a])
-              .collection("likes")
-              .get()
-              .then((sub) => {
-                if (sub.docs.length > 0) {
-                  collectionCheck = true;
-                }
-                if (collectionCheck) {
-                  console.log("jfefgewjfje");
-                  Firebase.firestore()
-                    .collection("alumniportal")
-                    .doc(this.state.id)
-                    .collection("comments")
-                    .doc(this.state.items[a])
-                    .collection("likes")
-                    .orderBy("timestamp", "desc")
-                    .get()
-                    .then((querySnapshot) => {
-                      querySnapshot.forEach(function (doc) {
-                        numLikes.push(doc.data());
-                        console.log(doc.data());
-                        if (doc.data().email === useremail) {
-                          likeCheck = true;
-                          items.push(doc.data());
-                        }
-                      });
-                      this.setState({ isLiked: likeCheck });
+  //     Firebase.firestore()
+  //       .collection("alumniportal")
+  //       .doc(this.state.id)
+  //       .get()
+  //       .then((doc) => {
+  //         if (doc.exists) {
+  //           Firebase.firestore()
+  //             .collection("alumniportal")
+  //             .doc(this.state.id)
+  //             .collection("comments")
+  //             .doc(this.state.items[a])
+  //             .collection("likes")
+  //             .get()
+  //             .then((sub) => {
+  //               if (sub.docs.length > 0) {
+  //                 collectionCheck = true;
+  //               }
+  //               if (collectionCheck) {
+  //                 console.log("jfefgewjfje");
+  //                 Firebase.firestore()
+  //                   .collection("alumniportal")
+  //                   .doc(this.state.id)
+  //                   .collection("comments")
+  //                   .doc(this.state.items[a])
+  //                   .collection("likes")
+  //                   .orderBy("timestamp", "desc")
+  //                   .get()
+  //                   .then((querySnapshot) => {
+  //                     querySnapshot.forEach(function (doc) {
+  //                       numLikes.push(doc.data());
+  //                       console.log(doc.data());
+  //                       if (doc.data().email === useremail) {
+  //                         likeCheck = true;
+  //                         items.push(doc.data());
+  //                       }
+  //                     });
+  //                     this.setState({ isLiked: likeCheck });
 
-                      if (items.length === 0) {
-                        this.setState({ isLiked: false });
-                        console.log(items);
-                      }
-                      this.likeAdd(a, numLikes.length);
-                    })
-                    .catch(function (error) {
-                      console.log("Error getting documents: ", error);
-                    });
-                } else {
-                  this.setState({ isLiked: false });
-                  this.likeAdd(a, 0);
-                  console.log("ahjesvf");
-                }
-              });
-          }
-        });
-    } else {
-      alert("Login to Like/Comment on the Post!");
-    }
-  };
+  //                     if (items.length === 0) {
+  //                       this.setState({ isLiked: false });
+  //                       console.log(items);
+  //                     }
+  //                     this.likeAdd(a, numLikes.length);
+  //                   })
+  //                   .catch(function (error) {
+  //                     console.log("Error getting documents: ", error);
+  //                   });
+  //               } else {
+  //                 this.setState({ isLiked: false });
+  //                 this.likeAdd(a, 0);
+  //                 console.log("ahjesvf");
+  //               }
+  //             });
+  //         }
+  //       });
+  //   } else {
+  //     alert("Login to Like/Comment on the Post!");
+  //   }
+  // };
 
-  likeAdd(a, b) {
-    const useremail = this.state.useremail;
-    if (!this.state.isLiked) {
-      console.log("hello");
-      Firebase.firestore()
-        .collection("alumniportal")
-        .doc(this.state.id)
-        .collection("comments")
-        .doc(this.state.items[a])
-        .collection("likes")
-        .add({
-          email: useremail,
-          timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      Firebase.firestore()
-        .collection("alumniportal")
-        .doc(this.state.id)
-        .collection("comments")
-        .doc(this.state.items[a])
-        .onSnapshot(function (doc) {
-          doc.ref.update({ numLikes: b + 1 });
-          doc.ref.update({ isLiked: true });
-        });
-    } else {
-      alert("You have already liked the Comment!");
-    }
-  }
+  // likeAdd(a, b) {
+  //   const useremail = this.state.useremail;
+  //   if (!this.state.isLiked) {
+  //     console.log("hello");
+  //     Firebase.firestore()
+  //       .collection("alumniportal")
+  //       .doc(this.state.id)
+  //       .collection("comments")
+  //       .doc(this.state.items[a])
+  //       .collection("likes")
+  //       .add({
+  //         email: useremail,
+  //         timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+  //       });
+  //     Firebase.firestore()
+  //       .collection("alumniportal")
+  //       .doc(this.state.id)
+  //       .collection("comments")
+  //       .doc(this.state.items[a])
+  //       .onSnapshot(function (doc) {
+  //         doc.ref.update({ numLikes: b + 1 });
+  //         doc.ref.update({ isLiked: true });
+  //       });
+  //   } else {
+  //     alert("You have already liked the Comment!");
+  //   }
+  // }
 
-  addPostLike = (a, b, e) => {
-    // add likes to post
-    e.preventDefault();
+  // addPostLike = (a, b, e) => {
+  //   // add likes to post
+  //   e.preventDefault();
 
-    const email = this.state.useremail;
+  //   const email = this.state.useremail;
+  //   const id = this.state.id;
 
-    if (this.state.isLogin) {
-      let likeCheck = false;
-      const useremail = this.state.useremail;
-      const items = [];
-      const numLikes = [];
+  //   console.log(this.state)
 
-      if (true) {
-        Firebase.firestore()
-          .collection("alumniportal")
-          .doc(this.state.id)
-          .collection("likes")
-          .orderBy("timestamp", "desc")
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach(function (doc) {
-              numLikes.push(doc.data());
-              if (doc.data().email === useremail) {
-                likeCheck = true;
-                items.push(doc.data());
-              }
-            });
+  //   if (this.state.isLogin) {
+  //     let likeCheck = false;
+  //     const useremail = this.state.useremail;
+  //     const items = [];
+  //     const numLikes = [];
 
-            this.setState({ isLiked: likeCheck });
-            if (items.length === 0) {
-              this.setState({ isLiked: false });
-            }
-            this.likeAddPost(a, numLikes.length);
-          })
-          .catch(function (error) {
-            console.log("Error getting documents: ", error);
-          });
-      }
-    } else {
-      alert("Login to Like/Comment on the Post!");
-    }
-  };
+  //     if (true) {
 
-  likeAddPost(a, b) {
-    const useremail = this.state.useremail;
-    if (!this.state.isLiked) {
-      Firebase.firestore()
-        .collection("alumniportal")
-        .doc(this.state.id)
-        .onSnapshot(function (doc) {
-          doc.ref.update({ numberLike: b + 1 });
-          doc.ref.update({ isLiked: true });
-        });
+  //       Firebase.database().ref("alumni/" + id).child("like").on("value", snapshot => {
+  //         snapshot.forEach(snap => {
+  //             if (snap.val().email === useremail) {
+  //               likeCheck = true;
+  //               items.push(snap.val());
+  //             }
+  //         });
+  //         this.setState({ isLiked: likeCheck });
+  //         if (items.length === 0) {
+  //           this.setState({ isLiked: false });
+  //         }
+  //         this.likeAddPost(a, numLikes.length);
+  //       });
+  //       // update({'dateOfBirth': moment(value.dateOfBirth).toDate().getTime()})
 
-      Firebase.firestore()
-        .collection("alumniportal")
-        .doc(this.state.items[a])
-        .collection("likes")
-        .add({
-          email: useremail,
-          timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
-        });
-    } else {
-      alert("You have already liked the Post");
-    }
-  }
+  //       // Firebase.firestore()
+  //       //   .collection("alumniportal")
+  //       //   .doc(this.state.id)
+  //       //   .collection("likes")
+  //       //   .orderBy("timestamp", "desc")
+  //       //   .get()
+  //       //   .then((querySnapshot) => {
+  //       //     querySnapshot.forEach(function (doc) {
+  //       //       numLikes.push(doc.data());
+  //       //       if (doc.data().email === useremail) {
+  //       //         likeCheck = true;
+  //       //         items.push(doc.data());
+  //       //       }
+  //       //     });
+
+  //       //     this.setState({ isLiked: likeCheck });
+  //       //     if (items.length === 0) {
+  //       //       this.setState({ isLiked: false });
+  //       //     }
+  //       //     this.likeAddPost(a, numLikes.length);
+  //       //   })
+  //       //   .catch(function (error) {
+  //       //     console.log("Error getting documents: ", error);
+  //       //   });
+  //     }
+  //   } else {
+  //     alert("Login to Like/Comment on the Post!");
+  //   }
+  // };
+
+  // likeAddPost(a, b) {
+  //   const useremail = this.state.useremail;
+  //   const id = this.state.id;
+  //   let c = 0;
+  //   if (!this.state.isLiked) {
+  //     Firebase.database().ref("alumni/" + id).update({'numberLike': b + 1});
+  //     Firebase.database().ref("alumni/" + id).update({'isLiked': true});
+  //     // Firebase.firestore()
+  //     //   .collection("alumniportal")
+  //     //   .doc(this.state.id)
+  //     //   .onSnapshot(function (doc) {
+  //     //     doc.ref.update({ numberLike: b + 1 });
+  //     //     doc.ref.update({ isLiked: true });
+  //     //   });
+
+  //     // Firebase.firestore()
+  //     //   .collection("alumniportal")
+  //     //   .doc(this.state.items[a])
+  //     //   .collection("likes")
+  //     //   .add({
+  //     //     email: useremail,
+  //     //     timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+  //     //   });
+
+  //     if (c == 0) {
+  //       Firebase.database().ref('alumni/' + id).child("like").push().set({
+  //         email: useremail,
+  //         timestamp: Firebase.database.ServerValue.TIMESTAMP,
+  //       }, (error) => {
+  //         if (error) {
+  //           // The write failed...
+  //           console.log(error);
+  //         } else {
+  //           // Data saved successfully!
+  //           console.log('Success');
+  //           c++;
+  //           if (c == 1) {
+  //             console.log('Data saved successfully');
+  //           }
+  //         }
+  //       });
+
+  //     }
+
+  //   } else {
+  //     alert("You have already liked the Post");
+  //   }
+  // }
 
   onSubmit = (e) => {
     e.preventDefault();
+    const time = Date.now();
+    const id = this.state.id;
+    const numberOfComments = this.state.numComments + 1;
+    console.log(numberOfComments);
 
     if (this.state.isLogin) {
       var new_comment = {
@@ -362,24 +493,43 @@ class Detail extends Component {
         email: this.state.useremail,
       };
 
-      const db = Firebase.firestore()
-        .collection("alumniportal")
-        .doc(this.state.id);
+      Firebase.database()
+        .ref("alumni/" + id)
+        .child("comments")
+        .push()
+        .set({
+          name: new_comment.username,
+          photoURL: new_comment.photo,
+          comment: new_comment.response,
+          email: new_comment.email,
+          numLikes: 0,
+          isLiked: false,
+          timestamp: Firebase.database.ServerValue.TIMESTAMP,
+        });
 
-      var messageRef = db.collection("comments").add({
-        name: new_comment.username,
-        photoURL: new_comment.photo,
-        comment: new_comment.response,
-        email: new_comment.email,
-        numLikes: 0,
-        isLiked: false,
-        timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
-      });
+      Firebase.database()
+        .ref("alumni/" + id)
+        .update({ numberComment: numberOfComments });
+
+      // const db = Firebase.firestore()
+      //   .collection("alumniportal")
+      //   .doc(this.state.id);
+
+      // var messageRef = db.collection("comments").add({
+      //   name: new_comment.username,
+      //   photoURL: new_comment.photo,
+      //   comment: new_comment.response,
+      //   email: new_comment.email,
+      //   numLikes: 0,
+      //   isLiked: false,
+      //   timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+      // });
 
       this.setState({
-        error: "Your comment added!  Please refresh to see the Changes",
+        error: "Your comment added!",
         total_comments: this.state.total_comments + 1,
       });
+      console.log(this.state);
     } else {
       alert("Please Login to Comment");
     }
@@ -397,7 +547,7 @@ class Detail extends Component {
               {checkAdmin ? (
                 <span
                   className="comment_cross_btn"
-                  onClick={this.showDeleteModal}
+                  onClick={this.showDeleteModal.bind(this, a++)}
                 >
                   <a>
                     <Icon name="close" />
@@ -407,8 +557,8 @@ class Detail extends Component {
 
               <Comment.Author>{project.name}</Comment.Author>
               <Comment.Metadata>
-                <TimeAgo date={project.timestamp.toDate()} minPeriod="5" />
-
+                {/* <TimeAgo date={project.timestamp.toDate()} minPeriod="5" /> */}
+                {/* 
                 <Feed>
                   <Feed.Event>
                     <Feed.Content>
@@ -426,7 +576,7 @@ class Detail extends Component {
                       </Feed.Meta>
                     </Feed.Content>
                   </Feed.Event>
-                </Feed>
+                </Feed> */}
               </Comment.Metadata>
               <Comment.Text>{project.comment}</Comment.Text>
             </Comment.Content>
@@ -440,110 +590,110 @@ class Detail extends Component {
     return (
       <div className="alumni">
         <Container text style={{ marginTop: "1em" }}>
-        {this.state.isLoading &&
-          <div className='loader_center'>
-            <Spinner animation="border" variant="info" />
-          </div>        
-        }        
+          {this.state.isLoading && (
+            <div className="loader_center">
+              <Spinner animation="border" variant="info" />
+            </div>
+          )}
           <span className="back_btn" onClick={() => history.push("/Alumni")}>
             <a>
               <Icon name="arrow alternate circle left outline" />
             </a>
           </span>
-        {!this.state.isLoading &&
-        <>
-          <Feed>
-            <Feed.Event>
-              <Feed.Label image={this.state.profileImage} />
-              <Feed.Content>
-                <Feed.Summary>
-                  <a>{this.state.name}</a>
-                  {/* <Feed.Date><TimeAgo date={this.state.timestamp.toDate()} minPeriod="5" /></Feed.Date> */}
-                </Feed.Summary>
-                <Feed.Extra images>
-                  <a>
-                    <img
-                      Style={"transition : transform 0.25s ease !important"}
-                      src={this.state.aimage1}
-                      onClick={this.enlargeImg}
-                    />
-                  </a>
-                  <a>
-                    <img
-                      Style={"transition : transform 0.25s ease !important"}
-                      src={this.state.aimage2}
-                      onClick={this.enlargeImg}
-                    />
-                  </a>
-                  <a>
-                    <img
-                      Style={"transition : transform 0.25s ease !important"}
-                      src={this.state.aimage3}
-                      onClick={this.enlargeImg}
-                    />
-                  </a>
-                </Feed.Extra>
-                <Feed.Extra text>{this.state.content}</Feed.Extra>
-                <Feed.Meta>
-                  <Feed.Like
+          {!this.state.isLoading && (
+            <>
+              <Feed>
+                <Feed.Event>
+                  <Feed.Label image={this.state.profileImage} />
+                  <Feed.Content>
+                    <Feed.Summary>
+                      <a>{this.state.name}</a>
+                      {/* <Feed.Date><TimeAgo date={this.state.timestamp.toDate()} minPeriod="5" /></Feed.Date> */}
+                    </Feed.Summary>
+                    <Feed.Extra images>
+                      <a>
+                        <img
+                          Style={"transition : transform 0.25s ease !important"}
+                          src={this.state.aimage1}
+                          onClick={this.enlargeImg}
+                        />
+                      </a>
+                      <a>
+                        <img
+                          Style={"transition : transform 0.25s ease !important"}
+                          src={this.state.aimage2}
+                          onClick={this.enlargeImg}
+                        />
+                      </a>
+                      <a>
+                        <img
+                          Style={"transition : transform 0.25s ease !important"}
+                          src={this.state.aimage3}
+                          onClick={this.enlargeImg}
+                        />
+                      </a>
+                    </Feed.Extra>
+                    <Feed.Extra text>{this.state.content}</Feed.Extra>
+                    <Feed.Meta>
+                      {/* <Feed.Like
                     onClick={this.addPostLike.bind(
                       this,
                       "a++",
-                      "project.numLikes"
+                      this.state.numLikes
                     )}
                   >
                     <Icon name="like" />
                     {this.state.numLikes}
-                  </Feed.Like>
-                  <span className="comment-box" onClick={this.reply_form}>
-                    <Feed.Like>
-                      <Icon name="comment" />
-                      {this.state.numComments}
-                    </Feed.Like>
-                  </span>
-                </Feed.Meta>
-              </Feed.Content>
-            </Feed.Event>
-          </Feed>
+                  </Feed.Like> */}
+                      <span className="comment-box" onClick={this.reply_form}>
+                        <Feed.Like>
+                          <Icon name="comment" />
+                          {this.state.numComments}
+                        </Feed.Like>
+                      </span>
+                    </Feed.Meta>
+                  </Feed.Content>
+                </Feed.Event>
+              </Feed>
 
-          {this.state.error && (
-            <span style={{ color: "green", marginLeft: "40px" }}>
-              <Icon name="check circle" />
-              {this.state.error}
-            </span>
+              {this.state.error && (
+                <span style={{ color: "green", marginLeft: "40px" }}>
+                  <Icon name="check circle" />
+                  {this.state.error}
+                </span>
+              )}
+
+              <Accordion defaultActiveKey="0">
+                <Accordion.Collapse eventKey={this.state.reply_form}>
+                  <form>
+                    <div className="form-group">
+                      <textarea
+                        className="form-control"
+                        type="text"
+                        name="response"
+                        placeholder="Your comment..."
+                        onChange={this.onChange}
+                        value={this.state.response}
+                        rows="5"
+                        required
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="btn btn-primary"
+                      onClick={this.onSubmit}
+                      disabled={this.state.response ? false : true}
+                    >
+                      Submit
+                    </Button>
+                  </form>
+                </Accordion.Collapse>
+              </Accordion>
+
+              <Comment.Group>{this.developUI()}</Comment.Group>
+            </>
           )}
-
-          <Accordion defaultActiveKey="0">
-            <Accordion.Collapse eventKey={this.state.reply_form}>
-              <form>
-                <div className="form-group">
-                  <textarea
-                    className="form-control"
-                    type="text"
-                    name="response"
-                    placeholder="Your comment..."
-                    onChange={this.onChange}
-                    value={this.state.response}
-                    rows="5"
-                    required
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={this.onSubmit}
-                  disabled={this.state.response ? false : true}
-                >
-                  Submit
-                </Button>
-              </form>
-            </Accordion.Collapse>
-          </Accordion>
-
-          <Comment.Group>{this.developUI()}</Comment.Group>
-        </>
-        }
         </Container>
 
         <Segment
@@ -572,6 +722,30 @@ class Detail extends Component {
         </Modal>
 
         <Modal
+          show={this.state.afterCommentDeleteModalShow}
+          size="sm"
+          aria-labelledby="contained-modal-title-vcenter"
+          onHide={() => this.handleClose()}
+          className="deleteModal"
+          centered
+        >
+          <Modal.Header style={{ padding: "10px" }} closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Comment Deleted
+            </Modal.Title>
+          </Modal.Header>
+          {/* <Modal.Footer style={{ padding: "0" }}>
+            <Button
+              variant="link"
+              style={{ color: "#1f88be" }}
+              onClick={this.deleteComment}
+            >
+              Delete
+            </Button>
+          </Modal.Footer> */}
+        </Modal>
+
+        <Modal
           show={this.state.deleteModalShow}
           size="sm"
           aria-labelledby="contained-modal-title-vcenter"
@@ -585,7 +759,11 @@ class Detail extends Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Footer style={{ padding: "0" }}>
-            <Button variant="link" style={{ color: "#1f88be" }} onClick={this.deleteComment}>
+            <Button
+              variant="link"
+              style={{ color: "#1f88be" }}
+              onClick={this.deleteComment}
+            >
               Delete
             </Button>
           </Modal.Footer>
