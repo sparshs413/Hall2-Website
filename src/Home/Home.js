@@ -54,14 +54,30 @@ export default class Home extends Component {
 
   componentDidMount() {
 
-    document.querySelector('#navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.4) !important; ";
+    const spans = document.querySelectorAll('.word span');
+
+    spans.forEach((span, idx) => {
+      span.addEventListener('click', (e) => {
+        e.target.classList.add('active');
+      });
+      span.addEventListener('animationend', (e) => {
+        e.target.classList.remove('active');
+      });
+      
+      // Initial animation
+      setTimeout(() => {
+        span.classList.add('active');
+      }, 750 * (idx+1))
+    });
+
+    document.querySelector('#navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.5) !important; backdrop-filter: blur(1px)";
 
     this.listener = document.addEventListener("scroll", e => {
       var scrolled = document.scrollingElement.scrollTop;
       if (scrolled >= 450) {
           document.getElementById('navbar').style.cssText = "background-color: #4285f4 !important";
       } else {
-          document.getElementById('navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.4) !important;";
+          document.getElementById('navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.5) !important; backdrop-filter: blur(1px)";
       }
     });
     
@@ -168,7 +184,13 @@ export default class Home extends Component {
                   className="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity"
                   id="self-type"
                 >
-                  Hall 2
+                <span class="word">
+                  <span>H</span>
+                  <span>A</span>
+                  <span>L</span>
+                  <span>L</span>
+                  <span>2</span>
+                </span>
                 </span>
               </div>
             </div>
@@ -359,7 +381,7 @@ export default class Home extends Component {
             <div className="bgimg-2 w3-display-container w3-opacity-min">
               <div className="w3-display-middle">
                 <span className="w3-xxlarge w3-text-white w3-wide  slide-text">
-                  GALLERY
+                  {/* GALLERY */}
                 </span>
               </div>
             </div>
@@ -379,7 +401,7 @@ export default class Home extends Component {
               </p>
               <br />
               {/* Responsive Grid. Four columns on tablets, laptops and desktops. Will stack on mobile devices/small screens (100% width) */}
-              <div className="gallimg">
+              {/* <div className="gallimg">
                 <div className="gall_img">
                   <ul id="gallimg">
                     <li>
@@ -415,11 +437,11 @@ export default class Home extends Component {
                       </a>
                     </li>
                   </ul>
-                </div>
+                </div> */}
                 {/* <a href="gallery_index.html">
                   <button className="gallery_button">VIEW FULL GALLERY</button>
                 </a> */}
-              </div>
+              {/* </div> */}
             </div>
             {/* Modal for full size images on click*/}
             <div
@@ -540,7 +562,7 @@ export default class Home extends Component {
       <i class="fa fa-linkedin w3-hover-opacity"></i>
     </div> */}
 
-              <p>Powered by HALL 2</p>
+              <p style={{margin: '20px 0 -10px'}}>Powered by HALL 2</p>
               <br />
               <p>Developed by Hall 2 </p>
             </footer>

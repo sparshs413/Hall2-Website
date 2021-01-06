@@ -4,7 +4,7 @@ import "./Navbar.css";
 import { Navbar, Nav, Form, Button, NavDropdown } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import Firebase from "../Firebase";
-import { Menu, Accordion, Transition } from "semantic-ui-react";
+import { Menu, Accordion, Transition, Divider } from "semantic-ui-react";
 
 export class Navigation extends Component {
   // console.log(props)
@@ -16,8 +16,8 @@ export class Navigation extends Component {
       sidecss: {},
       maincss: {},
       bars_class: "",
-      isAdmin: '',
-      isLogin: false,
+      isAdmin: true,
+      isLogin: true,
       activeIndex: 1,
     };
 
@@ -127,6 +127,8 @@ export class Navigation extends Component {
           <a href={this.state.isAdmin ? "/form" : "/Announce"}>Announcements</a>
           <a href="/Alumni">Alumni Portal</a>
           <a href="/ask-the-hab">Ask The Hab</a>
+          <a href="/gallery">Gallery Moments</a>
+          <a href="/clubs">Clubs</a>
           <a>
           <Accordion as={Menu} vertical>
             <Menu.Item >
@@ -152,9 +154,9 @@ export class Navigation extends Component {
             </Menu.Item>
           </Accordion>
         </a>
-        {!this.state.isAdmin &&
-          <a href='/edit-accounts'>Edit Other Accounts</a>
-        }
+          {this.state.isAdmin &&
+            <a href='/edit-accounts'>Edit Other Accounts</a>
+          }
           {this.state.isLogin &&
             <a href="/profile">Edit Profile</a>
           }
@@ -165,17 +167,32 @@ export class Navigation extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto nav_items">
-            <Nav.Link className='nav_hide' href="/LostFound">Lost or Found</Nav.Link>
-            <Nav.Link className='nav_hide' href={this.state.isAdmin ? "/form" : "/Announce"}>
-              Announcements
-            </Nav.Link>
+
+            <NavDropdown className='nav_hide' title="Announcements" id="basic-nav-dropdown">
+              <NavDropdown.Item href={this.state.isAdmin ? "/form" : "/Announce"}>Announcements</NavDropdown.Item>
+              <NavDropdown.Item href="/LostFound">Lost or Found</NavDropdown.Item>
+            </NavDropdown>
+            
             <Nav.Link className='nav_hide' href="/Alumni">Alumni Portal</Nav.Link>
             <Nav.Link className='nav_hide' href="/ask-the-hab">Ask The Hab</Nav.Link>
+            <Nav.Link className='nav_hide' href="/gallery">Gallery Moments</Nav.Link>
+
             <NavDropdown className='nav_hide' title="Mess Portal" id="basic-nav-dropdown">
               <NavDropdown.Item href="/mess-extras">Mess Extras</NavDropdown.Item>
               <NavDropdown.Item href="/time-table">Time Table</NavDropdown.Item>
               <NavDropdown.Item href="/BillHistory">Bills & History</NavDropdown.Item>
             </NavDropdown>
+
+            {/* {this.state.isLogin && */}
+              <NavDropdown className='nav_hide' title="Others" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/profile">Edit Profile</NavDropdown.Item>
+                  <NavDropdown.Item href="/clubs">Clubs</NavDropdown.Item>
+                {this.state.isAdmin &&
+                  <NavDropdown.Item href="/edit-accounts">Edit Other Accounts</NavDropdown.Item>
+                }
+              </NavDropdown>
+            {/* } */}
+
             {!this.state.isLogin ? (
               <Fragment>
                 <Nav.Link className='login' href="/login">Login</Nav.Link>

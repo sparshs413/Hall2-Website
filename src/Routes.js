@@ -23,6 +23,8 @@ import TimeTable from "./Mess/TimeTable";
 import FormTimeTable from "./Mess/FormTimeTable";
 import FormExtras from "./Mess/FormExtras";
 import History from "./Mess/History";
+import Gallery from "./Gallery/Gallery";
+import Clubs from "./Clubs/Clubs";
 
 
 export default class Routes extends Component {
@@ -52,6 +54,8 @@ export default class Routes extends Component {
           <Route path="/form-extras" component={FormExtras} />
           <Route path="/BillHistory" component={History} />
           <Route path="/resetpassword" component={ResetPassword} />
+          <Route path="/gallery" component={Gallery} />
+          <Route path="/clubs" component={Clubs} />
         </Switch>
       </Router>
     );

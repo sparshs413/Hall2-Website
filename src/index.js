@@ -1,4 +1,5 @@
 import React from 'react';
+import 'swiper/css/swiper.min.css';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';

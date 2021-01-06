@@ -20,6 +20,10 @@
   padding: 2px 6px !important;
 }
 
+.navbar .dropdown-menu a:hover, .navbar .dropdown-menu a:active{
+  color: rgb(12, 102, 187) !important;
+}
+
 .width { 
   height: 50px !important;
   position: fixed;
@@ -164,6 +168,13 @@ body {
 
 @media screen and (max-width: 710px) {
   .nav_hide {
+    display: none;
+  }
+  
+}
+
+@media screen and (min-width: 710px) {
+  #bars_container {
     display: none;
   }
 }

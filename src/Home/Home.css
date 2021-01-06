@@ -1,5 +1,5 @@
 body {
-    background-color: rgba(201, 187, 163, 0.1);
+    background-color: rgba(201, 187, 163, 0.2);
 }
 
 .Home .lander {
@@ -51,18 +51,18 @@ body {
 }
 
 
-.carousel-item {
+.Home .carousel-item {
     height: 300px;
 }
 
-.react-multi-carousel-dot button {
+.Home .react-multi-carousel-dot button {
   background-color: #ffffff;
   height: 10px !important;
   width: 10px !important;
   transition: 500;
 }
 
-.react-multi-carousel-dot--active button {
+.Home .react-multi-carousel-dot--active button {
   height: 12px !important;
   width: 12px !important;
   background-color: black !important;
@@ -78,16 +78,18 @@ body {
     .home-announce .message {
         font: 0.95em sans-serif;
     }
-    .react-multiple-carousel__arrow {
+    .Home .react-multiple-carousel__arrow {
         margin-top: 250px;
         min-width: 35px !important;
         min-height: 35px !important;
     }
   }
 
-
-
-
+@media screen and (min-width: 664px) {
+    .Home .bgimg-1 {
+        min-height: 100vh !important;
+    }
+}
 
 
 
