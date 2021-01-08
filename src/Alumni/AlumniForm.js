@@ -355,7 +355,7 @@ export class AlumniForm extends Component {
 
             <div  className="custom-file alumni_form_image">
               <div className='upload_img_bar' 
-                style={{width: `${this.state.progress_image1}%`, backgroundColor: this.state.progress_image1 === 100 ? 'rgb(68, 197, 85)' : 'rgb(42, 160, 175)' }}>  
+                style={{width: `${this.state.progress_image1}%`, backgroundColor: this.state.progress_image1 === 100 ? 'rgb(68, 197, 85)' : 'rgb(42, 160, 175)'}}>  
               </div>
               <input
                 type="file"

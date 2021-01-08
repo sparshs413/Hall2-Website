@@ -19,8 +19,7 @@ import { Link } from "react-router-dom";
 import Detail from "./detail";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Redirect } from "react-router";
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class Alumni extends Component {
   _isMounted = false;
