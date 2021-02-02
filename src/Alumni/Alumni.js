@@ -338,12 +338,12 @@ class Alumni extends Component {
               <Feed.Label>
                 <div
                   className="profile_pic"
-                  style={{ backgroundImage: `url(${project.userImage})` }}
+                  style={{ backgroundImage: project.userImage ? `url(${project.userImage})` : `url(${require("./stu.jpeg")})` }}
                 ></div>
               </Feed.Label>
               <Feed.Content>
                 <Feed.Summary>
-                  <a>{project.name}</a>
+                  <a onClick={this.openComments.bind(this, b++)}>{project.name}</a>
                   <Feed.Date>
                     <TimeAgo date={new Date(project.timestamp)} minPeriod="5" />
                     {console.log(new Date(project.timestamp))}
@@ -389,7 +389,7 @@ class Alumni extends Component {
                   )}
                 </Feed.Extra>
                 <a>
-                  <Feed.Extra text>{project.message}</Feed.Extra>
+                  <Feed.Extra text onClick={this.openComments.bind(this, b++)}>{project.message}</Feed.Extra>
                 </a>
                 <Feed.Meta>
                   {/* <Feed.Like
@@ -434,19 +434,22 @@ class Alumni extends Component {
     }
 
     return (
-      <div className="alumni">
+      <div className="alumni alumni_full">
         <Container className="alumni" text>
-          <Header as="h2" icon textAlign="center">
-            {this.state.isLoading && (
+          {this.state.isLoading && (
               <Spinner animation="border" variant="info" />
-            )}
-            <Icon name="users" circular />
-            <Header.Content style={{ color: "black" }}>
-              Alumni = Friends
-            </Header.Content>
-          </Header>
+          )}
+
           {!this.state.isLoading && (
-            <>
+          <>
+
+          <Header as="h2" icon textAlign="center">
+            
+            {/* <Header.Content style={{ color: "black", marginLeft: '-150px' }}>
+              Friends
+            </Header.Content> */}
+          </Header>
+          
               {this.makeUI()}
               <Feed>
                 <Feed.Event>
@@ -560,7 +563,8 @@ class Alumni extends Component {
         <Segment
           inverted
           vertical
-          style={{ margin: "15em 0em 0em", padding: "6em 0em" }}
+          style={{ margin: this.state.isLoading ? '55vh 0 0' : '3em 0 0'
+                  , padding: "15vh 0em" }}
         >
           <Container textAlign="center">
             <List horizontal inverted divided link size="small">

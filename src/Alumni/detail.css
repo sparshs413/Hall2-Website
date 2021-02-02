@@ -2,13 +2,27 @@
   color: #1f88be !important;
 }
 
+.ui.alumni_detail {
+  background-color: #ffffff;
+  padding-bottom: 3px;
+}
+
 .alumni .back_btn i {
   float: left;
   font-size: 2em;
   color: #217ba8 !important;
   margin-bottom: 10px;
-  margin-top: -20px !important;
-  margin-left: -11px;
+  margin-top: 5px !important;
+  margin-left: -8px;
+}
+
+.ui.alumni_detail .label {
+  width: 2.5rem !important;
+  max-height: 40px;
+}
+
+.ui.alumni_detail .label img {
+  max-height: 40px;
 }
 
 .loader_center {

@@ -19,6 +19,7 @@ export class Navigation extends Component {
       isAdmin: true,
       isLogin: true,
       activeIndex: 1,
+      activeIndex2: 1,
     };
 
     this.openNav = this.openNav.bind(this);
@@ -77,6 +78,13 @@ export class Navigation extends Component {
     this.setState({ activeIndex: newIndex })
   }
 
+  handleClick2 = (e, titleProps) => {
+    const { index } = titleProps
+    const { activeIndex2 } = this.state
+    const newIndex = activeIndex2 === index ? -1 : index
+
+    this.setState({ activeIndex2: newIndex })
+  }
 
   openNav() {
     var css = this.state.bars_class === "change" ? "" : "change";
@@ -128,7 +136,8 @@ export class Navigation extends Component {
           <a href="/Alumni">Alumni Portal</a>
           <a href="/ask-the-hab">Ask The Hab</a>
           <a href="/gallery">Gallery Moments</a>
-          <a href="/clubs">Clubs</a>
+          <a href="/events">Events</a>
+          <a href="/OurTeam">Our Team</a>
           <a>
           <Accordion as={Menu} vertical>
             <Menu.Item >
@@ -137,7 +146,6 @@ export class Navigation extends Component {
                 content='Mess Portal'
                 index={0}
                 onClick={this.handleClick}
-                
               />
               <Accordion.Content active={this.state.activeIndex === 0} >
                 <Transition animation='browse' visible={!this.state.activeIndex} duration={500}>
@@ -154,6 +162,40 @@ export class Navigation extends Component {
             </Menu.Item>
           </Accordion>
         </a>
+        <a>
+          <Accordion as={Menu} vertical>
+            <Menu.Item >
+              <Accordion.Title
+                active={this.state.activeIndex2 === 0}
+                content='Facilities'
+                index={0}
+                onClick={this.handleClick2}
+              />
+              <Accordion.Content active={this.state.activeIndex2 === 0} >
+                <Transition animation='browse' visible={!this.state.activeIndex2} duration={500}>
+                  <a href="/TVRoom">TV Room</a>
+                </Transition>
+                <Transition animation='browse' visible={!this.state.activeIndex2} duration={500}>
+                  <a href="/reading-room">Reading Room</a>
+                </Transition>
+                <Transition animation='browse' visible={!this.state.activeIndex2} duration={500}>
+                  <a href="/guest-room">Guest Room</a>
+                </Transition>
+                <Transition animation='browse' visible={!this.state.activeIndex2} duration={500}>
+                  <a href="/Canteen">Canteen</a>
+                </Transition>
+                <Transition animation='browse' visible={!this.state.activeIndex2} duration={500}>
+                  <a href="/computer-room">Computer Room</a>
+                </Transition>
+                <Transition animation='browse' visible={!this.state.activeIndex2} duration={500}>
+                  <a href="/sports">Sports</a>
+                </Transition>
+              </Accordion.Content>
+              
+            </Menu.Item>
+          </Accordion>
+        </a>
+          
           {this.state.isAdmin &&
             <a href='/edit-accounts'>Edit Other Accounts</a>
           }
@@ -183,10 +225,21 @@ export class Navigation extends Component {
               <NavDropdown.Item href="/BillHistory">Bills & History</NavDropdown.Item>
             </NavDropdown>
 
+            
+            <NavDropdown className='nav_hide' title="Facilities" id="basic-nav-dropdown">
+              <NavDropdown.Item href="/TVRoom">TV Room</NavDropdown.Item>
+              <NavDropdown.Item href="/reading-room">Reading Room</NavDropdown.Item>
+              <NavDropdown.Item href="/guest-room">Guest Room</NavDropdown.Item>
+              <NavDropdown.Item href="/canteen">Canteen</NavDropdown.Item>
+              <NavDropdown.Item href="/computer-room">Computer Room</NavDropdown.Item>
+              <NavDropdown.Item href="/sports">Sports Facilities</NavDropdown.Item>
+            </NavDropdown>
+
             {/* {this.state.isLogin && */}
               <NavDropdown className='nav_hide' title="Others" id="basic-nav-dropdown">
                   <NavDropdown.Item href="/profile">Edit Profile</NavDropdown.Item>
-                  <NavDropdown.Item href="/clubs">Clubs</NavDropdown.Item>
+                  <NavDropdown.Item href="/events">Events</NavDropdown.Item>
+                  <NavDropdown.Item href="/OurTeam">Our Team</NavDropdown.Item>
                 {this.state.isAdmin &&
                   <NavDropdown.Item href="/edit-accounts">Edit Other Accounts</NavDropdown.Item>
                 }

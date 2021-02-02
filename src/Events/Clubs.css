@@ -1,0 +1,129 @@
+.clubs .clubs_cont {
+  background-color: #ffffff;
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,0.2), 0 -2px 5px 0 rgba(0,0,0,0.2);
+  padding-top: 20px;
+  max-width: 900px !important;
+}
+
+.clubs .accordion .btn-link {
+  /* border: 3px solid rgba(74, 165, 218, 0.9); */
+  /* background-color: rgba(48, 68, 179, 0.9) ; */
+  border-radius: 40px;
+  font-size: 2.2em;
+  float: right;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* width: 150px; */
+  /* height: 40px;  */
+  text-decoration: none !important;
+  color: #2c71c0;
+  font-weight: bolder;
+  transition: 0.2s;
+}
+
+.clubs .card {
+  font-weight: 400;
+  box-shadow: 0 0px 5px 0 rgba(0,0,0,0.16), 0 0px 10px 0 rgba(0,0,0,0.12);
+}
+
+.clubs .card-header {
+  border-bottom: 0 !important;
+}
+
+.clubs .accordion {
+  margin-bottom: 20px;
+}
+
+.clubs .accordion .btn-link:active {
+  background-color: rgba(24, 117, 170, 0.8);
+}
+
+
+.clubs .card-body {
+  padding: 0 10px;
+}
+
+.clubs .names{
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.clubs .names:active, .clubs .names:hover{
+  color: #2c71c0;
+  font-weight: bold;
+}
+
+.clubs .clubs_head {
+  display: inline-block;
+  padding: 15px 10px;
+  font-weight: bold;
+  color: rgb(70, 71, 71);
+  margin:  0 0 -30px !important;
+}
+
+.sidebar_clubs {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: rgba(62, 172, 216, 0.1);
+  position: fixed;
+  /* height: 70; */
+  overflow: auto;
+  z-index: 11;
+
+}
+
+.sidebar_clubs a {
+  display: block;
+  color: rgb(88, 87, 87);
+  letter-spacing: 1px;
+  padding: 16px;
+  text-decoration: none;
+}
+ 
+.sidebar_clubs a.active {
+  background-color: #308ecc;
+  font-weight: bold;
+  color: white !important;
+}
+
+.sidebar_clubs a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.clubs div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+
+@media screen and (min-width: 1160px) {
+  .sidebar_clubs {
+    margin: 40px 0 0 2%
+  }
+  .options_accordion {
+    display: none;
+  }
+}
+
+
+@media screen and (max-width: 1160px) {
+  .sidebar_clubs {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .clubs .ui.container {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+  .sidebar_clubs {
+    display: none;
+  }
+}
+
+
+

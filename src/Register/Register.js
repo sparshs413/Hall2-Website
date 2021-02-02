@@ -78,7 +78,7 @@ class Register extends Component {
           style={{ height: "80vh" }}
           verticalAlign="middle"
         >
-          <Grid.Column style={{ maxWidth: 450, margin: 10 }}>
+          <Grid.Column style={{ maxWidth: 500, margin: 10 }}>
             <Header as="h2" textAlign="center">
               <Icon name="user circle" /> Make New Account
             </Header>

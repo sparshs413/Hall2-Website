@@ -1,0 +1,13 @@
+[x, fs] = audioread('h.wav');
+plot(x);
+subplot(311);
+x_25 = x.*hamming(length(x))';
+x_10 = x.*hamming(length(x)*0.4)';
+xft_25 = fft(x_25, 1024);
+xft_10 = fft(x_10, 1024);
+xabs_25 = abs(xft_25);
+xabs_10 = abs(xft_10);
+subplot(312);
+plot(xabs_25);
+subplot(313);
+plot(xabs_10);

@@ -306,7 +306,7 @@ class Detail extends Component {
   render() {
     return (
       <div className="alumni">
-        <Container text style={{ marginTop: "1em" }}>
+        <Container className='alumni_detail' text style={{ marginTop: "1em" }}>
           {this.state.isLoading && (
             <div className="loader_center">
               <Spinner animation="border" variant="info" />
@@ -327,6 +327,7 @@ class Detail extends Component {
                       <a>{this.state.name}</a>
                       {/* <Feed.Date><TimeAgo date={this.state.timestamp.toDate()} minPeriod="5" /></Feed.Date> */}
                     </Feed.Summary>
+                    { this.state.aimage1 &&
                     <Feed.Extra images>
                       <a>
                         <img
@@ -350,6 +351,7 @@ class Detail extends Component {
                         />
                       </a>
                     </Feed.Extra>
+                    }
                     <Feed.Extra text>{this.state.content}</Feed.Extra>
                     <Feed.Meta>
                       {/* <Feed.Like

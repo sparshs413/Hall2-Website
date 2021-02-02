@@ -24,7 +24,14 @@ import FormTimeTable from "./Mess/FormTimeTable";
 import FormExtras from "./Mess/FormExtras";
 import History from "./Mess/History";
 import Gallery from "./Gallery/Gallery";
-import Clubs from "./Clubs/Clubs";
+import Events from "./Events/Events";
+import Team from "./Team/Team";
+import Tv from "./Facilities/Tv";
+import Computer from "./Facilities/Computer";
+import Reading from "./Facilities/Reading";
+import Canteen from "./Facilities/Canteen";
+import Guest from "./Facilities/Guest";
+import Sports from "./Facilities/Sports";
 
 
 export default class Routes extends Component {
@@ -55,7 +62,14 @@ export default class Routes extends Component {
           <Route path="/BillHistory" component={History} />
           <Route path="/resetpassword" component={ResetPassword} />
           <Route path="/gallery" component={Gallery} />
-          <Route path="/clubs" component={Clubs} />
+          <Route path="/events" component={Events} />
+          <Route path="/OurTeam" component={Team} />
+          <Route path="/TVRoom" component={Tv} />
+          <Route path="/computer-room" component={Computer} />
+          <Route path="/reading-room" component={Reading} />
+          <Route path="/canteen" component={Canteen} />
+          <Route path="/guest-room" component={Guest} />
+          <Route path="/sports" component={Sports} />
         </Switch>
       </Router>
     );
