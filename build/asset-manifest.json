@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.0ff1d722.chunk.css",
-    "main.js": "/static/js/main.493fc182.chunk.js",
-    "main.js.map": "/static/js/main.493fc182.chunk.js.map",
+    "main.css": "/static/css/main.4f343364.chunk.css",
+    "main.js": "/static/js/main.fa8b7646.chunk.js",
+    "main.js.map": "/static/js/main.fa8b7646.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.50fe16ac.js",
     "runtime-main.js.map": "/static/js/runtime-main.50fe16ac.js.map",
     "static/css/2.5ce72412.chunk.css": "/static/css/2.5ce72412.chunk.css",
-    "static/js/2.89f46efa.chunk.js": "/static/js/2.89f46efa.chunk.js",
-    "static/js/2.89f46efa.chunk.js.map": "/static/js/2.89f46efa.chunk.js.map",
+    "static/js/2.827c8d9e.chunk.js": "/static/js/2.827c8d9e.chunk.js",
+    "static/js/2.827c8d9e.chunk.js.map": "/static/js/2.827c8d9e.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.a6611a95aa71fcaece72908e25191fa0.js": "/precache-manifest.a6611a95aa71fcaece72908e25191fa0.js",
+    "precache-manifest.8deba748e318788790df50c156e26602.js": "/precache-manifest.8deba748e318788790df50c156e26602.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.5ce72412.chunk.css.map": "/static/css/2.5ce72412.chunk.css.map",
-    "static/css/main.0ff1d722.chunk.css.map": "/static/css/main.0ff1d722.chunk.css.map",
-    "static/js/2.89f46efa.chunk.js.LICENSE.txt": "/static/js/2.89f46efa.chunk.js.LICENSE.txt",
+    "static/css/main.4f343364.chunk.css.map": "/static/css/main.4f343364.chunk.css.map",
+    "static/js/2.827c8d9e.chunk.js.LICENSE.txt": "/static/js/2.827c8d9e.chunk.js.LICENSE.txt",
     "static/media/05.jpg": "/static/media/05.a499b40e.jpg",
     "static/media/08.jpg": "/static/media/08.8aa9999b.jpg",
     "static/media/09.jpg": "/static/media/09.64de26dd.jpg",
@@ -21,6 +21,7 @@
     "static/media/12.jpg": "/static/media/12.916f2869.jpg",
     "static/media/14.jpg": "/static/media/14.edfad38a.jpg",
     "static/media/15.jpg": "/static/media/15.71dc06fa.jpg",
+    "static/media/Alumni.css": "/static/media/head.f2d2eafb.jpg",
     "static/media/mdb.css": "/static/media/arrow_right.8ef6a08c.svg",
     "static/media/semantic.min.css": "/static/media/outline-icons.ef60a4f6.woff",
     "static/media/hall2_1.jpg": "/static/media/hall2_1.26f38752.jpg",
@@ -32,8 +33,8 @@
   "entrypoints": [
     "static/js/runtime-main.50fe16ac.js",
     "static/css/2.5ce72412.chunk.css",
-    "static/js/2.89f46efa.chunk.js",
-    "static/css/main.0ff1d722.chunk.css",
-    "static/js/main.493fc182.chunk.js"
+    "static/js/2.827c8d9e.chunk.js",
+    "static/css/main.4f343364.chunk.css",
+    "static/js/main.fa8b7646.chunk.js"
   ]
 }

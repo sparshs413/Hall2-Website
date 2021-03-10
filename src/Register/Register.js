@@ -59,14 +59,19 @@ class Register extends Component {
           // console.log(errorMessage);
         });
 
-        const db = Firebase.firestore();
-        const userRef = db.collection("users-data").add({
-          name: this.state.name,
-          email: this.state.email,
-          password: this.state.password1,
-          photoURL: "",
-          timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
-        });
+      const db = Firebase.firestore();
+      const permissions = {
+        admin: false,
+        messAdmin: false,
+      };
+      const userRef = db.collection("users-data").add({
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password1,
+        photoURL: "",
+        permissions: permissions,
+        timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+      });
     }
   };
 
