@@ -39,78 +39,61 @@ class Alumni extends Component {
 			deleteModalShow: false,
 			postId: "",
 			isAdmin: false,
+			alumni: [],
+			alumniId: [],
 		};
 
 		this.openComments = this.openComments.bind(this);
 		this.deleteComment = this.deleteComment.bind(this);
 	}
 
-	// addLike = (a, b, e) => {
-	//   // add likes to post
-	//   e.preventDefault();
+	addLike = (a, b, e) => {
+		// add likes to post
+		e.preventDefault();
 
-	//   const email = this.state.useremail;
+		if (this.state.isLogin) {
+			let userLikeCheck = false;
+			const useremail = this.state.useremail;
+			const that = this;
 
-	//   if (this.state.isLogin) {
-	//     let likeCheck = false;
-	//     const useremail = this.state.useremail;
-	//     const items = [];
-	//     const numLikes = [];
+			if (true) {
+				Firebase.firestore()
+					.collection("alumni")
+					.doc(this.state.alumniId[a])
+					.collection("likes")
+					.orderBy("timestamp", "desc")
+					.get()
+					.then((querySnapshot) => {
+						querySnapshot.forEach(function (doc) {
+							if (doc.data().email === useremail) {
+								userLikeCheck = true;
+							}
+						});
 
-	//     if (true) {
-	//       Firebase.firestore()
-	//         .collection("alumniportal")
-	//         .doc(this.state.items[a])
-	//         .collection("likes")
-	//         .orderBy("timestamp", "desc")
-	//         .get()
-	//         .then((querySnapshot) => {
-	//           querySnapshot.forEach(function (doc) {
-	//             numLikes.push(doc.data());
-	//             if (doc.data().email === useremail) {
-	//               likeCheck = true;
-	//               items.push(doc.data());
-	//             }
-	//           });
+						if (!userLikeCheck) {
+							Firebase.firestore()
+								.collection("alumni")
+								.doc(that.state.alumniId[a])
+								.update({
+									numberLike: Firebase.firestore.FieldValue.increment(1),
+								});
 
-	//           this.setState({ isLiked: likeCheck });
-	//           if (items.length === 0) {
-	//             this.setState({ isLiked: false });
-	//           }
-	//           this.likeAdd(a, numLikes.length);
-	//         })
-	//         .catch(function (error) {
-	//           console.log("Error getting documents: ", error);
-	//         });
-	//     }
-	//   } else {
-	//     alert("Login to Like/Comment on the Post!");
-	//   }
-	// };
-
-	// likeAdd(a, b) {
-	//   const useremail = this.state.useremail;
-	//   if (!this.state.isLiked) {
-	//     Firebase.firestore()
-	//       .collection("alumniportal")
-	//       .doc(this.state.items[a])
-	//       .onSnapshot(function (doc) {
-	//         doc.ref.update({ numberLike: b + 1 });
-	//         doc.ref.update({ isLiked: true });
-	//       });
-
-	//     Firebase.firestore()
-	//       .collection("alumniportal")
-	//       .doc(this.state.items[a])
-	//       .collection("likes")
-	//       .add({
-	//         email: useremail,
-	//         timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
-	//       });
-	//   } else {
-	//     alert("You have already liked the Post");
-	//   }
-	// }
+							Firebase.firestore().collection("alumni").doc(that.state.alumniId[a]).collection("likes").add({
+								email: useremail,
+								timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+							});
+						} else {
+							alert("You have already liked the post!");
+						}
+					})
+					.catch(function (error) {
+						console.log("Error getting documents: ", error);
+					});
+			}
+		} else {
+			alert("Login to Like/Comment on the Post!");
+		}
+	};
 
 	openComments(b, e) {
 		e.preventDefault();
@@ -180,41 +163,18 @@ class Alumni extends Component {
 		this.setState({ isLoading: true });
 		this.authListener();
 
-		Firebase.database()
-			.ref("alumni/")
-			.on("value", (snapshot) => {
-				let matches = [];
-				let items = [];
-				snapshot.forEach((snap) => {
-					matches.push(snap.val());
-					items.push(snap.key);
+		Firebase.firestore()
+			.collection("alumni")
+			.onSnapshot((querySnapshot) => {
+				let alumni = [];
+				let alumniId = [];
+				querySnapshot.forEach((doc) => {
+					alumni.push(doc.data());
+					alumniId.push(doc.id);
 				});
-				this.setState({ matches: matches, items: items, isLoading: false });
-				this.numOfComments();
+
+				this.setState({ alumni: alumni, alumniId: alumniId, isLoading: false });
 			});
-
-		// Firebase.firestore()
-		//   .collection("alumniportal")
-		//   .orderBy("timestamp", "desc")
-		//   .get()
-		//   .then((querySnapshot) => {
-		//     const matches = [];
-		//     const items = [];
-
-		//     querySnapshot.forEach(function (doc) {
-		//       if (doc.data()) {
-		//         matches.push(doc.data());
-		//         items.push(doc.id);
-		//       }
-		//     });
-
-		//     this.setState({ matches: matches, items: items, isLoading: false });
-		//     // this.setState({  });
-		//     // this.numOfComments();
-		//   })
-		//   .catch(function (error) {
-		//     console.log("Error getting documents: ", error);
-		//   });
 	}
 
 	showDeleteModal(a) {
@@ -310,27 +270,14 @@ class Alumni extends Component {
 	}
 
 	makeUI() {
-		var a = 0;
-		var b = 0;
+		let a = 0;
+		let b = 0;
 		let c = 0;
+		let d = 0;
 		const checkAdmin = this.state.isAdmin ? true : false;
 
-		if (this.state.matches.length !== 0) {
-			//   <InfiniteScroll
-			//   dataLength={items.length} //This is important field to render the next data
-			//   next={fetchData}
-			//   hasMore={true}
-			//   loader={<h4>Loading...</h4>}
-			//   endMessage={
-			//     <p style={{ textAlign: 'center' }}>
-			//       <b>Yay! You have seen it all</b>
-			//     </p>
-			//   }
-			//   >
-			//   {items}
-			// </InfiniteScroll>
-
-			return this.state.matches.map((project) => (
+		if (this.state.alumni.length !== 0) {
+			return this.state.alumni.map((project) => (
 				<div>
 					<Feed>
 						<Feed.Event>
@@ -341,16 +288,15 @@ class Alumni extends Component {
 								<Feed.Summary>
 									<a onClick={this.openComments.bind(this, b++)}>{project.name}</a>
 									<Feed.Date>
-										<TimeAgo date={new Date(project.timestamp)} minPeriod="5" />
-										{console.log(new Date(project.timestamp))}
+										<TimeAgo date={project.timestamp.toDate()} minPeriod="5" />
 									</Feed.Date>
-									{/* {checkAdmin ? (
-                    <span className="delete_post">
-                      <a onClick={this.showDeleteModal.bind(this, c++)}>
-                        <Icon name="delete" />
-                      </a>
-                    </span>
-                  ) : null} */}
+									{checkAdmin ? (
+										<span className="delete_post">
+											<a onClick={this.showDeleteModal.bind(this, c++)}>
+												<Icon name="delete" />
+											</a>
+										</span>
+									) : null}
 								</Feed.Summary>
 								<Feed.Extra images>
 									{project.image1 && (
@@ -385,18 +331,14 @@ class Alumni extends Component {
 									)}
 								</Feed.Extra>
 								<a>
-									<Feed.Extra text onClick={this.openComments.bind(this, b++)}>
-										{project.message}
-									</Feed.Extra>
+									<Feed.Extra text>{project.message}</Feed.Extra>
 								</a>
 								<Feed.Meta>
-									{/* <Feed.Like
-                    onClick={this.addLike.bind(this, a++, project.numberLike)}
-                  >
-                    <Icon name="like" />
-                    {project.numberLike}
-                  </Feed.Like> */}
-									<span className="comment-box" onClick={this.openComments.bind(this, b++)}>
+									<Feed.Like>
+										<Icon name="like" onClick={this.addLike.bind(this, a++, project.numberLike)} />
+										{project.numberLike}
+									</Feed.Like>
+									<span className="comment-box" onClick={this.openComments.bind(this, d++)}>
 										<Feed.Like>
 											<Icon name="comment" />
 											{project.numberComment}
@@ -412,12 +354,8 @@ class Alumni extends Component {
 	}
 
 	render() {
-		// if (this.state.redirect) {
-		//   return <Redirect push to="./detail" data={this.state.link} />;
-		// }
-
 		if (this.state.redirect) {
-			const a = this.state.items[this.state.id];
+			const a = this.state.alumniId[this.state.id];
 			return (
 				<Redirect
 					to={{

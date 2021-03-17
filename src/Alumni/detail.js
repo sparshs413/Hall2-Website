@@ -5,6 +5,7 @@ import "./detail.css";
 import { Button, Accordion, Card, Modal, Spinner } from "react-bootstrap";
 import Firebase from "../Firebase";
 import TimeAgo from "react-timeago";
+import defaultImage from "./stu.jpeg";
 
 const createHistory = require("history").createBrowserHistory;
 
@@ -15,6 +16,24 @@ class Detail extends Component {
 		super(props);
 
 		this.state = {
+			storyDetail: [],
+			storyDetailId: this.props.location.state.name,
+			name: "",
+			profileImage: "",
+			aimage1: "",
+			aimage2: "",
+			aimage3: "",
+			content: "",
+			numLikes: "",
+			numComments: "",
+			comments: [],
+			commentsId: [],
+			username: "",
+			userImage: "",
+			useremail: "",
+			isLogin: false,
+			timestamp: "",
+
 			modalShow: false,
 			deleteModalShow: false,
 			afterCommentDeleteModalShow: false,
@@ -28,20 +47,7 @@ class Detail extends Component {
 			response: "",
 			total_comments: 0,
 			total_likes: 0,
-			id: this.props.location.state.name,
-			name: "",
-			profileImage: "",
-			aimage1: "",
-			aimage2: "",
-			aimage3: "",
-			content: "",
-			numLikes: "",
-			numComments: "",
-			timestamp: "",
-			username: "",
-			userImage: "",
-			useremail: "",
-			isLogin: false,
+
 			isLiked: false,
 			isAdmin: false,
 			isLoading: true,
@@ -50,132 +56,59 @@ class Detail extends Component {
 
 		this.enlargeImg = this.enlargeImg.bind(this);
 		this.reply_form = this.reply_form.bind(this);
-		// this.showDeleteModal = this.showDeleteModal.bind(this);
 		this.deleteComment = this.deleteComment.bind(this);
 	}
 
 	componentDidMount() {
 		this._isMounted = true;
-
 		this.setState({ isLoading: true });
-		const id = this.state.id;
+		const id = this.state.storyDetailId;
 		this.authListener();
 
-		Firebase.database()
-			.ref("alumni/")
-			.on("value", (snapshot) => {
-				let matches = [];
-				let items = [];
-				snapshot.forEach((snap) => {
-					if (id == snap.key) {
-						matches.push(snap.val());
-						items.push(snap.key);
+		Firebase.firestore()
+			.collection("alumni")
+			.orderBy("timestamp", "desc")
+			.onSnapshot((querySnapshot) => {
+				const storyDetail = [];
+
+				querySnapshot.forEach(function (doc) {
+					if (doc.data() && id === doc.id) {
+						storyDetail.push(doc.data());
 					}
 				});
 
+				this.setState({ storyDetail: storyDetail });
 				this.setState({
-					name: matches[0].name,
-					profileImage: matches[0].userImage,
-					aimage1: matches[0].image1,
-					aimage2: matches[0].image2,
-					aimage3: matches[0].image3,
-					content: matches[0].message,
-					numLikes: matches[0].numberLike,
-					timestamp: matches[0].timestamp,
+					name: storyDetail[0].name,
+					profileImage: storyDetail[0].userImage,
+					aimage1: storyDetail[0].image1,
+					aimage2: storyDetail[0].image2,
+					aimage3: storyDetail[0].image3,
+					content: storyDetail[0].message,
+					numLikes: storyDetail[0].numberLike,
+					numComments: storyDetail[0].numberComment,
+					timestamp: storyDetail[0].timestamp,
 				});
 			});
 
-		Firebase.database()
-			.ref("alumni/" + id)
-			.child("comments")
-			.on("value", (snapshot) => {
-				let matches = [];
-				let items = [];
-				let a = 0;
-				snapshot.forEach((snap) => {
-					if (
-						snap.key != "email" &&
-						snap.key != "image1" &&
-						snap.key != "image2" &&
-						snap.key != "image3" &&
-						snap.key != "isLiked" &&
-						snap.key != "message" &&
-						snap.key != "name" &&
-						snap.key != "numberComment" &&
-						snap.key != "numberLike" &&
-						snap.key != "timestamp" &&
-						snap.key != "userImage"
-					) {
-						matches.push(snap.val());
-						items.push(snap.key);
-						a++;
+		Firebase.firestore()
+			.collection("alumni")
+			.doc(id)
+			.collection("comments")
+			.orderBy("timestamp", "asc")
+			.onSnapshot((querySnapshot) => {
+				const comments = [];
+				const commentsId = [];
+
+				querySnapshot.forEach(function (doc) {
+					if (doc.data()) {
+						comments.push(doc.data());
+						commentsId.push(doc.id);
 					}
 				});
-				this.setState({ matches: matches });
-				this.setState({ numComments: a });
-				this.setState({ items: items, isLoading: false });
-			});
-	}
 
-	componentWillUnmount() {
-		this._isMounted = false;
-		this.setState = (state, callback) => {
-			return;
-		};
-	}
-
-	reply_form() {
-		if (this.state.reply_form === "1") {
-			this.setState({
-				reply_form: "0",
+				this.setState({ comments: comments, commentsId: commentsId, isLoading: false });
 			});
-		} else {
-			this.setState({
-				reply_form: "1",
-			});
-		}
-	}
-
-	showDeleteModal(a) {
-		if (this.state.deleteModalShow) {
-			this.setState({
-				deleteModalShow: false,
-			});
-		} else {
-			this.setState({
-				deleteModalShow: true,
-				commentID: this.state.items[a],
-			});
-		}
-	}
-
-	deleteComment(e) {
-		e.preventDefault();
-		Firebase.database()
-			.ref("alumni/" + this.state.id)
-			.child("comments")
-			.child(this.state.commentID)
-			.remove();
-
-		this.setState({ afterCommentDeleteModalShow: true });
-		this.setState({ deleteModalShow: false });
-	}
-
-	handleClose = () => {
-		this.setState({ modalShow: false, deleteModalShow: false, afterCommentDeleteModalShow: false });
-	};
-
-	enlargeImg(img) {
-		if (this.state.modalShow === false) {
-			this.setState({
-				modalImg: img.src,
-				modalShow: true,
-			});
-		} else {
-			this.setState({
-				modalShow: false,
-			});
-		}
 	}
 
 	authListener() {
@@ -212,6 +145,182 @@ class Detail extends Component {
 		});
 	}
 
+	addPostLike = (a, b, e) => {
+		// add likes to post
+		e.preventDefault();
+
+		if (this.state.isLogin) {
+			let userLikeCheck = false;
+			const useremail = this.state.useremail;
+			const that = this;
+
+			if (true) {
+				Firebase.firestore()
+					.collection("alumni")
+					.doc(this.state.storyDetailId)
+					.collection("likes")
+					.orderBy("timestamp", "desc")
+					.get()
+					.then((querySnapshot) => {
+						querySnapshot.forEach(function (doc) {
+							if (doc.data().email === useremail) {
+								userLikeCheck = true;
+							}
+						});
+
+						if (!userLikeCheck) {
+							Firebase.firestore()
+								.collection("alumni")
+								.doc(that.state.storyDetailId)
+								.update({
+									numberLike: Firebase.firestore.FieldValue.increment(1),
+								});
+
+							Firebase.firestore().collection("alumni").doc(that.state.storyDetailId).collection("likes").add({
+								email: useremail,
+								timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+							});
+						} else {
+							alert("You have already liked the post!");
+						}
+					})
+					.catch(function (error) {
+						console.log("Error getting documents: ", error);
+					});
+			}
+		} else {
+			alert("Login to Like/Comment on the Post!");
+		}
+	};
+
+	addCommentLike = (a, b, e) => {
+		// add likes to post
+		e.preventDefault();
+
+		if (this.state.isLogin) {
+			let userLikeCheck = false;
+			const useremail = this.state.useremail;
+			const that = this;
+
+			if (true) {
+				Firebase.firestore()
+					.collection("alumni")
+					.doc(this.state.storyDetailId)
+					.collection("comments")
+					.doc(this.state.commentsId[a])
+					.collection("likes")
+					.orderBy("timestamp", "desc")
+					.get()
+					.then((querySnapshot) => {
+						querySnapshot.forEach(function (doc) {
+							if (doc.data().email === useremail) {
+								userLikeCheck = true;
+							}
+						});
+
+						if (!userLikeCheck) {
+							Firebase.firestore()
+								.collection("alumni")
+								.doc(this.state.storyDetailId)
+								.collection("comments")
+								.doc(this.state.commentsId[a])
+								.update({
+									numLikes: Firebase.firestore.FieldValue.increment(1),
+								});
+
+							Firebase.firestore().collection("alumni").doc(this.state.storyDetailId).collection("comments").doc(this.state.commentsId[a]).collection("likes").add({
+								email: useremail,
+								timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+							});
+						} else {
+							alert("You have already liked the post!");
+						}
+					})
+					.catch(function (error) {
+						console.log("Error getting documents: ", error);
+					});
+			}
+		} else {
+			alert("Login to Like/Comment on the Post!");
+		}
+	};
+
+	componentWillUnmount() {
+		this._isMounted = false;
+		this.setState = (state, callback) => {
+			return;
+		};
+	}
+
+	reply_form() {
+		if (this.state.reply_form === "1") {
+			this.setState({
+				reply_form: "0",
+			});
+		} else {
+			this.setState({
+				reply_form: "1",
+			});
+		}
+	}
+
+	showDeleteModal(a) {
+		if (this.state.deleteModalShow) {
+			this.setState({
+				deleteModalShow: false,
+			});
+		} else {
+			this.setState({
+				deleteModalShow: true,
+				commentID: this.state.commentsId[a],
+			});
+		}
+	}
+
+	deleteComment(e) {
+		e.preventDefault();
+
+		Firebase.firestore()
+			.collection("alumni")
+			.doc(this.state.storyDetailId)
+			.update({
+				numberComment: Firebase.firestore.FieldValue.increment(-1),
+			});
+
+		Firebase.firestore()
+			.collection("alumni")
+			.doc(this.state.storyDetailId)
+			.collection("comments")
+			.doc(this.state.commentID)
+			.delete()
+			.then(() => {
+				console.log("Document successfully deleted!");
+			})
+			.catch((error) => {
+				console.error("Error removing document: ", error);
+			});
+
+		this.setState({ afterCommentDeleteModalShow: true });
+		this.setState({ deleteModalShow: false });
+	}
+
+	handleClose = () => {
+		this.setState({ modalShow: false, deleteModalShow: false, afterCommentDeleteModalShow: false });
+	};
+
+	enlargeImg(img) {
+		if (this.state.modalShow === false) {
+			this.setState({
+				modalImg: img.src,
+				modalShow: true,
+			});
+		} else {
+			this.setState({
+				modalShow: false,
+			});
+		}
+	}
+
 	onChange = (e) => {
 		this.setState({
 			[e.target.name]: e.target.value,
@@ -220,9 +329,7 @@ class Detail extends Component {
 
 	onSubmit = (e) => {
 		e.preventDefault();
-		const time = Date.now();
-		const id = this.state.id;
-		const numberOfComments = this.state.numComments + 1;
+		const that = this;
 
 		if (this.state.isLogin) {
 			var new_comment = {
@@ -232,29 +339,28 @@ class Detail extends Component {
 				email: this.state.useremail,
 			};
 
-			Firebase.database()
-				.ref("alumni/" + id)
-				.child("comments")
-				.push()
-				.set({
-					name: new_comment.username,
-					photoURL: new_comment.photo,
-					comment: new_comment.response,
-					email: new_comment.email,
-					numLikes: 0,
-					isLiked: false,
-					timestamp: Firebase.database.ServerValue.TIMESTAMP,
+			Firebase.firestore()
+				.collection("alumni")
+				.doc(that.state.storyDetailId)
+				.update({
+					numberComment: Firebase.firestore.FieldValue.increment(1),
 				});
 
-			Firebase.database()
-				.ref("alumni/" + id)
-				.update({ numberComment: numberOfComments });
+			Firebase.firestore().collection("alumni").doc(that.state.storyDetailId).collection("comments").add({
+				name: new_comment.username,
+				photoURL: new_comment.photo,
+				comment: new_comment.response,
+				email: new_comment.email,
+				numLikes: 0,
+				timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
+			});
 
 			this.setState({
 				error: "Your comment added!",
 				total_comments: this.state.total_comments + 1,
+				response: "",
 			});
-			console.log(this.state);
+			this.reply_form();
 		} else {
 			alert("Please Login to Comment");
 		}
@@ -262,12 +368,13 @@ class Detail extends Component {
 
 	developUI() {
 		let a = 0;
+		let b = 0;
 		const checkAdmin = this.state.isAdmin ? true : false;
-		if (this.state.matches.length !== 0) {
-			return this.state.matches.map((project) => (
+		if (this.state.comments.length !== 0) {
+			return this.state.comments.map((project) => (
 				<div>
 					<Comment>
-						<Comment.Avatar src={project.photoURL} />
+						<Comment.Avatar src={project.photoURL ? `url(${project.photoURL})` : defaultImage} />
 						<Comment.Content>
 							{checkAdmin ? (
 								<span className="comment_cross_btn" onClick={this.showDeleteModal.bind(this, a++)}>
@@ -279,26 +386,20 @@ class Detail extends Component {
 
 							<Comment.Author>{project.name}</Comment.Author>
 							<Comment.Metadata>
-								{/* <TimeAgo date={project.timestamp.toDate()} minPeriod="5" /> */}
-								{/* 
-                <Feed>
-                  <Feed.Event>
-                    <Feed.Content>
-                      <Feed.Meta>
-                        <Feed.Like
-                          onClick={this.addLike.bind(
-                            this,
-                            a++,
-                            project.numLikes
-                          )}
-                        >
-                          <Icon name="like" />
-                          {project.numLikes}
-                        </Feed.Like>
-                      </Feed.Meta>
-                    </Feed.Content>
-                  </Feed.Event>
-                </Feed> */}
+								<TimeAgo date={project.timestamp !== null ? project.timestamp.toDate() : new Date()} minPeriod="5" />
+
+								<Feed>
+									<Feed.Event>
+										<Feed.Content>
+											<Feed.Meta>
+												<Feed.Like onClick={this.addCommentLike.bind(this, b++, project.numLikes)}>
+													<Icon name="like" />
+													{project.numLikes}
+												</Feed.Like>
+											</Feed.Meta>
+										</Feed.Content>
+									</Feed.Event>
+								</Feed>
 							</Comment.Metadata>
 							<Comment.Text>{project.comment}</Comment.Text>
 						</Comment.Content>
@@ -326,11 +427,15 @@ class Detail extends Component {
 						<>
 							<Feed>
 								<Feed.Event>
-									<Feed.Label image={this.state.profileImage} />
+									<Feed.Label>
+										<div className="profile_pic" style={{ backgroundImage: this.state.profileImage ? `url(${this.state.profileImage})` : defaultImage }}></div>
+									</Feed.Label>
 									<Feed.Content>
 										<Feed.Summary>
 											<a>{this.state.name}</a>
-											{/* <Feed.Date><TimeAgo date={this.state.timestamp.toDate()} minPeriod="5" /></Feed.Date> */}
+											<Feed.Date>
+												<TimeAgo date={this.state.timestamp.toDate()} minPeriod="5" />
+											</Feed.Date>
 										</Feed.Summary>
 										{this.state.aimage1 && (
 											<Feed.Extra images>
@@ -347,16 +452,10 @@ class Detail extends Component {
 										)}
 										<Feed.Extra text>{this.state.content}</Feed.Extra>
 										<Feed.Meta>
-											{/* <Feed.Like
-                    onClick={this.addPostLike.bind(
-                      this,
-                      "a++",
-                      this.state.numLikes
-                    )}
-                  >
-                    <Icon name="like" />
-                    {this.state.numLikes}
-                  </Feed.Like> */}
+											<Feed.Like onClick={this.addPostLike.bind(this, "a++", this.state.numLikes)}>
+												<Icon name="like" />
+												{this.state.numLikes}
+											</Feed.Like>
 											<span className="comment-box" onClick={this.reply_form}>
 												<Feed.Like>
 													<Icon name="comment" />

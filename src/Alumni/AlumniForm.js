@@ -4,7 +4,7 @@ import { Container, Button, Grid, Header, Icon, Form, Segment } from "semantic-u
 import { Spinner } from "react-bootstrap";
 import history from "./../history";
 import "./AlumniForm.css";
-import Firebase from "../Firebase";
+import firebase from "../Firebase";
 
 export class AlumniForm extends Component {
 	constructor(props) {
@@ -15,9 +15,12 @@ export class AlumniForm extends Component {
 			email: "",
 			userImage: "",
 			message: "",
-			image1: "",
-			image2: "",
-			image3: "",
+			imageFileName1: "",
+			imageFileName2: "",
+			imageFileName3: "",
+			imageURL1: "",
+			imageURL2: "",
+			imageURL3: "",
 			progress_image1: 0,
 			progress_image2: 0,
 			progress_image3: 0,
@@ -41,7 +44,7 @@ export class AlumniForm extends Component {
 		});
 
 	authListener() {
-		Firebase.auth().onAuthStateChanged((user) => {
+		firebase.auth().onAuthStateChanged((user) => {
 			if (user) {
 				this.setState({ isLogin: true, name: user.displayName, email: user.email, userImage: user.photoURL });
 			} else {
@@ -53,24 +56,46 @@ export class AlumniForm extends Component {
 	onImageChange1 = async (e) => {
 		if (e.target.files[0]) {
 			const file = e.target.files[0];
-			console.log(file);
-			var url;
-			var storageRef = Firebase.app().storage("gs://hall2-iitk-website.appspot.com").ref();
-
-			var uploadTask = storageRef.child("images/" + file.name).put(file);
+			this.setState({
+				imageFileName1: file.name,
+			});
+			const that = this;
+			const timeStamp = new Date().valueOf();
+			var uploadTask = firebase
+				.storage()
+				.ref()
+				.child("alumni/" + file.name + timeStamp)
+				.put(file);
 
 			uploadTask.on(
-				Firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+				firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
 				function (snapshot) {
 					// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 					var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 					this.setState({ progress_image1: progress });
+					// console.log(this.state.progress_image);
+					if (progress === 100) {
+						var url;
+
+						firebase
+							.storage()
+							.ref()
+							.child("alumni/" + file.name + timeStamp)
+							.getDownloadURL()
+							.then(function (downloadURL) {
+								console.log("File available at", downloadURL);
+								url = downloadURL;
+								that.setState({
+									imageURL1: url,
+								});
+							});
+					}
 					console.log("Upload is " + progress + "% done");
 					switch (snapshot.state) {
-						case Firebase.storage.TaskState.PAUSED: // or 'paused'
+						case firebase.storage.TaskState.PAUSED: // or 'paused'
 							console.log("Upload is paused");
 							break;
-						case Firebase.storage.TaskState.RUNNING: // or 'running'
+						case firebase.storage.TaskState.RUNNING: // or 'running'
 							console.log("Upload is running");
 							break;
 						default:
@@ -92,50 +117,60 @@ export class AlumniForm extends Component {
 						case "storage/unknown":
 							// Unknown error occurred, inspect error.serverResponse
 							break;
+
 						default:
 							break;
 					}
 				}
 			);
-
-			// Upload completed successfully, now we can get the download URL
-			await uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-				console.log("File available at", downloadURL);
-				url = downloadURL;
-				// console.log(url);
-			});
-
-			console.log(url);
-			this.setState({ image1: url });
-			console.log(this.state.url);
-			// console.log(urls);
 		} else {
-			console.log("hello ");
-			this.setState(() => ({ image: "image" }));
+			this.setState(() => ({ imageFileName1: "image" }));
 		}
 	};
 
 	onImageChange2 = async (e) => {
 		if (e.target.files[0]) {
 			const file = e.target.files[0];
-			console.log(file);
-			var url;
-			var storageRef = Firebase.app().storage("gs://hall2-iitk-website.appspot.com").ref();
-
-			var uploadTask = storageRef.child("images/" + file.name).put(file);
+			this.setState({
+				imageFileName2: file.name,
+			});
+			const that = this;
+			const timeStamp = new Date().valueOf();
+			var uploadTask = firebase
+				.storage()
+				.ref()
+				.child("alumni/" + file.name + timeStamp)
+				.put(file);
 
 			uploadTask.on(
-				Firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+				firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
 				function (snapshot) {
 					// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 					var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 					this.setState({ progress_image2: progress });
+					// console.log(this.state.progress_image);
+					if (progress === 100) {
+						var url;
+
+						firebase
+							.storage()
+							.ref()
+							.child("alumni/" + file.name + timeStamp)
+							.getDownloadURL()
+							.then(function (downloadURL) {
+								console.log("File available at", downloadURL);
+								url = downloadURL;
+								that.setState({
+									imageURL2: url,
+								});
+							});
+					}
 					console.log("Upload is " + progress + "% done");
 					switch (snapshot.state) {
-						case Firebase.storage.TaskState.PAUSED: // or 'paused'
+						case firebase.storage.TaskState.PAUSED: // or 'paused'
 							console.log("Upload is paused");
 							break;
-						case Firebase.storage.TaskState.RUNNING: // or 'running'
+						case firebase.storage.TaskState.RUNNING: // or 'running'
 							console.log("Upload is running");
 							break;
 						default:
@@ -157,50 +192,60 @@ export class AlumniForm extends Component {
 						case "storage/unknown":
 							// Unknown error occurred, inspect error.serverResponse
 							break;
+
 						default:
 							break;
 					}
 				}
 			);
-
-			// Upload completed successfully, now we can get the download URL
-			await uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-				console.log("File available at", downloadURL);
-				url = downloadURL;
-				// console.log(url);
-			});
-
-			console.log(url);
-			this.setState({ image2: url });
-			console.log(this.state.url);
-			// console.log(urls);
 		} else {
-			console.log("hello ");
-			this.setState(() => ({ image: "image" }));
+			this.setState(() => ({ imageFileName2: "image" }));
 		}
 	};
 
 	onImageChange3 = async (e) => {
 		if (e.target.files[0]) {
 			const file = e.target.files[0];
-			console.log(file);
-			var url;
-			var storageRef = Firebase.app().storage("gs://hall2-iitk-website.appspot.com").ref();
-
-			var uploadTask = storageRef.child("images/" + file.name).put(file);
+			this.setState({
+				imageFileName3: file.name,
+			});
+			const that = this;
+			const timeStamp = new Date().valueOf();
+			var uploadTask = firebase
+				.storage()
+				.ref()
+				.child("alumni/" + file.name + timeStamp)
+				.put(file);
 
 			uploadTask.on(
-				Firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+				firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
 				function (snapshot) {
 					// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
 					var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 					this.setState({ progress_image3: progress });
+					// console.log(this.state.progress_image);
+					if (progress === 100) {
+						var url;
+
+						firebase
+							.storage()
+							.ref()
+							.child("alumni/" + file.name + timeStamp)
+							.getDownloadURL()
+							.then(function (downloadURL) {
+								console.log("File available at", downloadURL);
+								url = downloadURL;
+								that.setState({
+									imageURL3: url,
+								});
+							});
+					}
 					console.log("Upload is " + progress + "% done");
 					switch (snapshot.state) {
-						case Firebase.storage.TaskState.PAUSED: // or 'paused'
+						case firebase.storage.TaskState.PAUSED: // or 'paused'
 							console.log("Upload is paused");
 							break;
-						case Firebase.storage.TaskState.RUNNING: // or 'running'
+						case firebase.storage.TaskState.RUNNING: // or 'running'
 							console.log("Upload is running");
 							break;
 						default:
@@ -222,25 +267,14 @@ export class AlumniForm extends Component {
 						case "storage/unknown":
 							// Unknown error occurred, inspect error.serverResponse
 							break;
+
 						default:
 							break;
 					}
 				}
 			);
-
-			// Upload completed successfully, now we can get the download URL
-			await uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
-				console.log("File available at", downloadURL);
-				url = downloadURL;
-				// console.log(url);
-			});
-
-			console.log(url);
-			this.setState({ image3: url });
-			// console.log(urls);
 		} else {
-			console.log("hello ");
-			this.setState(() => ({ image: "image" }));
+			this.setState(() => ({ imageFileName3: "image" }));
 		}
 	};
 
@@ -253,43 +287,29 @@ export class AlumniForm extends Component {
 			alert("Please Login to Post");
 		} else {
 			this.setState({ isLoading: true });
-			const time = Date.now();
-			console.log(time);
-			Firebase.database().ref("alumni/").push().set({
+
+			firebase.firestore().collection("alumni").add({
 				name: this.state.name,
 				email: this.state.email,
 				userImage: this.state.userImage,
 				message: this.state.message,
-				image1: this.state.image1,
-				image2: this.state.image2,
-				image3: this.state.image3,
+				image1: this.state.imageURL1,
+				image2: this.state.imageURL2,
+				image3: this.state.imageURL3,
 				numberLike: 0,
 				numberComment: 0,
 				isLiked: false,
-				timestamp: Firebase.database.ServerValue.TIMESTAMP,
+				timestamp: firebase.firestore.FieldValue.serverTimestamp(),
 			});
-			// const db = Firebase.firestore();
-			// const userRef = db.collection("alumniportal").add({
-			//   name: this.state.name,
-			//   email: this.state.email,
-			//   userImage: this.state.userImage,
-			//   message: this.state.message,
-			//   image1: this.state.image1,
-			//   image2: this.state.image2,
-			//   image3: this.state.image3,
-			//   numberLike: 0,
-			//   numberComment: 0,
-			//   isLiked: false,
-			//   timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
-			// });
-			// console.log(userRef);
+
+			this.setState({
+				message: "",
+				image1: "",
+				image2: "",
+				image3: "",
+			});
 		}
 		this.setState({ isLoading: false, disabled: true });
-		// let history = createHistory();
-		// history.push("/");
-		// let pathUrl = window.location.href;
-		// window.location.href = pathUrl;
-		// redirect to alumni
 	};
 
 	render() {
@@ -343,8 +363,6 @@ export class AlumniForm extends Component {
 								style={{ width: `${this.state.progress_image2}%`, backgroundColor: this.state.progress_image1 === 100 ? "rgb(68, 197, 85)" : "rgb(42, 160, 175)" }}
 							></div>
 
-							{/* var messageRef = db.collection('rooms').doc('roomA')
-                 .collection('messages').doc('message1');           */}
 							<input type="file" name="image" className="custom-file-input" id="customFile" onChange={this.onImageChange2} />
 							<label className="custom-file-label" for="customFile">
 								Upload Image
@@ -361,6 +379,12 @@ export class AlumniForm extends Component {
 								Upload Image
 							</label>
 						</div>
+
+						<img src={this.state.imageURL1} width="100%" />
+						<br />
+						<img src={this.state.imageURL2} width="100%" />
+						<br />
+						<img src={this.state.imageURL3} width="100%" />
 					</Form>
 				</Container>
 
