@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
 import history from "./../history";
+import { Button, Spinner } from "react-bootstrap";
 import "./Home.css";
 import "./Home2.scss";
 import Carousel from "react-multi-carousel";
@@ -47,6 +47,7 @@ export default class Home extends Component {
       btn_class: "",
       items: ["hello", "world"],
       Matches: [],
+      isLoading: false,
     };
 
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -54,6 +55,59 @@ export default class Home extends Component {
 
   componentDidMount() {
 
+    this.setState({isLoading: true});
+
+    document.querySelector('#navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.5) !important; backdrop-filter: blur(1px)";
+
+    this.listener = document.addEventListener("scroll", e => {
+      var scrolled = document.scrollingElement.scrollTop;
+      if (scrolled >= 450) {
+          document.getElementById('navbar').style.cssText = "background-color: #4285f4 !important";
+      } else {
+          document.getElementById('navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.5) !important; backdrop-filter: blur(1px)";
+      }
+    });
+    
+    const Matches = [];
+    let a = 0;
+    firebase
+      .firestore()
+      .collection("announcements")
+      .orderBy("timestamp", "desc")
+      .limit(6)
+      .get() 
+      .then((querySnapshot) => {
+
+        querySnapshot.forEach(function (doc) {
+          if (doc.data()) {
+            Matches.push(doc.data());
+          }
+        });
+
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+
+
+    firebase
+			.firestore()
+			.collection("users")
+			.orderBy("timestamp", "desc")
+			.limit(6)
+			.get()
+			.then((querySnapshot) => {
+
+				querySnapshot.forEach(function (doc) {
+						Matches.push(doc.data());
+				});
+
+				this.setState({ Matches: Matches, isLoading: false });
+			})
+			.catch(function (error) {
+				console.log("Error getting documents: ", error);
+      });
+      
     const spans = document.querySelectorAll('.word span');
 
     spans.forEach((span, idx) => {
@@ -69,44 +123,10 @@ export default class Home extends Component {
         span.classList.add('active');
       }, 750 * (idx+1))
     });
-
-    document.querySelector('#navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.5) !important; backdrop-filter: blur(1px)";
-
-    this.listener = document.addEventListener("scroll", e => {
-      var scrolled = document.scrollingElement.scrollTop;
-      if (scrolled >= 450) {
-          document.getElementById('navbar').style.cssText = "background-color: #4285f4 !important";
-      } else {
-          document.getElementById('navbar').style.cssText = "background-color: rgba(0, 0, 0, 0.5) !important; backdrop-filter: blur(1px)";
-      }
-    });
-    
-    let a = 0;
-    firebase
-      .firestore()
-      .collection("announcements")
-      .orderBy("timestamp", "desc")
-      .get()
-      .then((querySnapshot) => {
-        const Matches = [];
-
-        querySnapshot.forEach(function (doc) {
-          if (doc.data() && a < 6) {
-            Matches.push(doc.data());
-          }
-          a++;
-        });
-
-        this.setState({ Matches: Matches });
-      })
-      .catch(function (error) {
-        console.log("Error getting documents: ", error);
-      });
   }
 
   componentDidUpdate() {
     document.removeEventListener("scroll", this.listener);
-
   }
 
   componentWillUnmount() {
@@ -119,9 +139,11 @@ export default class Home extends Component {
   makeAnnouncement() {
     let number = 0;
     if (number != 8) {
-      return this.state.Matches.map((project) => (
-        <div class="card-body home-announce">
-          <h4 class="card-title home-announce">{project.title}</h4>
+      return this.state.Matches.sort((b,a)=>{return a.timestamp.seconds-b.timestamp.seconds}).slice(0,6).map((project) => (
+        project.title ? (
+        <a href='/Announce'>
+        <div class="card-body home-announce" style={{'whiteSpace': 'pre-wrap'}}>
+          <h4 class="card-title home-announce" style={{'marginBottom': '.1rem'}}>{project.title}</h4>
           <div className="by">{project.whom}</div>
           <span className="time1">
             <TimeAgo date={project.timestamp.toDate()} minPeriod="5" />
@@ -130,12 +152,34 @@ export default class Home extends Component {
             <span className="message">{project.announcement}</span>
           </p>
         </div>
+        </a>
+        )
+        :
+        (
+        <a href={project.option ? '/lostitems' : '/founditems'}>
+				<div class="card-body home-announce" style={{'whiteSpace': 'pre-wrap'}}>
+          <h4 class="card-title home-announce"  style={{'marginBottom': '.1rem'}}>{project.option ? 'Lost' : 'Found'} - {project.what}</h4>
+          <div className="by">{project.name}</div>
+          <span className="time1">
+            <TimeAgo date={project.timestamp.toDate()} minPeriod="5" />
+          </span>
+          <p class="card-text">
+            <div style={{'marginBottom': '5px'}}><span className="info">Place and time: </span> {project.where} , {project.when} </div>
+						<div style={{'marginBottom': '5px'}}><span className="info">Message: </span> {project.message} </div>
+						<div style={{'marginBottom': '5px'}}><span className="contact"> Contact to - </span> {project.name}</div>
+						<span className="contact"> Phone no. </span> {project.number}
+				
+          </p>
+        </div>
+        </a>
+        )
       ));
     }
   }
 
   render() {
     return (
+
       <div className="Home">
         <div>
           <title>Hall 2 | IIT Kanpur</title>
@@ -218,7 +262,20 @@ export default class Home extends Component {
               itemClass="carousel-item-padding-40-px"
               // partialVisbile={true}
             >
-              {this.makeAnnouncement()}
+              {this.state.isLoading ?
+              ( Array.from(Array(6), (e, i) => {
+              return(
+              <div class="card-body home-announce">
+                <p class="card-text">
+                  <div className="loader_center" style={{'marginTop':'80px'}}>
+                    <Spinner animation="border" variant="info" />
+                  </div>
+                </p>
+              </div>)
+              }
+            ))
+              :
+              this.makeAnnouncement()}
             </Carousel>
           </div>
 
@@ -548,27 +605,11 @@ export default class Home extends Component {
               </div>
               {/* </div> */}
             </div>
-            {/* Footer */}
-            <footer className="w3-center w3-black w3-padding-64">
-              <a href="#home" className="w3-button w3-light-grey">
-                <i className="fa fa-arrow-up w3-margin-right"></i>To the top
-              </a>
-              {/* <div class="w3-xlarge w3-section">
-      <i class="fa fa-facebook-official w3-hover-opacity"></i>
-      <i class="fa fa-instagram w3-hover-opacity"></i>
-      <i class="fa fa-snapchat w3-hover-opacity"></i>
-      <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-      <i class="fa fa-twitter w3-hover-opacity"></i>
-      <i class="fa fa-linkedin w3-hover-opacity"></i>
-    </div> */}
-
-              <p style={{margin: '20px 0 -10px'}}>Powered by HALL 2</p>
-              <br />
-              <p>Developed by Hall 2 </p>
-            </footer>
+          
           </div>
         </div>
       </div>
+      
     );
   }
 }

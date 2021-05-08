@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./announce.css";
 import { Spinner } from "react-bootstrap";
-import { addAnnounce, getAnnounce } from "../actions/announce";
 import firebase from "../Firebase";
+import { Button, Icon } from "semantic-ui-react";
 import TimeAgo from "react-timeago";
-
+ 
 export class Announcements extends Component {
 	constructor(props) {
 		super(props);
@@ -20,34 +20,79 @@ export class Announcements extends Component {
 			Matches: [],
 			isAdmin: "",
 			isLoading: true,
+			isLoadMore: false,
+			hideLoadMore: false,
+			last: ''
 		};
 
 		this.componentDidMount = this.componentDidMount.bind(this);
 	}
 
+
 	componentDidMount() {
 		this.setState({ isLoading: true });
+		var lastTime = '';
 		firebase
 			.firestore()
 			.collection("announcements")
 			.orderBy("timestamp", "desc")
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 				const Matches = [];
-
-				querySnapshot.forEach(function (doc) {
+				querySnapshot.forEach((doc) => {
 					if (doc.data()) {
 						Matches.push(doc.data());
 					}
+					lastTime = doc.data().timestamp;
 				});
+				this.setState({last:lastTime})
 
-				this.setState({ Matches: Matches, isLoading: false });
+				this.setState({ Matches: Matches, isLoading: false, isLoadMore: false });
 			})
-			.catch(function (error) {
+			.catch((error) => {
 				console.log("Error getting documents: ", error);
-				this.setState({ isLoading: false });
+				this.setState({ isLoading: false, isLoadMore: false });
 			});
 	}
+
+	loadData = () => {
+
+		this.setState({ isLoadMore: true });
+		var lastTime = '';
+		firebase
+			.firestore()
+			.collection("announcements")
+			.orderBy("timestamp", "desc")
+			.startAfter(this.state.last) 
+			.limit(10)
+			.get()
+			.then((querySnapshot) => {
+				var Matches = this.state.Matches;
+				var i=0;
+				querySnapshot.forEach((doc) => {
+					if (doc.data() && JSON.stringify(Matches[i++].timestamp)!==JSON.stringify(doc.data().timestamp)) {
+							Matches.push(doc.data());
+					}
+					else{
+						this.setState({hideLoadMore: true})
+					}
+						lastTime = doc.data().timestamp;
+				});
+				if(i===0){
+					this.setState({hideLoadMore: true})
+				}
+
+				this.setState({last:lastTime})
+						console.log('d')
+				this.setState({ Matches: Matches, isLoading: false, isLoadMore: false });
+			})
+			.catch((error) => {
+				console.log("Error getting documents: ", error);
+				this.setState({ isLoading: false, isLoadMore: false });
+			});
+	}
+
 
 	// static propTypes = {
 	//   addAnnounce: PropTypes.func.isRequired,
@@ -55,14 +100,11 @@ export class Announcements extends Component {
 	//   announces: PropTypes.array.isRequired,
 	// };
 
-	componentDidUpdate() {
-		this.props.getAnnounce();
-	}
 
 	makeUI() {
 		if (this.state.Matches.length !== 0) {
 			return this.state.Matches.map((project) => (
-				<div class="card-body announce">
+				<div class="card-body announce" style={{'whiteSpace': 'pre-wrap'}}>
 					<h4 class="card-title announce">{project.title}</h4>
 					<div className="by">{project.whom}</div>
 					<span className="time1">
@@ -85,25 +127,24 @@ export class Announcements extends Component {
 					<h2>Announcements</h2>
 
 					{this.state.isLoading ? (
-						<div className="loader_center">
+						<div className="loader_center"  style={{'marginBottom': '15rem'}}>
 							<Spinner animation="border" variant="info" />
 						</div>
 					) : (
 						<>
-							{this.props.announces.map((announce) => (
-								<div class="card-body announce">
-									<h4 class="card-title announce">{announce.title}</h4>
-									<div className="by">{announce.from} </div>
-									{/* <span className="time1"><TimeAgo date={project.timestamp.toDate().toDateString()} /></span> */}
-									<span className="time2">time, date </span>
-									<p class="card-text">
-										<span className="message">{announce.message}</span>
-									</p>
-									<hr />
-								</div>
-							))}
 
 							{this.makeUI()}
+
+							<div className='announce_load_more' style={this.state.hideLoadMore ? {'display': 'none'} : {'display': 'block'}}>
+								<Button 
+									disabled={this.state.isLoadMore} 
+									loading={this.state.isLoadMore} 
+									color="linkedin" 
+									onClick={this.loadData}
+								>
+									Load More
+								</Button>
+							</div>
 						</>
 					)}
 				</div>
@@ -112,8 +153,5 @@ export class Announcements extends Component {
 	}
 }
 
-const mapStateToprops = (state) => ({
-	announces: state.announce.announce,
-});
 
-export default connect(mapStateToprops, { addAnnounce, getAnnounce })(Announcements);
+export default (Announcements);

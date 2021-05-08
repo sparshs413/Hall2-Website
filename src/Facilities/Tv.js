@@ -60,33 +60,19 @@ class Tv extends Component {
           <a href="/guest-room">Guest Room</a>
           <a href="/canteen">Canteen</a>
           <a href="/computer-room">Computer Room</a>
-          <a href="/sports">Sports Facilities</a>
+          <a href="/sports">Sports, Gym & Music</a>
         </div>
      
         <Container className='tv_cont' text>
           <div className='heading'>TV Room</div>
           <div className='para'>
-            Jan 14, 2021 - Explore Ch RJR's board "Tv Lounge", followed by 1711 people on Pinterest. See more ideas about living room designs, living room tv, living room ...
-            Furniture Arrangement: A Guide to TV Room Layouts - Houzzwww.houzz.in › magazine › furniture-arrangement-a-g...
-            No matter the shape or size of your TV room, look to these homes for inspiration for how to lay out your furniture. From shoebox spaces to multifunctional rooms, ...
-            Related searches
+            A wide screen, wall mounted a projector screen one of the best luxuries provided, is housed in the large TV Room of Hall2. This is the place to catch all the not-to-be-missed matches: cricket, football, tennis! Its surely everyones favourite haunt on the night of any final! The room remains open round the clock and you can drop in any time to watch any channel of choice. But the utility of the TV room doesn't end here. It proves to be a multi-purpose room: It is also the Dance Room of Hall2. For this reason, a major portion of one of the walls has been mirrored. Hall level classes by the Counselling Service and Hall level lectures of the tech clubs are also conducted here. It is also the venue of some Quad Sessions during the winters.
           </div>
           <div className='img'>
             <img src={require('../Home/images/tv.jpg')} alt="img06"/>
           </div>
         </Container>
         
-        <Segment
-          inverted
-          vertical
-          style={{ margin: "12em 0em 0em", padding: "6em 0em" }}
-        >
-          <Container textAlign="center">
-            <List horizontal inverted divided link size="small">
-              <List.Item>Designed by Hall 2</List.Item>
-            </List>
-          </Container>
-        </Segment>
 
       </div>
     );

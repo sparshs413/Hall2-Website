@@ -25,6 +25,9 @@ class AskTheHab extends Component {
 			responseId: "",
 			modalShow: false,
 			isLoading: true,
+			isLoadMore: false,
+			hideLoadMore: false,
+			last: ''
 		};
 
 		this.handleInputChange = this.handleInputChange.bind(this);
@@ -67,10 +70,12 @@ class AskTheHab extends Component {
 
 	componentDidMount() {
 		this.setState({ isLoading: true });
+		var lastTime = '';
 		this.authListener();
 		Firebase.firestore()
 			.collection("askthehab")
 			.orderBy("timestamp", "desc")
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 				const Matches = [];
@@ -81,15 +86,15 @@ class AskTheHab extends Component {
 						Matches.push(doc.data());
 						items.push(doc.id);
 					}
+					lastTime = doc.data().timestamp;
 				});
 
-				this.setState({ Matches: Matches });
-				this.setState({ items: items, isLoading: false });
-				console.log(this.state.Matches);
+				this.setState({ Matches: Matches, last: lastTime });
+				this.setState({ items: items, isLoading: false, isLoadMore: false });
 			})
 			.catch(function (error) {
 				console.log("Error getting documents: ", error);
-				this.setState({ isLoading: false });
+				this.setState({ isLoading: false, isLoadMore: false });
 			});
 	}
 
@@ -100,6 +105,44 @@ class AskTheHab extends Component {
 			return <span Style={"color:rgb(53, 100, 53)"}>Answered</span>;
 		}
 	};
+
+
+	loadData = () => {
+		this.setState({ isLoadMore: true });
+		var lastTime = '';
+		firebase
+		.firestore()
+		.collection("askthehab")
+		.orderBy("timestamp", "desc")
+		.startAfter(this.state.last)
+		.limit(10)
+		.get()
+		.then((querySnapshot) => {
+			var Matches = this.state.Matches;
+			var items = this.state.items;
+
+			querySnapshot.forEach((doc) => {
+				if (doc.data()) {
+					if(!items.includes(doc.id)){
+						Matches.push(doc.data());
+						items.push(doc.id);
+					}
+					else{
+						this.setState({hideLoadMore: true})
+					}
+				}
+				lastTime = doc.data().timestamp;
+			});
+
+			this.setState({ Matches: Matches, last: lastTime });
+			this.setState({ items: items, isLoading: false, isLoadMore: false });
+		})
+		.catch((error) => {
+			console.log("Error getting documents: ", error);
+			this.setState({ isLoading: false, isLoadMore: false });
+		});
+	}
+
 
 	updateID = (id) => {
 		this.setState({ responseId: id });
@@ -315,11 +358,24 @@ class AskTheHab extends Component {
 					</Accordion>
 
 					{this.state.isLoading ? (
-						<div className="loader_center">
+						<div className="loader_center" style={{'marginBottom': '15rem'}}>
 							<Spinner animation="border" variant="info" />
 						</div>
 					) : (
-						<>{this.developUI()}</>
+						<>
+							{this.developUI()}
+
+							<div className='announce_load_more' style={this.state.hideLoadMore ? {'display': 'none'} : {'display': 'block'}}>
+								<Button 
+									disabled={this.state.isLoadMore} 
+									loading={!this.state.isLoadMore} 
+									color="linkedin" 
+									onClick={this.loadData}
+								>
+									Load More
+								</Button>
+							</div>
+						</>
 					)}
 				</div>
 

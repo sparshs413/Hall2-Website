@@ -61,33 +61,20 @@ class Sports extends Component {
           <a href="/guest-room">Guest Room</a>
           <a href="/canteen">Canteen</a>
           <a href="/computer-room">Computer Room</a>
-          <a href="/sports" style={{backgroundColor:'rgb(96, 96, 96)', fontWeight:'bold', color:'#fff'}}>Sports Facilities</a>
+          <a href="/sports" style={{backgroundColor:'rgb(96, 96, 96)', fontWeight:'bold', color:'#fff'}}>Sports, Gym & Music</a>
         </div>
      
         <Container className='tv_cont' text>
-          <div className='heading'>Sports</div>
+          <div className='heading'>Sports, Gym and Music</div>
           <div className='para'>
-            Jan 14, 2021 - Explore Ch RJR's board "Tv Lounge", followed by 1711 people on Pinterest. See more ideas about living room designs, living room tv, living room ...
-            Furniture Arrangement: A Guide to TV Room Layouts - Houzzwww.houzz.in › magazine › furniture-arrangement-a-g...
-            No matter the shape or size of your TV room, look to these homes for inspiration for how to lay out your furniture. From shoebox spaces to multifunctional rooms, ...
-            Related searches
+          We also have a music room in our hall , if you want to try out some music with your hands or just want to chill . We have Tablas , Guitars and many more equipments.
+          <br/>We have a gym inside our hall ready to serve residents at all time , it has enough gym equipments to carry out your daily exercises.
           </div>
           <div className='img' id='facilities_img'>
-            <img src={require('../Home/images/tv.jpg')} alt="img06"/>
+            <img src={require('../Home/images/hall2_8.jpg')} alt="img06"/>
           </div>
         </Container>
         
-        <Segment
-          inverted
-          vertical
-          style={{ margin: "12em 0em 0em", padding: "6em 0em" }}
-        >
-          <Container textAlign="center">
-            <List horizontal inverted divided link size="small">
-              <List.Item>Designed by Hall 2</List.Item>
-            </List>
-          </Container>
-        </Segment>
 
       </div>
     );

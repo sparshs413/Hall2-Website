@@ -61,34 +61,20 @@ class Computer extends Component {
           <a href="/guest-room">Guest Room</a>
           <a href="/canteen">Canteen</a>
           <a href="/computer-room" style={{backgroundColor:'rgb(63, 156, 231)', fontWeight:'bold', color:'#fff'}}>Computer Room</a>
-          <a href="/sports">Sports Facilities</a>
+          <a href="/sports">Sports, Gym & Music</a>
         </div>
      
         <Container className='tv_cont' text>
           <div className='heading'>Computer Room</div>
           <div className='para'>
-            Jan 14, 2021 - Explore Ch RJR's board "Tv Lounge", followed by 1711 people on Pinterest. See more ideas about living room designs, living room tv, living room ...
-            Furniture Arrangement: A Guide to TV Room Layouts - Houzzwww.houzz.in › magazine › furniture-arrangement-a-g...
-            No matter the shape or size of your TV room, look to these homes for inspiration for how to lay out your furniture. From shoebox spaces to multifunctional rooms, ...
-            Related searches
+            A well maintained Computer Room at your service 24 X 7 with high spped internet connection and air conditioning .It proves quiet helpful at times if you don't have laptop . It proves quiet useful during exams time when you don't want to study in your room or want to have a group discussion.
           </div>
           <div className='img' id='facilities_img'>
-            <img src={require('../Home/images/tv.jpg')} alt="img06"/>
+            <img src={require('../Home/images/cc.jpg')} alt="img06"/>
           </div>
         </Container>
         
-        <Segment
-          inverted
-          vertical
-          style={{ margin: "12em 0em 0em", padding: "6em 0em" }}
-        >
-          <Container textAlign="center">
-            <List horizontal inverted divided link size="small">
-              <List.Item>Designed by Hall 2</List.Item>
-            </List>
-          </Container>
-        </Segment>
-
+  
       </div>
     );
   }

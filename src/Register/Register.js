@@ -8,6 +8,7 @@ import {
   Message,
   Segment,
 } from "semantic-ui-react";
+import history from "./../history";
 import "./Register.css";
 import Firebase from "../Firebase";
 
@@ -22,6 +23,7 @@ class Register extends Component {
       password2: "",
       error: "",
       success: false,
+      isLoading: false,
     };
   }
 
@@ -30,13 +32,15 @@ class Register extends Component {
       [e.target.name]: e.target.value,
     });
 
-  onSubmit = (e) => {
+  onSubmit = async(e) => {
     e.preventDefault();
 
     const { password1, password2 } = this.state;
+    this.setState({isLoading: true});
     if (password1 !== password2) {
       this.setState({
         error: "Passwords don't match",
+        isLoading: false
       });
     } else {
       Firebase.auth()
@@ -56,6 +60,7 @@ class Register extends Component {
           var errorMessage = error.message;
           // ..
           alert(errorMessage);
+          this.setState({isLoading: false});
           // console.log(errorMessage);
         });
 
@@ -64,7 +69,7 @@ class Register extends Component {
         admin: false,
         messAdmin: false,
       };
-      const userRef = db.collection("users-data").add({
+      const userRef = await db.collection("users-data").add({
         name: this.state.name,
         email: this.state.email,
         password: this.state.password1,
@@ -72,6 +77,8 @@ class Register extends Component {
         permissions: permissions,
         timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
       });
+      this.setState({isLoading: false});
+      history.push("/")
     }
   };
 
@@ -150,7 +157,7 @@ class Register extends Component {
                     {this.state.error}
                   </span>
                 )}
-                <Button color="teal" type="submit" fluid size="large">
+                <Button color="teal" type="submit" fluid size="large" disabled={this.state.isLoading} loading={this.state.isLoading}>
                   Register
                 </Button>
               </Segment>

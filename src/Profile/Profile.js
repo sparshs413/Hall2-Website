@@ -1,7 +1,7 @@
 import $ from "jquery";
 import React, { Component } from "react";
-import { Container, Button, Grid, Header, Icon, Form, Segment } from "semantic-ui-react";
-
+import { Container, Button, Header, Icon, Form } from "semantic-ui-react";
+import { Spinner } from "react-bootstrap";
 import "./Profile.css";
 import Firebase from "../Firebase";
 
@@ -10,7 +10,7 @@ export class Profile extends Component {
 		super(props);
 
 		this.state = {
-			names: "",
+			name: "",
 			email: "",
 			userImage: "",
 			changeName: "",
@@ -24,6 +24,8 @@ export class Profile extends Component {
 			isLogin: false,
 			progress_image1: 0,
 			success: false,
+			uploading: false,
+			isLoading: true
 		};
 
 		this.changeUserData = this.changeUserData.bind(this);
@@ -60,9 +62,10 @@ export class Profile extends Component {
 			if (user) {
 				this.setState({
 					isLogin: true,
-					names: user.displayName,
+					name: user.displayName,
 					email: user.email,
 					userImage: user.photoURL,
+					isLoading: false
 				});
 				email = user.email;
 				Firebase.firestore()
@@ -157,6 +160,7 @@ export class Profile extends Component {
 
 	onImageChange1 = async (e) => {
 		if (e.target.files[0]) {
+			this.setState({uploading: true});
 			const file = e.target.files[0];
 			console.log(file);
 			var url;
@@ -211,7 +215,8 @@ export class Profile extends Component {
 			});
 
 			console.log(url);
-			this.setState({ userImage: url });
+			this.setState({ userImage: url, uploading: false});
+
 		} else {
 			console.log("hello ");
 			this.setState(() => ({ image: "image" }));
@@ -229,10 +234,9 @@ export class Profile extends Component {
 					displayName: name,
 					photoURL: userImages,
 				})
-					.then(function () {
+					.then( () => {
 						// Update successful.
 						console.log("Successfully updated");
-						this.state({ success: true });
 						// window.location.reload(false);
 					})
 					.catch(function (error) {
@@ -247,10 +251,12 @@ export class Profile extends Component {
 			.collection("users-data")
 			.doc(this.state.docsItems[0])
 			.get()
-			.then(function (doc) {
+			.then((doc) => {
 				console.log(doc.id, " => ", doc.data());
 				doc.ref.update({ name: name });
 				doc.ref.update({ photoURL: userImages });
+				this.setState({ success: true });
+
 			});
 
 		for (var i = 0; i < this.state.alumniID.length; i++) {
@@ -280,7 +286,7 @@ export class Profile extends Component {
 						}
 					});
 
-					// this.setState({ userComments: items });
+					this.setState({ success: true });
 				})
 				.catch(function (error) {
 					console.log("Error getting documents: ", error);
@@ -296,21 +302,41 @@ export class Profile extends Component {
 	render() {
 		return (
 			<div className="Profile">
-				<Container text style={{ marginTop: "1em" }}>
+				<Container text className='edit_profile_container' style={{ marginTop: "1em" }}>
+
+				{this.state.isLoading ? (
+						<div className="loader_center" style={{'marginBottom': '20rem'}}>
+							<Spinner animation="border" variant="info" />
+						</div>
+					) : (
+					<>
+					
+					<Header as="h3">Edit Profile</Header>
+
+					<Button 
+						type="submit" 
+						color="linkedin" 
+						className="alumni_form_button"
+						disabled={this.state.uploading}
+						onClick={this.changeUserData}
+					>
+
+						{this.state.uploading ? 
+							<>Uploading &nbsp;<i className='fa fa-pulse fa-spinner'></i></>
+						:
+							'Change'
+						}
+						
+						
+					</Button>
 					{this.state.success && (
-						<span style={{ color: "green" }}>
+						<span style={{ color: "green", float: 'right' }}>
 							<Icon name="check" />
 							Successfully changed
 						</span>
 					)}
-					<Header as="h3">Edit Profile</Header>
-
-					<Button type="submit" color="linkedin" className="alumni_form_button" onClick={this.changeUserData}>
-						Change
-					</Button>
-
 					<Form>
-						<img Style={"transition : transform 0.25s ease !important"} alt="" src={this.state.userImage} onClick={this.enlargeImg} />
+						<img Style={"transition : transform 0.25s ease !important"} alt='' src={this.state.userImage ? this.state.userImage : require("../Alumni/stu.jpeg")} onClick={this.enlargeImg} />
 						<div className="custom-file profile_image">
 							<div
 								className="upload_img_bar"
@@ -318,30 +344,23 @@ export class Profile extends Component {
 							></div>
 							<input type="file" name="image" className="custom-file-input" id="customFile" onChange={this.onImageChange1} />
 							<label className="custom-file-label" for="customFile">
-								Change Image
+								Change Image(jpeg/jpg)
 							</label>
-							<span style={{ color: "red" }}>crop image in square shape before uploading for good cover</span>
+							<span style={{ color: "indigo" }}>Crop image in square shape before uploading for good cover</span>
 						</div>
 
 						<div className="form-group profile_email">
 							<label>
-								Email: {this.state.email} <br /> Name: {this.state.names}
+								Email: {this.state.email} <br /> Name: {this.state.name}
 							</label>
 							<input className="form-control" type="text" name="name" placeholder="Change Name" onChange={this.onChange} value={this.state.changeName} />
 						</div>
 					</Form>
-					<p>After uploading the Profile Photo, dont click on the submit button untill the photo is being displayed on the page.</p>
+					{/* <p>After uploading the Profile Photo, dont click on the submit button untill the photo is being displayed on the page.</p> */}
+					</>
+					)}
 				</Container>
 
-				<Segment inverted vertical style={{ margin: "10em 0em 0em", padding: "7em 0em" }}>
-					<Container textAlign="center">
-						<Grid divided inverted stackable>
-							<Grid.Column width={7}>
-								<Header inverted as="h4" content="Developed by Hall 2" />
-							</Grid.Column>
-						</Grid>
-					</Container>
-				</Segment>
 			</div>
 		);
 	}

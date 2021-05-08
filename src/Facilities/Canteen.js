@@ -61,34 +61,22 @@ class Canteen extends Component {
           <a href="/guest-room">Guest Room</a>
           <a href="/canteen" style={{backgroundColor:'rgb(8, 200, 47)', fontWeight:'bold', color:'#fff'}}>Canteen</a>
           <a href="/computer-room">Computer Room</a>
-          <a href="/sports">Sports Facilities</a>
+          <a href="/sports">Sports, Gym & Music</a>
         </div>
      
         <Container className='tv_cont' text>
           <div className='heading'>Canteen</div>
           <div className='para'>
-            Jan 14, 2021 - Explore Ch RJR's board "Tv Lounge", followed by 1711 people on Pinterest. See more ideas about living room designs, living room tv, living room ...
-            Furniture Arrangement: A Guide to TV Room Layouts - Houzzwww.houzz.in › magazine › furniture-arrangement-a-g...
-            No matter the shape or size of your TV room, look to these homes for inspiration for how to lay out your furniture. From shoebox spaces to multifunctional rooms, ...
-            Related searches
+            This is the place to get all the food stuff other than mess. 
+            Canteen timings are from 2 pm to 2 am. It attracts most of the hall junta for evening snacks and 
+            popular late night munchings. A plethora of varieties are available to cater to your taste buds. 
+            Additional facilities like LCD tv are also available to draw the crowd, especially on match days.
           </div>
           <div className='img' id='facilities_img'>
-            <img src={require('../Home/images/tv.jpg')} alt="img06"/>
+            <img src={require('../Home/images/canteen.jpg')} alt="img06"/>
           </div>
         </Container>
         
-        <Segment
-          inverted
-          vertical
-          style={{ margin: "12em 0em 0em", padding: "6em 0em" }}
-        >
-          <Container textAlign="center">
-            <List horizontal inverted divided link size="small">
-              <List.Item>Designed by Hall 2</List.Item>
-            </List>
-          </Container>
-        </Segment>
-
       </div>
     );
   }

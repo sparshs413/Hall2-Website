@@ -24,6 +24,16 @@ class LoginForm extends Component {
 
   componentDidMount() {
     this.authListener();
+    Firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        // Sign-out successful.
+        console.log("Sign-out successful");
+      })
+      .catch(function (error) {
+        // An error happened.
+      });
   }
 
   authListener() {
@@ -40,7 +50,7 @@ class LoginForm extends Component {
       else {
         this.setState({user: null});
         let history = createHistory();
-        history.push("/login");
+        history.push("/");
         let pathUrl = window.location.href;
         window.location.href = pathUrl;
       }

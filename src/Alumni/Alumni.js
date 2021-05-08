@@ -165,6 +165,7 @@ class Alumni extends Component {
 
 		Firebase.firestore()
 			.collection("alumni")
+			.orderBy("timestamp", "desc")
 			.onSnapshot((querySnapshot) => {
 				let alumni = [];
 				let alumniId = [];
@@ -330,17 +331,17 @@ class Alumni extends Component {
 										</a>
 									)}
 								</Feed.Extra>
-								<a>
+								<a onClick={this.openComments.bind(this, b-1)}>
 									<Feed.Extra text>{project.message}</Feed.Extra>
 								</a>
 								<Feed.Meta>
 									<Feed.Like>
-										<Icon name="like" onClick={this.addLike.bind(this, a++, project.numberLike)} />
+										<Icon name="like" style={{'color': 'rgba(53, 133, 199, .85)'}} onClick={this.addLike.bind(this, a++, project.numberLike)} />
 										{project.numberLike}
 									</Feed.Like>
 									<span className="comment-box" onClick={this.openComments.bind(this, d++)}>
 										<Feed.Like>
-											<Icon name="comment" />
+											<Icon name="comment" style={{'color': 'rgba(53, 133, 199, .85)'}} />
 											{project.numberComment}
 										</Feed.Like>
 									</span>
@@ -369,7 +370,11 @@ class Alumni extends Component {
 		return (
 			<div className="alumni alumni_full">
 				<Container className="alumni" text>
-					{this.state.isLoading && <Spinner animation="border" variant="info" />}
+					{this.state.isLoading && 
+						<div style={{'marginBottom': '20rem'}}>
+							<Spinner style={{'marginBottom': '35rem'}} animation="border" variant="info" />
+						</div>
+					}
 
 					{!this.state.isLoading && (
 						<>
@@ -380,51 +385,6 @@ class Alumni extends Component {
 							</Header>
 
 							{this.makeUI()}
-							<Feed>
-								<Feed.Event>
-									<Feed.Label image={require("./1.jpeg")} />
-									<Feed.Content>
-										<Feed.Summary>
-											<a>Helen Troy</a>
-											<Feed.Date>4 days ago</Feed.Date>
-											<span className="delete_post">
-												<a onClick={() => this.setState({ deleteModalShow: true })}>
-													<Icon name="delete" />
-												</a>
-											</span>
-										</Feed.Summary>
-										<Feed.Extra images>
-											<a>
-												<img
-													className={this.state.img_class}
-													Style={"transition : transform 0.25s ease !important"}
-													src={require("../lostfound/no_image.png")}
-													onClick={this.enlargeImg}
-												/>
-											</a>
-											<a>
-												<img className={this.state.img_class} Style={"transition : transform 0.25s ease !important"} src={require("./1.jpeg")} onClick={this.enlargeImg} />
-											</a>
-										</Feed.Extra>
-										<a>
-											<Feed.Extra text onClick={() => history.push("/detail")}>
-												Ours is a life of constant reruns. We're always circling back to where we'd we started, then starting all over again. Even if we don't run extra laps
-												that day, we surely will come back for more of the same another day soon.
-											</Feed.Extra>
-										</a>
-										<Feed.Meta>
-											<Feed.Like onClick={this.addLike}>
-												<Icon name="like" />1
-											</Feed.Like>
-											<span className="comment-box">
-												<Feed.Like>
-													<Icon name="comment" />1
-												</Feed.Like>
-											</span>
-										</Feed.Meta>
-									</Feed.Content>
-								</Feed.Event>
-							</Feed>
 						</>
 					)}
 
@@ -449,18 +409,11 @@ class Alumni extends Component {
 				</Container>
 
 				<div className="fix_btn">
-					<Button className="primary add_alumni" onClick={() => history.push("/AlumniForm")}>
+					<Button className="primary add_alumni" onClick={() => { this.state.isLogin ? history.push("/AlumniForm") : history.push("/Login")}}>
 						+
 					</Button>
 				</div>
 
-				<Segment inverted vertical style={{ margin: this.state.isLoading ? "55vh 0 0" : "3em 0 0", padding: "15vh 0em" }}>
-					<Container textAlign="center">
-						<List horizontal inverted divided link size="small">
-							<List.Item>Designed by Hall 2</List.Item>
-						</List>
-					</Container>
-				</Segment>
 			</div>
 		);
 	}

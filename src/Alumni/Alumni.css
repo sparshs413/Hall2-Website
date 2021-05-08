@@ -12,6 +12,7 @@
 .alumni_full {
   margin-top: -20px;
   padding-top: 20px;
+  padding-bottom: 100px;
   background-size: cover;
   background-repeat: no-repeat;  
   background-position: center;
@@ -23,6 +24,7 @@
 .ui.alumni {
   background-color: rgba(255, 255, 255, .9);  
   backdrop-filter: blur(7px);
+  padding-bottom: 50px;
 }
 
 .alumni .spinner-border {

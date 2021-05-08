@@ -61,33 +61,19 @@ class Reading extends Component {
           <a href="/guest-room">Guest Room</a>
           <a href="/canteen">Canteen</a>
           <a href="/computer-room">Computer Room</a>
-          <a href="/sports">Sports Facilities</a>
+          <a href="/sports">Sports, Gym & Music</a>
         </div>
      
         <Container className='tv_cont' text>
           <div className='heading'>Reading Room</div>
           <div className='para'>
-            Jan 14, 2021 - Explore Ch RJR's board "Tv Lounge", followed by 1711 people on Pinterest. See more ideas about living room designs, living room tv, living room ...
-            Furniture Arrangement: A Guide to TV Room Layouts - Houzzwww.houzz.in › magazine › furniture-arrangement-a-g...
-            No matter the shape or size of your TV room, look to these homes for inspiration for how to lay out your furniture. From shoebox spaces to multifunctional rooms, ...
-            Related searches
+            Hall 2 has an exclusive room for keeping the newspapers, periodicals, magazines, along with some novels, called the Reading Room. It has comfortable couches, ample chairs and a table for comfortable reading with Air Conditioning facility. Many leading national dailies are kept in the reading room for the benefit of the residents. We have also subscribed to few magazines, which are also stored in the shelves of the reading room. Textbooks and novels gratefully donated by the outgoing seniors also fill those large shelves. The room remains open 24 hours a day. No membership is required to avail the facilities of the reading room.
           </div>
           <div className='img' id='facilities_img'>
-            <img src={require('../Home/images/tv.jpg')} alt="img06"/>
+            <img src={require('../Home/images/rr.jpg')} alt="img06"/>
           </div>
         </Container>
         
-        <Segment
-          inverted
-          vertical
-          style={{ margin: "12em 0em 0em", padding: "6em 0em" }}
-        >
-          <Container textAlign="center">
-            <List horizontal inverted divided link size="small">
-              <List.Item>Designed by Hall 2</List.Item>
-            </List>
-          </Container>
-        </Segment>
 
       </div>
     );

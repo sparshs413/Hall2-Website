@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./lostitems.css";
 import PropTypes from "prop-types";
-import { getFoundItems } from "../actions/lostfound";
 import { Button, Spinner } from "react-bootstrap";
 import history from "./../history";
 import firebase from "../Firebase";
@@ -11,7 +10,6 @@ import { Modal } from "react-bootstrap";
 export class foundItems extends Component {
 	static propTypes = {
 		founditems: PropTypes.array.isRequired,
-		getfoundItems: PropTypes.func.isRequired,
 	};
 
 	constructor(props) {
@@ -26,6 +24,9 @@ export class foundItems extends Component {
 			error: "",
 			isAdmin: false,
 			isLoading: true,
+			isLoadMore: false,
+			hideLoadMore: false,
+			last: ''
 		};
 
 		this.componentDidMount = this.componentDidMount.bind(this);
@@ -63,11 +64,13 @@ export class foundItems extends Component {
 
 	componentDidMount() {
 		this.setState({ isLoading: true });
+		var lastTime = '';
 		this.authListener();
 		firebase
 			.firestore()
 			.collection("users")
 			.orderBy("timestamp", "desc")
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 				const Matches = [];
@@ -78,20 +81,56 @@ export class foundItems extends Component {
 						Matches.push(doc.data());
 						items.push(doc.id);
 					}
+					lastTime = doc.data().timestamp;
 				});
 
-				this.setState({ Matches: Matches });
-				this.setState({ items: items, isLoading: false });
+				this.setState({ Matches: Matches, last: lastTime });
+				this.setState({ items: items, isLoading: false, isLoadMore: false });
 			})
 			.catch(function (error) {
 				console.log("Error getting documents: ", error);
-				this.setState({ isLoading: false });
+				this.setState({ isLoading: false, isLoadMore: false });
 			});
 	}
 
-	componentDidUpdate() {
-		this.props.getFoundItems();
-	}
+
+	loadData = () => {
+
+		this.setState({ isLoadMore: true });
+		var lastTime = '';
+		firebase
+		.firestore()
+		.collection("users")
+		.orderBy("timestamp", "desc")
+		.startAfter(this.state.last)
+		.limit(10)
+		.get()
+		.then((querySnapshot) => {
+			var Matches = this.state.Matches;
+			var items = this.state.items;
+
+			querySnapshot.forEach( (doc) => {
+				if (doc.data().option) {
+					if(!items.includes(doc.id)){
+						Matches.push(doc.data());
+						items.push(doc.id);
+					}
+					else{
+						this.setState({hideLoadMore: true})
+					}
+				}
+				lastTime = doc.data().timestamp;
+			});
+
+			this.setState({ Matches: Matches, last: lastTime });
+			this.setState({ items: items, isLoading: false, isLoadMore: false });
+		})
+		.catch((error) => {
+			console.log("Error getting documents: ", error);
+			this.setState({ isLoading: false, isLoadMore: false });
+		});
+}
+
 
 	onChange = (e) =>
 		this.setState({
@@ -184,7 +223,7 @@ export class foundItems extends Component {
 					<h4 class="card-title">{project.what}</h4>
 					<p class="card-text">
 						<span className="info">Place and time: </span> {project.where} , {project.when} <br />
-						<span className="info">Message: </span> {project.message} <br />
+						<span className="info" style={{'whiteSpace': 'pre-wrap'}}>Message: </span> {project.message} <br />
 						<span className="contact"> Contact to - </span> {project.name}
 						<br />
 						<span className="contact"> Phone no. </span> {project.number}
@@ -228,11 +267,24 @@ export class foundItems extends Component {
 						</Button>
 					</div>
 					{this.state.isLoading ? (
-						<div className="loader_center">
+						<div className="loader_center" style={{'marginBottom': '20rem'}}>
 							<Spinner animation="border" variant="info" />
 						</div>
 					) : (
-						<>{this.testFunc()}</>
+						<>
+							{this.testFunc()}
+						
+							<div className='announce_load_more' style={this.state.hideLoadMore ? {'display': 'none'} : {'display': 'block'}}>
+								<Button 
+									disabled={this.state.isLoadMore} 
+									loading={this.state.isLoadMore} 
+									color="linkedin" 
+									onClick={this.loadData}
+								>
+									Load More
+								</Button>
+							</div>
+						</>
 					)}
 				</div>
 			</div>
@@ -240,8 +292,5 @@ export class foundItems extends Component {
 	}
 }
 
-const mapStateToprops = (state) => ({
-	founditems: state.lostfound.lostfound,
-});
 
-export default connect(mapStateToprops, { getFoundItems })(foundItems);
+export default (foundItems);

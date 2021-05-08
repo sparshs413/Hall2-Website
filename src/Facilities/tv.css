@@ -1,6 +1,10 @@
+@import url("https://fonts.googleapis.com/css?family=Dancing+Script");
+
+
 .tv{
     margin-top: -60px;
     padding-top: 100px;
+    padding-bottom: 100px;
     width: 100%;
     background-color: rgb(97, 96, 96);
     background-image: linear-gradient(to bottom right, rgb(211, 174, 8), rgb(243, 247, 12));
@@ -28,7 +32,7 @@
 
 .sidebar_facilities a {
     display: block;
-    color: rgb(88, 87, 87);
+    color: rgb(65, 64, 64);
     letter-spacing: 1px;
     padding: 16px;
     text-decoration: none;
@@ -49,13 +53,13 @@
     font-size: 3em;
     margin: 5px 15px;
     font-weight: bold;
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'Dancing Script';
 }
 
 .tv .para{
     padding: 0 20px;
     font-weight: 700;
-    color: gray;
+    color: rgb(99, 98, 98);
     text-align: justify;
 }
 

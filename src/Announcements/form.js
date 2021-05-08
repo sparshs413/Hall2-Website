@@ -2,11 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./announce.css";
 import Card from "react-bootstrap/Card";
-import PropTypes from "prop-types";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import firebase from "../Firebase";
 import "./announce.css";
-import { addAnnounce, getAnnounce } from "../actions/announce";
 import Firebase from "../Firebase";
 import TimeAgo from "react-timeago";
 
@@ -17,8 +15,8 @@ export class AnnounceForm extends Component {
 		this.state = {
 			title: "",
 			message: "",
-			password: "",
-			password2: "",
+			// password: "",
+			// password2: "",
 			from: "",
 			btn_class: "",
 			show: false,
@@ -28,13 +26,12 @@ export class AnnounceForm extends Component {
 			showDeleteModal: false,
 			deleteid: "",
 			isLoading: true,
+			isLoadMore: false,
+			hideLoadMore: false,
+			last: ''
 		};
 		this.componentDidMount = this.componentDidMount.bind(this);
 	}
-
-	static propTypes = {
-		addAnnounce: PropTypes.func.isRequired,
-	};
 
 	handleShow = (id) => {
 		this.setState({ showDeleteModal: true, deleteid: id });
@@ -47,7 +44,6 @@ export class AnnounceForm extends Component {
 			showDeleteModal: false,
 		});
 
-		window.location.reload(false);
 	};
 
 	message = () => {
@@ -74,9 +70,7 @@ export class AnnounceForm extends Component {
 			from,
 		};
 
-		console.log(deleteid);
-
-		if (announce.password === "12") {
+		if (this.state.isAdmin) {
 			const db = firebase.firestore();
 			db.collection("announcements").add({
 				title: announce.title,
@@ -94,7 +88,6 @@ export class AnnounceForm extends Component {
 				error: "Annnouncement Added Successfully",
 			});
 
-			// window.location.reload(false);
 		} else {
 			this.setState({
 				title: "",
@@ -102,7 +95,7 @@ export class AnnounceForm extends Component {
 				message: "",
 				from: "",
 				show: true,
-				error: "Password Wrong",
+				error: "Admin not logged in",
 			});
 		}
 	};
@@ -126,7 +119,7 @@ export class AnnounceForm extends Component {
 					console.error("Error removing document: ", error);
 				});
 			this.setState({
-				password2: "",
+				// password2: "",
 				error: "Annnouncement Deleted Successfully",
 				showDeleteModal: true,
 			});
@@ -168,45 +161,92 @@ export class AnnounceForm extends Component {
 
 	componentDidMount() {
 		this.setState({ isLoading: true });
+		var lastTime = '';
 		this.authListener();
 		firebase
 			.firestore()
 			.collection("announcements")
 			.orderBy("timestamp", "desc")
+			.limit(10)
 			.get()
 			.then((querySnapshot) => {
 				const Matches = [];
 				const id = [];
 
-				querySnapshot.forEach(function (doc) {
+				querySnapshot.forEach((doc) => {
 					// console.log(doc.id);
 					id.push(doc.id);
 					if (doc.data()) {
 						Matches.push(doc.data());
 					}
+					lastTime = doc.data().timestamp;
 				});
 				// console.log(Matches);
 
-				this.setState({ Matches: Matches });
+				this.setState({ Matches: Matches, last:lastTime });
 				this.setState({ id: id, isLoading: false });
 				// console.log(this.state.Matches);
 			})
-			.catch(function (error) {
+			.catch((error) => {
 				console.log("Error getting documents: ", error);
 				this.setState({ isLoading: false });
 			});
+		console.log(this.state.isAdmin);
+
 	}
 
-	componentDidUpdate() {
-		this.props.getAnnounce();
+
+	loadData = () => {
+		this.setState({ isLoadMore: true });
+		var lastTime = '';
+		firebase
+			.firestore()
+			.collection("announcements")
+			.orderBy("timestamp", "desc")
+			.startAfter(this.state.last) 
+			.limit(10)
+			.get()
+			.then((querySnapshot) => {
+				const Matches = this.state.Matches;
+				const id = this.state.id;
+				var i=0;
+
+				querySnapshot.forEach((doc) => {
+					i++;
+					// console.log(doc.id);
+					if(!id.includes(doc.id)){
+						id.push(doc.id);
+						if (doc.data()) {
+							Matches.push(doc.data());
+						}
+					}
+					else{
+						this.setState({hideLoadMore: true})
+					}
+
+						lastTime = doc.data().timestamp;
+				});
+				// console.log(Matches);
+				if(i===0){
+					this.setState({hideLoadMore: true})
+				}
+				this.setState({ Matches: Matches, last:lastTime });
+				this.setState({ id: id, isLoading: false, isLoadMore: false });
+				// console.log(this.state.Matches);
+			})
+			.catch((error) => {
+				console.log("Error getting documents: ", error);
+				this.setState({ isLoading: false, isLoadMore: false });
+			});
 	}
+
 
 	makeUI() {
 		let a = 0;
 		if (this.state.Matches.length !== 0) {
 			return this.state.Matches.map((project) => (
 				<div>
-					<div class="card-body announce">
+					<div class="card-body announce" style={{'whiteSpace': 'pre-wrap'}}>
 						<button onClick={this.handleShow.bind(this, this.state.id[a++])} className="close" data-toggle="modal" data-target="#myModal" aria-label="close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -267,9 +307,9 @@ export class AnnounceForm extends Component {
 												placeholder="By (e.g. Mess secretary, President etc)"
 											/>
 										</div>
-										<div className="form-group">
+										{/* <div className="form-group">
 											<input className="form-control" type="password" name="password" onChange={this.onChange} value={this.state.password} placeholder="Password" required />
-										</div>
+										</div> */}
 										<div className="form-group">
 											<button type="submit" className="btn btn-primary announce_submit">
 												Submit
@@ -341,11 +381,24 @@ export class AnnounceForm extends Component {
               <hr />
             </div> */}
 						{this.state.isLoading ? (
-							<div className="loader_center">
+							<div className="loader_center" style={{'marginBottom': '15rem'}}>
 								<Spinner animation="border" variant="info" />
 							</div>
 						) : (
-							<>{this.makeUI()}</>
+							<>
+								{this.makeUI()}
+								
+								<div className='announce_load_more' style={this.state.hideLoadMore ? {'display': 'none'} : {'display': 'block'}}>
+									<Button 
+										disabled={this.state.isLoadMore} 
+										loading={this.state.isLoadMore} 
+										color="linkedin" 
+										onClick={this.loadData}
+									>
+										Load More
+									</Button>
+								</div>
+							</>
 						)}
 					</div>
 				</div>
@@ -369,8 +422,4 @@ export class AnnounceForm extends Component {
 	}
 }
 
-const mapStateToprops = (state) => ({
-	announces: state.announce.announce,
-});
-
-export default connect(mapStateToprops, { addAnnounce, getAnnounce })(AnnounceForm);
+export default (AnnounceForm);

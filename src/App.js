@@ -3,6 +3,7 @@ import "./App.css";
 import Navigation from "./components/Navbar";
 import Routes from "./Routes";
 import { Provider } from "react-redux";
+import Footer from './components/footer';
 import store from "./store";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <div className="App" >
           <Navigation />
           <Routes />
+          <Footer />
         </div>
       </Fragment>
     </Provider>

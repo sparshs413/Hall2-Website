@@ -372,7 +372,7 @@ class Detail extends Component {
 		const checkAdmin = this.state.isAdmin ? true : false;
 		if (this.state.comments.length !== 0) {
 			return this.state.comments.map((project) => (
-				<div>
+				<div style={{"marginBottom": "20px"}}>
 					<Comment>
 						<Comment.Avatar src={project.photoURL ? `url(${project.photoURL})` : defaultImage} />
 						<Comment.Content>
@@ -393,7 +393,7 @@ class Detail extends Component {
 										<Feed.Content>
 											<Feed.Meta>
 												<Feed.Like onClick={this.addCommentLike.bind(this, b++, project.numLikes)}>
-													<Icon name="like" />
+													<Icon name="like" style={{'color': 'rgba(53, 133, 199, .85)'}} />
 													{project.numLikes}
 												</Feed.Like>
 											</Feed.Meta>
@@ -414,7 +414,7 @@ class Detail extends Component {
 			<div className="alumni">
 				<Container className="alumni_detail" text style={{ marginTop: "1em" }}>
 					{this.state.isLoading && (
-						<div className="loader_center">
+						<div className="loader_center"  style={{'marginBottom': '15rem'}}>
 							<Spinner animation="border" variant="info" />
 						</div>
 					)}
@@ -428,8 +428,9 @@ class Detail extends Component {
 							<Feed>
 								<Feed.Event>
 									<Feed.Label>
-										<div className="profile_pic" style={{ backgroundImage: this.state.profileImage ? `url(${this.state.profileImage})` : defaultImage }}></div>
+										<div className="profile_pic" style={{ backgroundImage: this.state.profileImage ? `url(${this.state.profileImage})` : `url(${require("./stu.jpeg")})` }}></div>
 									</Feed.Label>
+
 									<Feed.Content>
 										<Feed.Summary>
 											<a>{this.state.name}</a>
@@ -452,13 +453,13 @@ class Detail extends Component {
 										)}
 										<Feed.Extra text>{this.state.content}</Feed.Extra>
 										<Feed.Meta>
-											<Feed.Like onClick={this.addPostLike.bind(this, "a++", this.state.numLikes)}>
+											<Feed.Like style={{'color': 'rgba(53, 133, 199, .85)'}} onClick={this.addPostLike.bind(this, "a++", this.state.numLikes)}>
 												<Icon name="like" />
 												{this.state.numLikes}
 											</Feed.Like>
 											<span className="comment-box" onClick={this.reply_form}>
 												<Feed.Like>
-													<Icon name="comment" />
+													<Icon name="comment" style={{'color': 'rgba(53, 133, 199, .85)'}} />
 													{this.state.numComments}
 												</Feed.Like>
 											</span>
@@ -501,14 +502,6 @@ class Detail extends Component {
 						</>
 					)}
 				</Container>
-
-				<Segment inverted vertical style={{ margin: "15em 0em 0em", padding: "6em 0em" }}>
-					<Container textAlign="center">
-						<List horizontal inverted divided link size="small">
-							<List.Item>Designed by Hall 2</List.Item>
-						</List>
-					</Container>
-				</Segment>
 
 				<Modal show={this.state.modalShow} size="lg" aria-labelledby="contained-modal-title-vcenter" onHide={() => this.handleClose()} centered className="alumni">
 					<Modal.Body>

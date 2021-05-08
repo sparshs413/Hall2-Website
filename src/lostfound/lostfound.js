@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { addlostfound } from "../actions/lostfound";
 import $ from "jquery";
 import "./lostfound.css";
 import { Modal } from "react-bootstrap";
@@ -35,9 +33,6 @@ export class Form extends Component {
 		};
 	}
 
-	static propTypes = {
-		addlostfound: PropTypes.func.isRequired,
-	};
 
 	handleClose = () => {
 		this.setState({ smShow: false });
@@ -145,7 +140,6 @@ export class Form extends Component {
 		});
 		e.target.reset();
 
-		this.props.addlostfound(lostfound);
 		this.setState({
 			option: "lost",
 			object: "",
@@ -202,7 +196,7 @@ export class Form extends Component {
 					</div>
 					<div className="form-group">
 						<label>Mobile no. *</label>
-						<input className="form-control" type="text" name="phone" onChange={this.onChange} value={this.state.number} required />
+						<input className="form-control" type="text" name="phone" onChange={this.onChange} value={this.state.number}  />
 					</div>
 					<div className="form-group">
 						<label>Email Id *</label>
@@ -234,7 +228,6 @@ export class Form extends Component {
 							onChange={this.onChange}
 							value={this.state.message}
 							required
-							// placeholder="Optional Description"
 						/>
 					</div>
 					<div className="form-group">
@@ -242,8 +235,8 @@ export class Form extends Component {
 						<input className="form-control" type="text" name="name" onChange={this.onChange} value={this.state.name} />
 					</div>
 					<div className="form-group">
-						<label>Mobile no. *</label>
-						<input className="form-control" type="text" name="phone" onChange={this.onChange} value={this.state.number} required />
+						<label>Mobile no.</label>
+						<input className="form-control" type="text" name="phone" onChange={this.onChange} value={this.state.number} />
 					</div>
 					<div className="form-group">
 						<label>Email Id *</label>
@@ -309,4 +302,4 @@ export class Form extends Component {
 	}
 }
 
-export default connect(null, { addlostfound })(Form);
+export default connect(null, { })(Form);

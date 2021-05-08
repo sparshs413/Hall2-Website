@@ -61,7 +61,7 @@ class Guest extends Component {
           <a href="/guest-room" style={{backgroundColor:'rgb(226, 20, 245)', fontWeight:'bold', color:'#fff'}}>Guest Room</a>
           <a href="/canteen">Canteen</a>
           <a href="/computer-room">Computer Room</a>
-          <a href="/sports">Sports Facilities</a>
+          <a href="/sports">Sports, Gym & Music</a>
         </div>
      
         <Container className='tv_cont' text>
@@ -73,21 +73,11 @@ class Guest extends Component {
             Related searches
           </div>
           <div className='img' id='facilities_img'>
-            <img src={require('../Home/images/tv.jpg')} alt="img06"/>
+            <img src={require('../Home/images/hall2_1.jpg')} alt="img06"/>
           </div>
         </Container>
         
-        <Segment
-          inverted
-          vertical
-          style={{ margin: "12em 0em 0em", padding: "6em 0em" }}
-        >
-          <Container textAlign="center">
-            <List horizontal inverted divided link size="small">
-              <List.Item>Designed by Hall 2</List.Item>
-            </List>
-          </Container>
-        </Segment>
+   
 
       </div>
     );

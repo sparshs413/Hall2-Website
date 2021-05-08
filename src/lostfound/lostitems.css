@@ -8,6 +8,10 @@
     border-bottom: 2px solid rgb(223, 217, 217);
 }
 
+.lostfound .card-body{
+    padding: 0 1.25rem 0;
+}
+
 .redfont {
     color: red;
 }

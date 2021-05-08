@@ -24,22 +24,64 @@ class TimeTable extends Component {
       current_day: 0,
       visible: false,
       values: [
-        { sunday: ["aa", "c"], monday: ["q", "w"] },
-        { sunday: ["aa2", "c2"], monday: ["q2", "w2"] },
-        { sunday: ["aa3", "c3"], monday: ["q3", "w3"] },
+        // Breakfast
+        { sunday: ["MASALA DOSA", "SAMBHAR", 'COCONUT CHUTNEY', 'SPROUTED GRAINS', 'MILK(WITH BOURNVITA OR HORLICKS) or', 'TEA /COFFEE or', 'EGG(1)/BANANA(2) or', 'BREAD- BUTTER/JAM or', 'CORNFLAKES'], 
+          monday: ["BOMBAY SANDWICH", 'SPROUTED GRAINS', 'MILK(WITH BOURNVITA OR HORLICKS) or', 'TEA /COFFEE or', 'EGG(1)/BANANA(2) or', 'BREAD- BUTTER/JAM or', 'CORNFLAKES'], 
+          tuesday: ["MIXVEG PARATHA", "ALOO PARATHA", 'SPROUTED GRAINS', 'MILK(WITH BOURNVITA OR HORLICKS) or', 'TEA /COFFEE or', 'EGG(1)/BANANA(2) or', 'BREAD- BUTTER/JAM or', 'CORNFLAKES'], 
+          wednesday: ["UTTAPAM", "SAMBHAR", "COCONUT CHUTNEY", 'SPROUTED GRAINS', 'MILK(WITH BOURNVITA OR HORLICKS) or', 'TEA /COFFEE or', 'EGG(1)/BANANA(2) or', 'BREAD- BUTTER/JAM or', 'CORNFLAKES'],
+          thursday: ["POORI SABJ", "SOOZI HALWA/ KHASTA KACHORI", 'SPROUTED GRAINS', 'MILK(WITH BOURNVITA OR HORLICKS) or', 'TEA /COFFEE or', 'EGG(1)/BANANA(2) or', 'BREAD- BUTTER/JAM or', 'CORNFLAKES'],
+          friday: ["IDLI/ VADA", "SAMBHAR", "IMLI & GREEN CHUTNEY", 'SPROUTED GRAINS', 'MILK(WITH BOURNVITA OR HORLICKS) or', 'TEA /COFFEE or', 'EGG(1)/BANANA(2) or', 'BREAD- BUTTER/JAM or', 'CORNFLAKES'],
+          saturday: ["POHA", "JALEBI", "DAHI", "HALDIRAM BHUJIYA", 'SPROUTED GRAINS', 'MILK(WITH BOURNVITA OR HORLICKS) or', 'TEA /COFFEE or', 'EGG(1)/BANANA(2) or', 'BREAD- BUTTER/JAM or', 'CORNFLAKES']
+        },
+        // Lunch
+        { sunday: ["BESAN GATTA SABJI", "KUNDRU", 'ARHAR DAL', 'MATHA', 'CURD/ SEASONAL FRUIT(banana or orange)'], 
+          monday: ["RAZMA", 'LEMON RICE', 'ARVI MASALA', 'BOONDI RAITA', 'CURD/ SEASONAL FRUIT(banana or orange)'], 
+          tuesday: ["KADHI", "JEERA ALOO", 'GREEN CHUTNE', 'CURD/ SEASONAL FRUIT(banana or orange)'], 
+          wednesday: ["ARHAR DAL,", "ALOO SHIMLA/ ALOO PALAK", "MINT RAITA", 'TAHARI', 'CURD/ SEASONAL FRUIT(banana or orange)'],
+          thursday: ["VEG BIRYANI", "CHANA DAL TADKA", 'KHEERA RAITA', 'CURD/ SEASONAL FRUIT(banana or orange)'],
+          friday: ["ALOO BHINDI (ALOO 20%) /BHINDI MASALA/ LUTPUTI BHINDI", "DAL MAKHANI", "VEG RAITA", 'CURD/ SEASONAL FRUIT(banana or orange)'],
+          saturday: ["CHHOLA", "PARATHA(MIX VEG, DAL, ALOOO)", "CHUTNEY", "ARHAR DAL", 'NIMBU PANI', 'CURD/ SEASONAL FRUIT(banana or orange)']
+        },
+        // Dinner
+        { sunday: ["MASALA DOSA", "SAMBHAR", 'COCONUT CHUTNEY'], 
+          monday: ["BOMBAY SANDWICH"], 
+          tuesday: ["MIXVEG PARATHA", "ALOO PARATHA"], 
+          wednesday: ["UTTAPAM", "SAMBHAR", "COCONUT CHUTNEY"],
+          thursday: ["POORI SABJ", "SOOZI HALWA/ KHASTA KACHORI"],
+          friday: ["IDLI/ VADA", "SAMBHAR", "IMLI & GREEN CHUTNEY"],
+          saturday: ["PANEER BUTTER MASALA/ KADAI PANEER", "MASOOR DAL,", "PULAO RICE", "NAAN", 'MISSI ROTI', 'LADOO']
+        },
       ],
       extras: [
+        // Breakfast Extras
         {
-          sunday: { aa: [3, 7], c: [33, 73] },
-          monday: { d: [3, 7], e: [3, 7] },
+          sunday: { EGG: [0, 0] },
+          monday: { EGG: [0, 0] },
+          tuesday: { EGG: [0, 0] },
+          wednesday: { EGG: [0, 0] },
+          thursday: { EGG: [0, 0] },
+          friday: { EGG: [0, 0] },
+          saturday: { EGG: [0, 0] },
         },
+        // Lunch Extras
         {
-          sunday: { ala: [31, 71], sc: [13, 17] },
-          monday: { ffd: [3, 7], dee: [3, 7] },
+          sunday: { EGG: [0, 0], PANEER: [0, 0], CHILLI_PANEER: [0, 0], CHICKEN_BIRYANI: [0,0] },
+          monday: { EGG: [0, 0], PANEER: [0, 0], PANEER_BHURJI: [0,0], EGG_BHURJI: [0,0], DAHI_CHAT:[0,0] },
+          tuesday: { EGG: [0, 0], PANEER: [0, 0], PANEER_TIKKA: [0, 0], STUFFED_SHIMLA_MIRCH: [0, 0] },
+          wednesday: { EGG: [0, 0], PANEER: [0, 0], EGG_BIRYANI: [0, 0], SHAHI_PANEER: [0, 0], MILK_CAKE: [0, 0], },
+          thursday: { EGG: [0, 0], PANEER: [0, 0], DAHI_VADA: [0, 0], },
+          friday: { EGG: [0, 0], PANEER: [0, 0], EGG_CURRY: [0, 0], SPECIAL_LASSI: [0, 0], ALOO_TIKKI: [0, 0], },
+          saturday: { EGG: [0, 0], PANEER: [0, 0], CUSTARD_OR_FRUIT_RAITA: [0, 0], },
         },
+        // Dinner Extras
         {
-          sunday: { ada: [32, 72], c1: [23, 27] },
-          monday: { x: [3, 2], cx: [4, 2] },
+          sunday: { EGG: [0, 0], PANEER: [0, 0], CHICKEN: [0, 0], CHICKEN_BIRYANI: [0,0], BUTTER_CHICKEN: [0,0], MOONG_DAL_HALWA: [0,0] },
+          monday: { EGG: [0, 0], PANEER: [0, 0], CHICKEN: [0, 0], ROASTED_CHICKEN: [0,0]},
+          tuesday: { EGG: [0, 0], PANEER: [0, 0], CHICKEN: [0, 0], PANEERDO_PYAZA: [0, 0]},
+          wednesday: { EGG: [0, 0], PANEER: [0, 0], CHICKEN: [0, 0]},
+          thursday: { EGG: [0, 0], PANEER: [0, 0], CHICKEN: [0, 0], HARIYALI_KABAB: [0, 0] },
+          friday: { EGG: [0, 0], PANEER: [0, 0], CHICKEN: [0, 0],  CHILLY_CHICKEN: [0, 0] },
+          saturday: { EGG: [0, 0], PANEER: [0, 0], CHICKEN: [0, 0], SHAHI_TOAST: [0, 0] },
         },
       ],
     };
@@ -101,15 +143,18 @@ class TimeTable extends Component {
                             {Object.keys(extras[i][day]).map((key, value) => {
                               return (
                                 <>
-                                  <Item.Header>{key}</Item.Header>
-                                  <Label style={{ float: "right" }}>
-                                    ₹ {extras[i][day][key][0]}
+                                  <Item.Header style={{marginTop: '5px'}}>{key}</Item.Header>
+                                  <Label style={{ position: "absolute", right: '0'}}>
+                                  {/* <Label style={{ float: "right" }}> */}
+                                    {/* ₹ {extras[i][day][key][0]} */}
+                                    ₹
                                   </Label>
-                                  <Label>{extras[i][day][key][1]} left</Label>
+                                  {/* <Label>{extras[i][day][key][1]} left</Label> */}
                                   <br />
                                 </>
                               );
                             })}
+
                           </Item.Content>
                         </Item>
                       </Item.Group>
@@ -139,7 +184,7 @@ class TimeTable extends Component {
         menuItem: "Monday",
         render: () => (
           <Tab.Pane>
-            Sunday
+            Monday
             {this.group("monday")}
           </Tab.Pane>
         ),
@@ -148,17 +193,17 @@ class TimeTable extends Component {
         menuItem: "Tuesday",
         render: () => (
           <Tab.Pane>
-            Sunday
+            Tuesday
             {this.group("tuesday")}
           </Tab.Pane>
         ),
       },
       {
-        menuItem: "Wedday",
+        menuItem: "Wednesday",
         render: () => (
           <Tab.Pane>
-            Sunday
-            {this.group("wedday")}
+            Wednesday
+            {this.group("wednesday")}
           </Tab.Pane>
         ),
       },
@@ -166,7 +211,7 @@ class TimeTable extends Component {
         menuItem: "Thursday",
         render: () => (
           <Tab.Pane>
-            Sunday
+            Thursday
             {this.group("thursday")}
           </Tab.Pane>
         ),
@@ -175,7 +220,7 @@ class TimeTable extends Component {
         menuItem: "Friday",
         render: () => (
           <Tab.Pane>
-            Sunday
+            Friday
             {this.group("friday")}
           </Tab.Pane>
         ),
@@ -184,7 +229,7 @@ class TimeTable extends Component {
         menuItem: "Saturday",
         render: () => (
           <Tab.Pane>
-            Sunday
+            Saturday
             {this.group("saturday")}
           </Tab.Pane>
         ),
@@ -195,12 +240,12 @@ class TimeTable extends Component {
       <Container className="extras">
         <h3>
           Menu of the WEEK
-          {this.state.is_mess_admin && (
+          {/* {this.state.is_mess_admin && (
             <Button primary floated="right" href="/form-time-table">
               Edit Menu
               <Icon name="right chevron" />
             </Button>
-          )}
+          )} */}
         </h3>
         <Tab
           panes={panes}

@@ -15,6 +15,7 @@ class LoginForm extends Component {
 			error: "",
 			user: {},
 			modalShow: false,
+			isLoading: false,
 		};
 
 		this.login = this.login.bind(this);
@@ -22,16 +23,28 @@ class LoginForm extends Component {
 
 	login = (e) => {
 		e.preventDefault();
+		this.setState({isLoading: true});
 		Firebase.auth()
 			.signInWithEmailAndPassword(this.state.email, this.state.password)
 			.then((user) => {
 				let history = createHistory();
-				history.push("/admin");
+				history.push("/");
 				let pathUrl = window.location.href;
 				window.location.href = pathUrl;
+				this.setState({isLoading: false});
 			})
 			.catch((error) => {
-				alert(error.message);
+				console.log(error.message);
+				if(error.message === 'There is no user record corresponding to this identifier. The user may have been deleted.'){
+					this.setState({error: 'Email not registered.'})
+				}
+				else if(error.message === 'The password is invalid or the user does not have a password.'){
+					this.setState({error: 'Incorrect Password'})
+				}
+				else{
+					alert(error.message);
+				}
+				this.setState({isLoading: false});
 			});
 	};
 
@@ -52,9 +65,8 @@ class LoginForm extends Component {
 						<Header as="h2" className="py-2" textAlign="center">
 							<span Style="color:white">Log-in</span>
 						</Header>
-						<Form size="large">
+						<Form size="large" onSubmit={this.login}>
 							<Segment stacked>
-								<span style={{ color: "red", float: "left" }}>{this.state.error}</span>
 								<Form.Input fluid name="email" icon="user" iconPosition="left" placeholder="EmailId" type="email" onChange={this.onChange} value={this.state.email} required />
 
 								<Form.Input
@@ -69,7 +81,8 @@ class LoginForm extends Component {
 									required
 								/>
 
-								<Button color="blue" type="submit" fluid size="large" onClick={this.login}>
+								<span style={{ color: "red", float: "left" }}>{this.state.error}</span>
+								<Button color="blue" type="submit" fluid size="large" loading={this.state.isLoading} disabled={this.state.isLoading}>
 									Login
 								</Button>
 							</Segment>

@@ -278,7 +278,7 @@ export class AlumniForm extends Component {
 		}
 	};
 
-	onSubmit = (e) => {
+	onSubmit = async(e) => {
 		e.preventDefault();
 
 		this.setState({ isLoading: true, disabled: true });
@@ -288,7 +288,7 @@ export class AlumniForm extends Component {
 		} else {
 			this.setState({ isLoading: true });
 
-			firebase.firestore().collection("alumni").add({
+			await firebase.firestore().collection("alumni").add({
 				name: this.state.name,
 				email: this.state.email,
 				userImage: this.state.userImage,
@@ -310,6 +310,7 @@ export class AlumniForm extends Component {
 			});
 		}
 		this.setState({ isLoading: false, disabled: true });
+		history.push('/Alumni')
 	};
 
 	render() {
@@ -317,7 +318,7 @@ export class AlumniForm extends Component {
 			<div className="AlumniForm">
 				<Container text style={{ marginTop: "1em" }}>
 					{this.state.isLoading && (
-						<div className="loader_center">
+						<div className="loader_center"  style={{'marginBottom': '15rem'}}>
 							<Spinner animation="border" variant="info" />
 						</div>
 					)}
@@ -388,15 +389,6 @@ export class AlumniForm extends Component {
 					</Form>
 				</Container>
 
-				<Segment inverted vertical style={{ margin: "10em 0em 0em", padding: "7em 0em" }}>
-					<Container textAlign="center">
-						<Grid divided inverted stackable>
-							<Grid.Column width={7}>
-								<Header inverted as="h4" content="Developed by Hall 2" />
-							</Grid.Column>
-						</Grid>
-					</Container>
-				</Segment>
 			</div>
 		);
 	}
