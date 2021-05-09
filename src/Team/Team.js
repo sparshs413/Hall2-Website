@@ -1,7 +1,7 @@
 import { Container, Segment, List, Icon } from "semantic-ui-react";
 import React, { Component } from "react";
 // import './Team.css'
-import "./layla.css";
+import "./team.css";
 import { photos } from "../Gallery/photos";
 import Gallery from "react-photo-gallery";
 
@@ -36,75 +36,106 @@ class Team extends Component {
 					<span className="head1">Our</span> Team
 				</div>
 				<Container className="team_cont">
+					
 					<div className="box">
 						<span className="category">Wardens</span>
 						<div class="grid">
 							<figure class="effect-layla">
-								<img src={require("../Home/images/hall2_1.jpg")} alt="img06" />
+								<img src={require("../Home/images/team/warden/faiz.jpg")} alt="img06" />
 								<figcaption>
 									<h2>
-										Crazy <span>Layla</span>
+											Prof. &nbsp; <span>Faiz Hamid</span>&nbsp;
+											<div className='smHead'>Maintainence Warden</div>
 									</h2>
-									<p>When Layla appears, she brings an eternal summer along.</p>
+									<p>Assistant Professor, Department of Industrial and Management Engineering</p>
 								</figcaption>
 							</figure>
 						</div>
 						<div class="grid">
 							<figure class="effect-layla">
-								<img src={require("../Home/images/hall2_1.jpg")} alt="img06" />
+								<img src={require("../Home/images/team/warden/devpriya-kumar.jpg")} alt="img06" />
 								<figcaption>
 									<h2>
-										Crazy <span>Layla</span>
+											Prof. &nbsp; <span>Devpriya Kumar</span>&nbsp;
+											<div className='smHead'>WARDEN-IN-CHARGE</div>
 									</h2>
-									<p>When Layla appears, she brings an eternal summer along.</p>
+									<p>Assistant Professor, Departement of Humanities and Social Sciences</p>
 								</figcaption>
 							</figure>
 						</div>
 						<div class="grid">
 							<figure class="effect-layla">
-								<img src={require("../Home/images/hall2_6.jpg")} alt="img06" />
+								<img src={require("../Home/images/team/warden/soumya.jpg")} alt="img06" />
 								<figcaption>
 									<h2>
-										Crazy <span>Layla</span>
+											Prof. &nbsp; <span>SOMYA RANJAN SAHOO</span>&nbsp;
+											<div className='smHead'>MESS WARDEN</div>
 									</h2>
-									<p>When Layla appears, she brings an eternal summer along.</p>
+									<p>Assistant Professor, Department of Electrical Engineering</p>
 								</figcaption>
 							</figure>
 						</div>
 					</div>
 
 					<div className="grid2">
-						<span className="category2">Wardens2</span>
+						<span className="category2">HAB</span>
 						<div class="grid">
 							<figure class="effect-layla">
-								<img src={require("../Home/images/hall2_1.jpg")} alt="img06" />
+								<img src={require("../Home/images/team/hab/shubham.jpg")} alt="img06" />
 								<figcaption>
 									<h2>
-										ddd <span>Layla</span>
+									<span>SHUBHAM RAJ</span>&nbsp;
+											<div className='smHead'>CONVENOR</div>
 									</h2>
-									<p>When Layla appears, she brings an eternal summer along.</p>
+									<p>Department of Mechanical Engineering</p>
+							</figcaption>
+							</figure>
+						</div>
+						<div class="grid">
+							<figure class="effect-layla">
+								<img src={require("../Home/images/team/hab/msahil.jpg")} alt="img06" />
+								<figcaption>
+									<h2>
+									<span>SAHIL KHAN</span>&nbsp;
+											<div className='smHead'>PRESIDENT</div>
+									</h2>
+									<p>Department of Chemical Engineering</p>
+							</figcaption>
+							</figure>
+						</div>
+						<div class="grid">
+							<figure class="effect-layla">
+								<img src={require("../Home/images/team/hab/aniket.jpg")} alt="img06" />
+								<figcaption>
+									<h2>
+									<span>ANIKET SHARMA</span>&nbsp;
+											<div className='smHead'>MAINTAINENCE SECRETARY</div>
+									</h2>
+									<p>Department of Electrical Engineering</p>
 								</figcaption>
 							</figure>
 						</div>
 						<div class="grid">
 							<figure class="effect-layla">
-								<img src={require("../Home/images/hall2_1.jpg")} alt="img06" />
+								<img src={require("../Home/images/team/hab/aaiyush.jpg")} alt="img06" />
 								<figcaption>
 									<h2>
-										ddd <span>Layla</span>
+									<span>AAIYUSH KAPURWAN</span>&nbsp;
+											<div className='smHead'>MESS SECRETARY</div>
 									</h2>
-									<p>When Layla appears, she brings an eternal summer along.</p>
+									<p>Department of Aerospace Engineering</p>
 								</figcaption>
 							</figure>
 						</div>
 						<div class="grid">
 							<figure class="effect-layla">
-								<img src={require("../Home/images/hall2_6.jpg")} alt="img06" />
+								<img src={require("../Home/images/team/hab/shrotriya.jpg")} alt="img06" />
 								<figcaption>
 									<h2>
-										ddd <span>Layla</span>
+									<span>AYUSH SHROTRIYA</span>&nbsp;
+											<div className='smHead'>CULTURAL SECRETARY</div>
 									</h2>
-									<p>When Layla appears, she brings an eternal summer along.</p>
+									<p>Department of Mathematics</p>
 								</figcaption>
 							</figure>
 						</div>
@@ -113,6 +144,13 @@ class Team extends Component {
 
 					{/* <Gallery photos={photos} direction={"column"} /> */}
 				</Container>
+				<Segment inverted vertical style={{ margin: "5em 0em 0em", padding: "6em 0em" }}>
+					<Container textAlign="center">
+						<List horizontal inverted divided link size="small">
+							<List.Item>Designed by Hall 2</List.Item>
+						</List>
+					</Container>
+				</Segment>
 			</div>
 		);
 	}

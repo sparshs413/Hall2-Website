@@ -57,23 +57,23 @@ class Gallery extends Component {
 						<div className="swiper-wrapper">
 							<div className="swiper-slide">
 								<img className="img_center" src={require("../Home/images/hall2.jpg")} alt="" />
-								<div className="text">galxy</div>
+								<div className="text" style={{textAlign:'center'}}>hall2</div>
 							</div>
 							<div className="swiper-slide">
 								<img className="img_center" src={require("../Home/images/tv.jpg")} alt="" />
-								<div className="text">galxy</div>
+								<div className="text" style={{textAlign:'center'}}>hall2</div>
 							</div>
 							<div className="swiper-slide">
-								<img className="img_center" src={require("../Home/images/hall2_6.jpg")} alt="" />
-								<div className="text">galxy</div>
+								<img className="img_center" src={require("../Home/images/hall2_8.jpg")} alt="" />
+								<div className="text" style={{textAlign:'center'}}>hall2</div>
 							</div>
 							<div className="swiper-slide">
-								<img className="img_center" src={require("../Home/images/hall2.jpg")} alt="" />
-								<div className="text">galxy</div>
+								<img className="img_center" src={require("../Home/images/hall2_1.jpg")} alt="" />
+								<div className="text" style={{textAlign:'center'}}>hall2</div>
 							</div>
 							<div className="swiper-slide">
-								<img className="img_center" src={require("../Home/images/hall2.jpg")} alt="" />
-								<div className="text">galxy</div>
+								<img className="img_center" src={require("../Home/images/hall2_3.jpg")} alt="" />
+								<div className="text" style={{textAlign:'center'}}>hall2</div>
 							</div>
 						</div>
 					</div>
@@ -92,6 +92,13 @@ class Gallery extends Component {
 
 				{/* </Container> */}
 
+				<Segment inverted vertical style={{ margin: "15em 0em 0em", padding: "6em 0em" }}>
+					<Container textAlign="center">
+						<List horizontal inverted divided link size="small">
+							<List.Item>Designed by Hall 2</List.Item>
+						</List>
+					</Container>
+				</Segment>
 			</div>
 		);
 	}

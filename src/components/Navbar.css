@@ -21,13 +21,6 @@
   padding: 2px 6px !important;
 }
 
-.nav_items a.name{
-  margin: auto 0 auto 10px !important;
-  padding: 2px 6px !important;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
 .navbar .dropdown-menu a:hover, .navbar .dropdown-menu a:active{
   color: rgb(12, 102, 187) !important;
 }
@@ -167,13 +160,6 @@ body {
   padding: 16px;
 }
 
-.navbar .name_on_navbar{
-  color: #fff;
-  font-weight: bold;
-  font-size: 1.2em;
-  padding: 3px 0 0 1em;
-}
-
 @media screen and (max-height: 450px) {
   .sidenav {
     padding-top: 15px;
@@ -181,9 +167,7 @@ body {
   .sidenav a {
     font-size: 18px;
   }
-  
 }
-
 
 @media screen and (max-width: 1010px) {
   .nav_hide {
