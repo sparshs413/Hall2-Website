@@ -1,13 +1,11 @@
-import React, { Component } from "react";
-import { Container, Comment, Form, List, Feed, Icon, Segment } from "semantic-ui-react";
-import history from "./../history";
-import "./detail.css";
-import { Button, Accordion, Card, Modal, Spinner } from "react-bootstrap";
-import Firebase from "../Firebase";
-import TimeAgo from "react-timeago";
-import defaultImage from "./stu.jpeg";
-
-const createHistory = require("history").createBrowserHistory;
+import React, { Component } from 'react';
+import { Container, Comment, Feed, Icon } from 'semantic-ui-react';
+import history from './../history';
+import './detail.css';
+import { Button, Accordion, Modal, Spinner } from 'react-bootstrap';
+import Firebase from '../Firebase';
+import TimeAgo from 'react-timeago';
+import defaultImage from './stu.jpeg';
 
 class Detail extends Component {
 	_isMounted = false;
@@ -18,45 +16,41 @@ class Detail extends Component {
 		this.state = {
 			storyDetail: [],
 			storyDetailId: this.props.location.state.name,
-			name: "",
-			profileImage: "",
-			aimage1: "",
-			aimage2: "",
-			aimage3: "",
-			content: "",
-			numLikes: "",
-			numComments: "",
+			name: '',
+			profileImage: '',
+			aimage1: '',
+			aimage2: '',
+			aimage3: '',
+			content: '',
+			numLikes: '',
+			numComments: '',
 			comments: [],
 			commentsId: [],
-			username: "",
-			userImage: "",
-			useremail: "",
+			username: '',
+			userImage: '',
+			useremail: '',
 			isLogin: false,
-			timestamp: "",
+			timestamp: '',
 
 			modalShow: false,
 			deleteModalShow: false,
 			afterCommentDeleteModalShow: false,
 			modalImg: null,
-			reply_form: "1",
-			error: "",
+			reply_form: '1',
+			error: '',
 			matches: [],
 			items: [],
 			docs: [],
 			docsItems: [],
-			response: "",
+			response: '',
 			total_comments: 0,
 			total_likes: 0,
 
 			isLiked: false,
 			isAdmin: false,
 			isLoading: true,
-			commentID: "",
+			commentID: '',
 		};
-
-		this.enlargeImg = this.enlargeImg.bind(this);
-		this.reply_form = this.reply_form.bind(this);
-		this.deleteComment = this.deleteComment.bind(this);
 	}
 
 	componentDidMount() {
@@ -66,8 +60,8 @@ class Detail extends Component {
 		this.authListener();
 
 		Firebase.firestore()
-			.collection("alumni")
-			.orderBy("timestamp", "desc")
+			.collection('alumni')
+			.orderBy('timestamp', 'desc')
 			.onSnapshot((querySnapshot) => {
 				const storyDetail = [];
 
@@ -77,7 +71,6 @@ class Detail extends Component {
 					}
 				});
 
-				this.setState({ storyDetail: storyDetail });
 				this.setState({
 					name: storyDetail[0].name,
 					profileImage: storyDetail[0].userImage,
@@ -88,14 +81,15 @@ class Detail extends Component {
 					numLikes: storyDetail[0].numberLike,
 					numComments: storyDetail[0].numberComment,
 					timestamp: storyDetail[0].timestamp,
+					storyDetail: storyDetail,
 				});
 			});
 
 		Firebase.firestore()
-			.collection("alumni")
+			.collection('alumni')
 			.doc(id)
-			.collection("comments")
-			.orderBy("timestamp", "asc")
+			.collection('comments')
+			.orderBy('timestamp', 'asc')
 			.onSnapshot((querySnapshot) => {
 				const comments = [];
 				const commentsId = [];
@@ -121,22 +115,22 @@ class Detail extends Component {
 					useremail: user.email,
 				});
 				Firebase.firestore()
-					.collection("users-data")
-					.where("email", "==", user.email)
+					.collection('users-data')
+					.where('email', '==', user.email)
 					.get()
 					.then((querySnapshot) => {
 						var admin = false;
 
 						querySnapshot.forEach(function (doc) {
 							if (doc.data()) {
-								admin = doc.data().permissions["admin"];
+								admin = doc.data().permissions['admin'];
 							}
 						});
 
 						this.setState({ isAdmin: admin, isLoading: false });
 					})
 					.catch(function (error) {
-						console.log("Error getting documents: ", error);
+						console.log('Error getting documents: ', error);
 						this.setState({ isLoading: false });
 					});
 			} else {
@@ -156,10 +150,10 @@ class Detail extends Component {
 
 			if (true) {
 				Firebase.firestore()
-					.collection("alumni")
+					.collection('alumni')
 					.doc(this.state.storyDetailId)
-					.collection("likes")
-					.orderBy("timestamp", "desc")
+					.collection('likes')
+					.orderBy('timestamp', 'desc')
 					.get()
 					.then((querySnapshot) => {
 						querySnapshot.forEach(function (doc) {
@@ -170,26 +164,26 @@ class Detail extends Component {
 
 						if (!userLikeCheck) {
 							Firebase.firestore()
-								.collection("alumni")
+								.collection('alumni')
 								.doc(that.state.storyDetailId)
 								.update({
 									numberLike: Firebase.firestore.FieldValue.increment(1),
 								});
 
-							Firebase.firestore().collection("alumni").doc(that.state.storyDetailId).collection("likes").add({
+							Firebase.firestore().collection('alumni').doc(that.state.storyDetailId).collection('likes').add({
 								email: useremail,
 								timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
 							});
 						} else {
-							alert("You have already liked the post!");
+							alert('You have already liked the post!');
 						}
 					})
 					.catch(function (error) {
-						console.log("Error getting documents: ", error);
+						console.log('Error getting documents: ', error);
 					});
 			}
 		} else {
-			alert("Login to Like/Comment on the Post!");
+			alert('Login to Like/Comment on the Post!');
 		}
 	};
 
@@ -200,16 +194,15 @@ class Detail extends Component {
 		if (this.state.isLogin) {
 			let userLikeCheck = false;
 			const useremail = this.state.useremail;
-			const that = this;
 
 			if (true) {
 				Firebase.firestore()
-					.collection("alumni")
+					.collection('alumni')
 					.doc(this.state.storyDetailId)
-					.collection("comments")
+					.collection('comments')
 					.doc(this.state.commentsId[a])
-					.collection("likes")
-					.orderBy("timestamp", "desc")
+					.collection('likes')
+					.orderBy('timestamp', 'desc')
 					.get()
 					.then((querySnapshot) => {
 						querySnapshot.forEach(function (doc) {
@@ -220,28 +213,28 @@ class Detail extends Component {
 
 						if (!userLikeCheck) {
 							Firebase.firestore()
-								.collection("alumni")
+								.collection('alumni')
 								.doc(this.state.storyDetailId)
-								.collection("comments")
+								.collection('comments')
 								.doc(this.state.commentsId[a])
 								.update({
 									numLikes: Firebase.firestore.FieldValue.increment(1),
 								});
 
-							Firebase.firestore().collection("alumni").doc(this.state.storyDetailId).collection("comments").doc(this.state.commentsId[a]).collection("likes").add({
+							Firebase.firestore().collection('alumni').doc(this.state.storyDetailId).collection('comments').doc(this.state.commentsId[a]).collection('likes').add({
 								email: useremail,
 								timestamp: Firebase.firestore.FieldValue.serverTimestamp(),
 							});
 						} else {
-							alert("You have already liked the post!");
+							alert('You have already liked the post!');
 						}
 					})
 					.catch(function (error) {
-						console.log("Error getting documents: ", error);
+						console.log('Error getting documents: ', error);
 					});
 			}
 		} else {
-			alert("Login to Like/Comment on the Post!");
+			alert('Login to Like/Comment on the Post!');
 		}
 	};
 
@@ -252,19 +245,19 @@ class Detail extends Component {
 		};
 	}
 
-	reply_form() {
-		if (this.state.reply_form === "1") {
+	reply_form = () => {
+		if (this.state.reply_form === '1') {
 			this.setState({
-				reply_form: "0",
+				reply_form: '0',
 			});
 		} else {
 			this.setState({
-				reply_form: "1",
+				reply_form: '1',
 			});
 		}
-	}
+	};
 
-	showDeleteModal(a) {
+	showDeleteModal = (a) => {
 		if (this.state.deleteModalShow) {
 			this.setState({
 				deleteModalShow: false,
@@ -275,40 +268,39 @@ class Detail extends Component {
 				commentID: this.state.commentsId[a],
 			});
 		}
-	}
+	};
 
-	deleteComment(e) {
+	deleteComment = (e) => {
 		e.preventDefault();
 
 		Firebase.firestore()
-			.collection("alumni")
+			.collection('alumni')
 			.doc(this.state.storyDetailId)
 			.update({
 				numberComment: Firebase.firestore.FieldValue.increment(-1),
 			});
 
 		Firebase.firestore()
-			.collection("alumni")
+			.collection('alumni')
 			.doc(this.state.storyDetailId)
-			.collection("comments")
+			.collection('comments')
 			.doc(this.state.commentID)
 			.delete()
 			.then(() => {
-				console.log("Document successfully deleted!");
+				console.log('Document successfully deleted!');
 			})
 			.catch((error) => {
-				console.error("Error removing document: ", error);
+				console.error('Error removing document: ', error);
 			});
 
-		this.setState({ afterCommentDeleteModalShow: true });
-		this.setState({ deleteModalShow: false });
-	}
+		this.setState({ afterCommentDeleteModalShow: true, deleteModalShow: false });
+	};
 
 	handleClose = () => {
 		this.setState({ modalShow: false, deleteModalShow: false, afterCommentDeleteModalShow: false });
 	};
 
-	enlargeImg(img) {
+	enlargeImg = (img) => {
 		if (this.state.modalShow === false) {
 			this.setState({
 				modalImg: img.src,
@@ -319,7 +311,7 @@ class Detail extends Component {
 				modalShow: false,
 			});
 		}
-	}
+	};
 
 	onChange = (e) => {
 		this.setState({
@@ -340,13 +332,13 @@ class Detail extends Component {
 			};
 
 			Firebase.firestore()
-				.collection("alumni")
+				.collection('alumni')
 				.doc(that.state.storyDetailId)
 				.update({
 					numberComment: Firebase.firestore.FieldValue.increment(1),
 				});
 
-			Firebase.firestore().collection("alumni").doc(that.state.storyDetailId).collection("comments").add({
+			Firebase.firestore().collection('alumni').doc(that.state.storyDetailId).collection('comments').add({
 				name: new_comment.username,
 				photoURL: new_comment.photo,
 				comment: new_comment.response,
@@ -356,13 +348,13 @@ class Detail extends Component {
 			});
 
 			this.setState({
-				error: "Your comment added!",
+				error: 'Your comment added!',
 				total_comments: this.state.total_comments + 1,
-				response: "",
+				response: '',
 			});
 			this.reply_form();
 		} else {
-			alert("Please Login to Comment");
+			alert('Please Login to Comment');
 		}
 	};
 
@@ -372,28 +364,28 @@ class Detail extends Component {
 		const checkAdmin = this.state.isAdmin ? true : false;
 		if (this.state.comments.length !== 0) {
 			return this.state.comments.map((project) => (
-				<div style={{"marginBottom": "20px"}}>
+				<div style={{ marginBottom: '20px' }}>
 					<Comment>
 						<Comment.Avatar src={project.photoURL ? `url(${project.photoURL})` : defaultImage} />
 						<Comment.Content>
 							{checkAdmin ? (
-								<span className="comment_cross_btn" onClick={this.showDeleteModal.bind(this, a++)}>
+								<span className='comment_cross_btn' onClick={this.showDeleteModal.bind(this, a++)}>
 									<a>
-										<Icon name="close" />
+										<Icon name='close' />
 									</a>
 								</span>
 							) : null}
 
 							<Comment.Author>{project.name}</Comment.Author>
 							<Comment.Metadata>
-								<TimeAgo date={project.timestamp !== null ? project.timestamp.toDate() : new Date()} minPeriod="5" />
+								<TimeAgo date={project.timestamp !== null ? project.timestamp.toDate() : new Date()} minPeriod='5' />
 
 								<Feed>
 									<Feed.Event>
 										<Feed.Content>
 											<Feed.Meta>
 												<Feed.Like onClick={this.addCommentLike.bind(this, b++, project.numLikes)}>
-													<Icon name="like" style={{'color': 'rgba(53, 133, 199, .85)'}} />
+													<Icon name='like' style={{ color: 'rgba(53, 133, 199, .85)' }} />
 													{project.numLikes}
 												</Feed.Like>
 											</Feed.Meta>
@@ -411,16 +403,16 @@ class Detail extends Component {
 
 	render() {
 		return (
-			<div className="alumni">
-				<Container className="alumni_detail" text style={{ marginTop: "1em" }}>
+			<div className='alumni'>
+				<Container className='alumni_detail' text style={{ marginTop: '1em' }}>
 					{this.state.isLoading && (
-						<div className="loader_center"  style={{'marginBottom': '15rem'}}>
-							<Spinner animation="border" variant="info" />
+						<div className='loader_center' style={{ marginBottom: '15rem' }}>
+							<Spinner animation='border' variant='info' />
 						</div>
 					)}
-					<span className="back_btn" onClick={() => history.push("/Alumni")}>
+					<span className='back_btn' onClick={() => history.push('/Alumni')}>
 						<a>
-							<Icon name="arrow alternate circle left outline" />
+							<Icon name='arrow alternate circle left outline' />
 						</a>
 					</span>
 					{!this.state.isLoading && (
@@ -428,38 +420,38 @@ class Detail extends Component {
 							<Feed>
 								<Feed.Event>
 									<Feed.Label>
-										<div className="profile_pic" style={{ backgroundImage: this.state.profileImage ? `url(${this.state.profileImage})` : `url(${require("./stu.jpeg")})` }}></div>
+										<div className='profile_pic' style={{ backgroundImage: this.state.profileImage ? `url(${this.state.profileImage})` : `url(${require('./stu.jpeg')})` }}></div>
 									</Feed.Label>
 
 									<Feed.Content>
 										<Feed.Summary>
 											<a>{this.state.name}</a>
 											<Feed.Date>
-												<TimeAgo date={this.state.timestamp.toDate()} minPeriod="5" />
+												<TimeAgo date={this.state.timestamp.toDate()} minPeriod='5' />
 											</Feed.Date>
 										</Feed.Summary>
 										{this.state.aimage1 && (
 											<Feed.Extra images>
 												<a>
-													<img Style={"transition : transform 0.25s ease !important"} src={this.state.aimage1} onClick={this.enlargeImg} />
+													<img Style={'transition : transform 0.25s ease !important'} src={this.state.aimage1} onClick={this.enlargeImg} />
 												</a>
 												<a>
-													<img Style={"transition : transform 0.25s ease !important"} src={this.state.aimage2} onClick={this.enlargeImg} />
+													<img Style={'transition : transform 0.25s ease !important'} src={this.state.aimage2} onClick={this.enlargeImg} />
 												</a>
 												<a>
-													<img Style={"transition : transform 0.25s ease !important"} src={this.state.aimage3} onClick={this.enlargeImg} />
+													<img Style={'transition : transform 0.25s ease !important'} src={this.state.aimage3} onClick={this.enlargeImg} />
 												</a>
 											</Feed.Extra>
 										)}
 										<Feed.Extra text>{this.state.content}</Feed.Extra>
 										<Feed.Meta>
-											<Feed.Like style={{'color': 'rgba(53, 133, 199, .85)'}} onClick={this.addPostLike.bind(this, "a++", this.state.numLikes)}>
-												<Icon name="like" />
+											<Feed.Like style={{ color: 'rgba(53, 133, 199, .85)' }} onClick={this.addPostLike.bind(this, 'a++', this.state.numLikes)}>
+												<Icon name='like' />
 												{this.state.numLikes}
 											</Feed.Like>
-											<span className="comment-box" onClick={this.reply_form}>
+											<span className='comment-box' onClick={this.reply_form}>
 												<Feed.Like>
-													<Icon name="comment" style={{'color': 'rgba(53, 133, 199, .85)'}} />
+													<Icon name='comment' style={{ color: 'rgba(53, 133, 199, .85)' }} />
 													{this.state.numComments}
 												</Feed.Like>
 											</span>
@@ -469,29 +461,29 @@ class Detail extends Component {
 							</Feed>
 
 							{this.state.error && (
-								<span style={{ color: "green", marginLeft: "40px" }}>
-									<Icon name="check circle" />
+								<span style={{ color: 'green', marginLeft: '40px' }}>
+									<Icon name='check circle' />
 									{this.state.error}
 								</span>
 							)}
 
-							<Accordion defaultActiveKey="0">
+							<Accordion defaultActiveKey='0'>
 								<Accordion.Collapse eventKey={this.state.reply_form}>
 									<form>
-										<div className="form-group">
+										<div className='form-group'>
 											<textarea
-												className="form-control"
-												type="text"
-												name="response"
-												placeholder="Your comment..."
+												className='form-control'
+												type='text'
+												name='response'
+												placeholder='Your comment...'
 												onChange={this.onChange}
 												value={this.state.response}
-												rows="5"
+												rows='5'
 												required
 											/>
 										</div>
 
-										<Button type="submit" className="btn btn-primary" onClick={this.onSubmit} disabled={this.state.response ? false : true}>
+										<Button type='submit' className='btn btn-primary' onClick={this.onSubmit} disabled={this.state.response ? false : true}>
 											Submit
 										</Button>
 									</form>
@@ -503,33 +495,24 @@ class Detail extends Component {
 					)}
 				</Container>
 
-				<Modal show={this.state.modalShow} size="lg" aria-labelledby="contained-modal-title-vcenter" onHide={() => this.handleClose()} centered className="alumni">
+				<Modal show={this.state.modalShow} size='lg' aria-labelledby='contained-modal-title-vcenter' onHide={() => this.handleClose()} centered className='alumni'>
 					<Modal.Body>
 						<img src={this.state.modalImg} />
 					</Modal.Body>
 				</Modal>
 
-				<Modal show={this.state.afterCommentDeleteModalShow} size="sm" aria-labelledby="contained-modal-title-vcenter" onHide={() => this.handleClose()} className="deleteModal" centered>
-					<Modal.Header style={{ padding: "10px" }} closeButton>
-						<Modal.Title id="contained-modal-title-vcenter">Comment Deleted</Modal.Title>
+				<Modal show={this.state.afterCommentDeleteModalShow} size='sm' aria-labelledby='contained-modal-title-vcenter' onHide={() => this.handleClose()} className='deleteModal' centered>
+					<Modal.Header style={{ padding: '10px' }} closeButton>
+						<Modal.Title id='contained-modal-title-vcenter'>Comment Deleted</Modal.Title>
 					</Modal.Header>
-					{/* <Modal.Footer style={{ padding: "0" }}>
-            <Button
-              variant="link"
-              style={{ color: "#1f88be" }}
-              onClick={this.deleteComment}
-            >
-              Delete
-            </Button>
-          </Modal.Footer> */}
 				</Modal>
 
-				<Modal show={this.state.deleteModalShow} size="sm" aria-labelledby="contained-modal-title-vcenter" onHide={() => this.handleClose()} className="deleteModal" centered>
-					<Modal.Header style={{ padding: "10px" }} closeButton>
-						<Modal.Title id="contained-modal-title-vcenter">Sure to delete ?</Modal.Title>
+				<Modal show={this.state.deleteModalShow} size='sm' aria-labelledby='contained-modal-title-vcenter' onHide={() => this.handleClose()} className='deleteModal' centered>
+					<Modal.Header style={{ padding: '10px' }} closeButton>
+						<Modal.Title id='contained-modal-title-vcenter'>Sure to delete ?</Modal.Title>
 					</Modal.Header>
-					<Modal.Footer style={{ padding: "0" }}>
-						<Button variant="link" style={{ color: "#1f88be" }} onClick={this.deleteComment}>
+					<Modal.Footer style={{ padding: '0' }}>
+						<Button variant='link' style={{ color: '#1f88be' }} onClick={this.deleteComment}>
 							Delete
 						</Button>
 					</Modal.Footer>
