@@ -203,9 +203,9 @@ export class Navigation extends Component {
 						</Nav.Link>
 
 						<NavDropdown className='nav_hide' title='Mess Portal' id='basic-nav-dropdown'>
-							<NavDropdown.Item href='/mess-extras'>Mess Extras</NavDropdown.Item>
 							<NavDropdown.Item href='/time-table'>Time Table</NavDropdown.Item>
-							<NavDropdown.Item href='/BillHistory'>Bills & History</NavDropdown.Item>
+							<NavDropdown.Item href='/mess-extras'>Not Working</NavDropdown.Item>
+							<NavDropdown.Item href='/BillHistory'>Not Working</NavDropdown.Item>
 						</NavDropdown>
 
 						<NavDropdown className='nav_hide' title='Facilities' id='basic-nav-dropdown'>
