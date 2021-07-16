@@ -3,10 +3,6 @@ import { Container } from 'semantic-ui-react';
 import './tv.css';
 
 class Reading extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	componentDidMount() {
 		document.querySelector('#navbar').style.cssText = 'background-color: rgba(0, 0, 0, 0) !important; box-shadow: none ';
 		document.querySelector('#tv').style.cssText = 'background-image: linear-gradient(to bottom right, rgb(243, 55, 8), rgb(252, 142, 53)) !important; ';

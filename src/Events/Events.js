@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { Segment, List, Divider, Icon, Container } from "semantic-ui-react";
-import { Accordion, Card, Button } from "react-bootstrap";
-import "./Clubs.css";
-import "./background.css";
-import { DanceClub } from "./dance";
-import { EC } from "./ec";
+import React, { Component } from 'react';
+import { Divider, Icon, Container } from 'semantic-ui-react';
+import { Accordion, Card, Button } from 'react-bootstrap';
+import './Clubs.css';
+import './background.css';
+import { DanceClub } from './dance';
+import { EC } from './ec';
 
 class BillHistory extends Component {
 	constructor(props) {
@@ -22,11 +22,11 @@ class BillHistory extends Component {
 	}
 
 	render() {
-		const clubs = ["Event1", "Event2", "Event3", "Event4"];
+		const clubs = ['Event1', 'Event2', 'Event3', 'Event4'];
 		return (
-			<div className="clubs">
-				<div class="area">
-					<ul class="circles">
+			<div className='clubs'>
+				<div class='area'>
+					<ul class='circles'>
 						<li></li>
 						<li></li>
 						<li></li>
@@ -40,45 +40,45 @@ class BillHistory extends Component {
 					</ul>
 				</div>
 
-				<div class="sidebar_clubs">
+				<div class='sidebar_clubs'>
 					{clubs.map((club, i) => {
 						return (
-							<a href="" onClick={() => this.change(i + 1)} className={this.state.activeKey - 1 === i && "active"}>
+							<a href='' onClick={() => this.change(i + 1)} className={this.state.activeKey - 1 === i && 'active'}>
 								{club}
 							</a>
 						);
 					})}
 				</div>
 
-				<Container className="clubs_cont" text>
-					<Accordion className="options_accordion" defaultActiveKey="0">
+				<Container className='clubs_cont' text>
+					<Accordion className='options_accordion' defaultActiveKey='0'>
 						<Card>
 							<Card.Header>
 								{/* <span className='mat'> */}
-								<span className="clubs_head">Events List</span>
+								<span className='clubs_head'>Events List</span>
 								{/* </span> */}
 								<Accordion.Toggle
-									id="clubs_names"
+									id='clubs_names'
 									onClick={function () {
-										if (document.getElementById("clubs_names").style.transform !== "rotate(-90deg)") {
-											document.getElementById("clubs_names").style = "transform: rotate(-90deg)";
+										if (document.getElementById('clubs_names').style.transform !== 'rotate(-90deg)') {
+											document.getElementById('clubs_names').style = 'transform: rotate(-90deg)';
 										} else {
-											document.getElementById("clubs_names").style = "transform: rotate(0deg)";
+											document.getElementById('clubs_names').style = 'transform: rotate(0deg)';
 										}
 									}}
 									as={Button}
-									variant="link"
-									eventKey="1"
+									variant='link'
+									eventKey='1'
 								>
-									<Icon name="chevron circle left" />
+									<Icon name='chevron circle left' />
 								</Accordion.Toggle>
 							</Card.Header>
-							<Accordion.Collapse eventKey="1">
+							<Accordion.Collapse eventKey='1'>
 								<Card.Body>
 									{clubs.map((club, i) => {
 										return (
 											<>
-												<div className="names" style={{ color: `${i + 1 === this.state.activeKey ? "#077bc9" : ""}` }} onClick={() => this.change(i + 1)}>
+												<div className='names' style={{ color: `${i + 1 === this.state.activeKey ? '#077bc9' : ''}` }} onClick={() => this.change(i + 1)}>
 													{club}
 												</div>
 												<Divider />
@@ -89,7 +89,7 @@ class BillHistory extends Component {
 							</Accordion.Collapse>
 						</Card>
 					</Accordion>
-					<div className="clubs_body">
+					<div className='clubs_body'>
 						{this.state.activeKey === 1 ? (
 							<DanceClub />
 						) : this.state.activeKey === 2 ? (
@@ -99,13 +99,12 @@ class BillHistory extends Component {
 						) : this.state.activeKey === 4 ? (
 							<EC />
 						) : this.state.activeKey === 5 ? (
-							""
+							''
 						) : (
-							""
+							''
 						)}
 					</div>
 				</Container>
-
 			</div>
 		);
 	}

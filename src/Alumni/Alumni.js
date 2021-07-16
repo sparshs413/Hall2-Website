@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Feed, Button, Icon, Container, Header } from 'semantic-ui-react';
+import { Feed, Button, Icon, Container } from 'semantic-ui-react';
 import { Modal, Spinner } from 'react-bootstrap';
 import history from './../history';
 import './Alumni.css';

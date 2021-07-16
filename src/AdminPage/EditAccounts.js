@@ -1,39 +1,36 @@
-import React, { Component } from "react";
-import "./EditAccounts.css";
-import { Table, Spinner, Modal } from "react-bootstrap";
-import { Container, Button, Input } from "semantic-ui-react";
-import Firebase from "../Firebase";
+import React, { Component } from 'react';
+import './EditAccounts.css';
+import { Table, Spinner, Modal } from 'react-bootstrap';
+import { Container, Button, Input } from 'semantic-ui-react';
+import Firebase from '../Firebase';
 class FormTimeTable extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			adminUsers: [],
 			nonAdminUsers: [],
-			addAdminEmail: "",
+			addAdminEmail: '',
 			adminPermission: false,
 			messAdminPermission: false,
 			isLoading: true,
 			smShow: false,
-			error: "",
+			error: '',
 		};
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.addClick = this.addClick.bind(this);
 	}
 
 	componentDidMount() {
 		const adminUsers = [];
 		const nonAdminUsers = [];
 		Firebase.firestore()
-			.collection("users-data")
+			.collection('users-data')
 			.get()
 			.then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					if (doc.data().permissions["admin"] || doc.data().permissions["messAdmin"]) {
+					if (doc.data().permissions['admin'] || doc.data().permissions['messAdmin']) {
 						adminUsers.push(doc.data());
 					} else {
 						nonAdminUsers.push(doc.data().email);
 					}
-					// console.log(adminUsers);
 				});
 
 				this.setState({
@@ -65,10 +62,9 @@ class FormTimeTable extends Component {
 		});
 	};
 
-	addClick() {
-		// console.log(this.state.adminUsers);
-		if (this.state.addAdminEmail === "") {
-			this.setState({ error: "Add email" });
+	addClick = () => {
+		if (this.state.addAdminEmail === '') {
+			this.setState({ error: 'Add email' });
 			return;
 		}
 		this.state.nonAdminUsers.forEach((user) => {
@@ -85,59 +81,57 @@ class FormTimeTable extends Component {
 					demoVar.push(demoAdmin);
 					this.setState({
 						adminUsers: demoVar,
-						addAdminEmail: "",
+						addAdminEmail: '',
 						adminPermission: false,
 						messAdminPermission: false,
 					});
 				} else {
-					this.setState({ error: "Tick atleast one checkbox" });
+					this.setState({ error: 'Tick atleast one checkbox' });
 				}
 			} else {
 				this.setState({
-					error: "Input user is not registered or the user has already been given the permission.",
+					error: 'Input user is not registered or the user has already been given the permission.',
 				});
 			}
 		});
-	}
+	};
 
-	handleSubmit(event) {
+	handleSubmit = (event) => {
 		event.preventDefault();
 		if (this.state.adminUsers.length !== 0) {
 			this.state.adminUsers.forEach((data) => {
 				Firebase.firestore()
-					.collection("users-data")
-					.where("email", "==", data.email)
+					.collection('users-data')
+					.where('email', '==', data.email)
 					.get()
 					.then((querySnapshot) => {
 						querySnapshot.forEach((doc) => {
-							// doc.data() is never undefined for query doc snapshots
-							console.log(doc.id, " => ", doc.data());
 							Firebase.firestore()
-								.collection("users-data")
+								.collection('users-data')
 								.doc(doc.id)
 								.update({
 									permissions: {
-										admin: data.permissions["admin"],
-										messAdmin: data.permissions["messAdmin"],
+										admin: data.permissions['admin'],
+										messAdmin: data.permissions['messAdmin'],
 									},
 								})
 								.then(() => {
-									console.log("Document successfully updated!");
+									console.log('Document successfully updated!');
 								})
 								.catch((error) => {
 									// The document probably doesn't exist.
-									console.error("Error updating document: ", error);
+									console.error('Error updating document: ', error);
 								});
 						});
 					})
 					.catch((error) => {
-						console.log("Error getting documents: ", error);
+						console.log('Error getting documents: ', error);
 					});
 			});
 		}
 		this.setState({ smShow: true });
 		setTimeout(() => this.setState({ smShow: false }), 1300);
-	}
+	};
 
 	renderUI() {
 		if (this.state.adminUsers.length !== 0) {
@@ -148,12 +142,12 @@ class FormTimeTable extends Component {
 					<td>{data.email}</td>
 					<td>
 						<form>
-							<input checked={data.permissions["admin"]} onChange={(e) => this.updateAdminCheckBoxes(e, a++, "admin")} type="checkbox" />
+							<input checked={data.permissions['admin']} onChange={(e) => this.updateAdminCheckBoxes(e, a++, 'admin')} type='checkbox' />
 						</form>
 					</td>
 					<td>
 						<form>
-							<input checked={data.permissions["messAdmin"]} type="checkbox" onChange={(e) => this.updateAdminCheckBoxes(e, b++, "messAdmin")} />
+							<input checked={data.permissions['messAdmin']} type='checkbox' onChange={(e) => this.updateAdminCheckBoxes(e, b++, 'messAdmin')} />
 						</form>
 					</td>
 				</tr>
@@ -163,15 +157,15 @@ class FormTimeTable extends Component {
 
 	render() {
 		return (
-			<div className="EditAcc">
-				<Container className="timetable timetableform " text>
+			<div className='EditAcc'>
+				<Container className='timetable timetableform ' text>
 					<h3>
 						Edit accounts permissions
-						<Button primary floated="right" className="submit_menu" onClick={this.handleSubmit}>
+						<Button primary floated='right' className='submit_menu' onClick={this.handleSubmit}>
 							Submit
 						</Button>
 					</h3>
-					<Table responsive striped bordered hover className="form">
+					<Table responsive striped bordered hover className='form'>
 						<thead>
 							<tr>
 								<th>Email</th>
@@ -181,48 +175,48 @@ class FormTimeTable extends Component {
 						</thead>
 						<tbody>
 							{this.state.isLoading ? (
-								<div className="loader_center">
-									<Spinner animation="border" variant="info" />
+								<div className='loader_center'>
+									<Spinner animation='border' variant='info' />
 								</div>
 							) : (
 								<>
 									{this.renderUI()}
 
 									<tr>
-										<td colSpan="3" className="heading">
-											<div className="heading">Make other account admin</div>
+										<td colSpan='3' className='heading'>
+											<div className='heading'>Make other account admin</div>
 										</td>
 									</tr>
-									<tr className="add_admin">
+									<tr className='add_admin'>
 										<td>
-											<span className="label">Existing User Email</span>
-											<Input iconPosition="left" className="admin_input" value={this.state.addAdminEmail} placeholder="Email" onChange={this.handleChange} />
+											<span className='label'>Existing User Email</span>
+											<Input iconPosition='left' className='admin_input' value={this.state.addAdminEmail} placeholder='Email' onChange={this.handleChange} />
 										</td>
 										<td>
-											<input checked={this.state.adminPermission} onChange={this.checkBoxChange} name="adminPermission" type="checkbox" />
+											<input checked={this.state.adminPermission} onChange={this.checkBoxChange} name='adminPermission' type='checkbox' />
 										</td>
 										<td>
-											<input checked={this.state.messAdminPermission} name="messAdminPermission" onChange={this.checkBoxChange} type="checkbox" />
+											<input checked={this.state.messAdminPermission} name='messAdminPermission' onChange={this.checkBoxChange} type='checkbox' />
 										</td>
 									</tr>
 								</>
 							)}
 						</tbody>
 					</Table>
-					<span className="error">{this.state.error}</span>
-					<input type="button" className="addbtn" value="+" onClick={this.addClick} />
+					<span className='error'>{this.state.error}</span>
+					<input type='button' className='addbtn' value='+' onClick={this.addClick} />
 				</Container>
 
 				<Modal
-					size="sm"
-					style={{ backgroundColor: "transparent" }}
+					size='sm'
+					style={{ backgroundColor: 'transparent' }}
 					show={this.state.smShow}
-					className="lf-modal"
+					className='lf-modal'
 					onHide={() => this.handleClose()}
-					aria-labelledby="example-modal-sizes-title-sm"
+					aria-labelledby='example-modal-sizes-title-sm'
 				>
 					<Modal.Header closeButton>
-						<Modal.Title id="example-modal-sizes-title-sm">Changed Successfully</Modal.Title>
+						<Modal.Title id='example-modal-sizes-title-sm'>Changed Successfully</Modal.Title>
 					</Modal.Header>
 				</Modal>
 			</div>

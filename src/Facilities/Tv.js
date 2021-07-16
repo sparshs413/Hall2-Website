@@ -3,10 +3,6 @@ import { Container } from 'semantic-ui-react';
 import './tv.css';
 
 class Tv extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	componentDidMount() {
 		document.querySelector('#navbar').style.cssText = 'background-color: rgba(0, 0, 0, 0) !important; box-shadow: none ';
 

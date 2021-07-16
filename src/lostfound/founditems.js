@@ -1,11 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import "./lostitems.css";
-import PropTypes from "prop-types";
-import { Button, Spinner } from "react-bootstrap";
-import history from "./../history";
-import firebase from "../Firebase";
-import { Modal } from "react-bootstrap";
+import React, { Component } from 'react';
+import './lostitems.css';
+import PropTypes from 'prop-types';
+import { Button, Spinner } from 'react-bootstrap';
+import history from './../history';
+import firebase from '../Firebase';
+import { Modal } from 'react-bootstrap';
 
 export class foundItems extends Component {
 	static propTypes = {
@@ -18,15 +17,15 @@ export class foundItems extends Component {
 			items: [],
 			Matches: [],
 			show: false,
-			email: "",
-			deleteid: "",
-			deleteemail: "",
-			error: "",
+			email: '',
+			deleteid: '',
+			deleteemail: '',
+			error: '',
 			isAdmin: false,
 			isLoading: true,
 			isLoadMore: false,
 			hideLoadMore: false,
-			last: ''
+			last: '',
 		};
 
 		this.componentDidMount = this.componentDidMount.bind(this);
@@ -38,22 +37,22 @@ export class foundItems extends Component {
 				this.setState({ isLogin: true });
 				firebase
 					.firestore()
-					.collection("users-data")
-					.where("email", "==", user.email)
+					.collection('users-data')
+					.where('email', '==', user.email)
 					.get()
 					.then((querySnapshot) => {
 						var admin = false;
 
 						querySnapshot.forEach(function (doc) {
 							if (doc.data()) {
-								admin = doc.data().permissions["admin"];
+								admin = doc.data().permissions['admin'];
 							}
 						});
 
 						this.setState({ isAdmin: admin, isLoading: false });
 					})
 					.catch(function (error) {
-						console.log("Error getting documents: ", error);
+						console.log('Error getting documents: ', error);
 						this.setState({ isLoading: false });
 					});
 			} else {
@@ -68,8 +67,8 @@ export class foundItems extends Component {
 		this.authListener();
 		firebase
 			.firestore()
-			.collection("users")
-			.orderBy("timestamp", "desc")
+			.collection('users')
+			.orderBy('timestamp', 'desc')
 			.limit(10)
 			.get()
 			.then((querySnapshot) => {
@@ -88,49 +87,45 @@ export class foundItems extends Component {
 				this.setState({ items: items, isLoading: false, isLoadMore: false });
 			})
 			.catch(function (error) {
-				console.log("Error getting documents: ", error);
+				console.log('Error getting documents: ', error);
 				this.setState({ isLoading: false, isLoadMore: false });
 			});
 	}
 
-
 	loadData = () => {
-
 		this.setState({ isLoadMore: true });
 		var lastTime = '';
 		firebase
-		.firestore()
-		.collection("users")
-		.orderBy("timestamp", "desc")
-		.startAfter(this.state.last)
-		.limit(10)
-		.get()
-		.then((querySnapshot) => {
-			var Matches = this.state.Matches;
-			var items = this.state.items;
+			.firestore()
+			.collection('users')
+			.orderBy('timestamp', 'desc')
+			.startAfter(this.state.last)
+			.limit(10)
+			.get()
+			.then((querySnapshot) => {
+				var Matches = this.state.Matches;
+				var items = this.state.items;
 
-			querySnapshot.forEach( (doc) => {
-				if (doc.data().option) {
-					if(!items.includes(doc.id)){
-						Matches.push(doc.data());
-						items.push(doc.id);
+				querySnapshot.forEach((doc) => {
+					if (doc.data().option) {
+						if (!items.includes(doc.id)) {
+							Matches.push(doc.data());
+							items.push(doc.id);
+						} else {
+							this.setState({ hideLoadMore: true });
+						}
 					}
-					else{
-						this.setState({hideLoadMore: true})
-					}
-				}
-				lastTime = doc.data().timestamp;
+					lastTime = doc.data().timestamp;
+				});
+
+				this.setState({ Matches: Matches, last: lastTime });
+				this.setState({ items: items, isLoading: false, isLoadMore: false });
+			})
+			.catch((error) => {
+				console.log('Error getting documents: ', error);
+				this.setState({ isLoading: false, isLoadMore: false });
 			});
-
-			this.setState({ Matches: Matches, last: lastTime });
-			this.setState({ items: items, isLoading: false, isLoadMore: false });
-		})
-		.catch((error) => {
-			console.log("Error getting documents: ", error);
-			this.setState({ isLoading: false, isLoadMore: false });
-		});
-}
-
+	};
 
 	onChange = (e) =>
 		this.setState({
@@ -138,7 +133,7 @@ export class foundItems extends Component {
 		});
 
 	handleClose = () => {
-		this.setState({ show: false, error: "" });
+		this.setState({ show: false, error: '' });
 	};
 	handleShow = (email, id) => {
 		this.setState({ show: true, deleteid: id, deleteemail: email });
@@ -146,23 +141,23 @@ export class foundItems extends Component {
 
 	message = () => {
 		const { error } = this.state;
-		if (error === "success") {
+		if (error === 'success') {
 			return (
-				<div className="greenfont">
-					<i className="fa fa-check-circle"> </i>
+				<div className='greenfont'>
+					<i className='fa fa-check-circle'> </i>
 					&nbsp; Deleted successfully
 				</div>
 			);
 		} else {
-			return <span className="redfont">{error}</span>;
+			return <span className='redfont'>{error}</span>;
 		}
 	};
 
 	onSubmit = (e) => {
 		e.preventDefault();
-		const { email, deleteid, deleteemail, error, isAdmin } = this.state;
+		let { email, deleteid, deleteemail, isAdmin } = this.state;
 
-		var docRef = firebase.firestore().collection("users").doc(deleteid);
+		let docRef = firebase.firestore().collection('users').doc(deleteid);
 
 		docRef
 			.get()
@@ -170,32 +165,32 @@ export class foundItems extends Component {
 				if (doc.exists) {
 					email = doc.data().email;
 				} else {
-					console.log("No such document!");
+					console.log('No such document!');
 				}
 			})
 			.catch(function (error) {
-				console.log("Error getting document:", error);
+				console.log('Error getting document:', error);
 			});
 
-		if (email === deleteemail || email === "rancho" || isAdmin) {
-			var db = firebase.firestore();
+		if (email === deleteemail || email === 'rancho' || isAdmin) {
+			let db = firebase.firestore();
 
-			db.collection("users")
+			db.collection('users')
 				.doc(deleteid)
 				.delete()
 				.then(function () {
-					console.log("Document successfully deleted!");
+					console.log('Document successfully deleted!');
 					window.location.reload(false);
 				})
 				.catch(function (error) {
-					console.error("Error removing document: ", error);
+					console.error('Error removing document: ', error);
 				});
 
 			this.setState({
-				email: "",
-				deleteid: "",
-				deleteemail: "",
-				error: "success",
+				email: '',
+				deleteid: '',
+				deleteemail: '',
+				error: 'success',
 				show: true,
 			});
 		} else {
@@ -209,24 +204,27 @@ export class foundItems extends Component {
 		if (this.state.Matches.length !== 0) {
 			let b = 0;
 			return this.state.Matches.map((project) => (
-				<div class="card-body">
+				<div class='card-body'>
 					<button
 						onClick={this.handleShow.bind(this, project.email /*lostitem.id, lostitem.email*/, this.state.items[b++])}
-						className="close"
-						data-toggle="modal"
-						data-target="#myModal"
-						aria-label="close"
+						className='close'
+						data-toggle='modal'
+						data-target='#myModal'
+						aria-label='close'
 					>
-						<span aria-hidden="true close">&times;</span>
+						<span>&times;</span>
 					</button>
 
-					<h4 class="card-title">{project.what}</h4>
-					<p class="card-text">
-						<span className="info">Place and time: </span> {project.where} , {project.when} <br />
-						<span className="info" style={{'whiteSpace': 'pre-wrap'}}>Message: </span> {project.message} <br />
-						<span className="contact"> Contact to - </span> {project.name}
+					<h4 class='card-title'>{project.what}</h4>
+					<p class='card-text'>
+						<span className='info'>Place and time: </span> {project.where} , {project.when} <br />
+						<span className='info' style={{ whiteSpace: 'pre-wrap' }}>
+							Message:{' '}
+						</span>{' '}
+						{project.message} <br />
+						<span className='contact'> Contact to - </span> {project.name}
 						<br />
-						<span className="contact"> Phone no. </span> {project.number}
+						<span className='contact'> Phone no. </span> {project.number}
 					</p>
 					<hr />
 					<Modal show={this.state.show} onHide={this.handleClose}>
@@ -237,14 +235,14 @@ export class foundItems extends Component {
 							<Modal.Body>
 								Enter email (as filled in form) <br />
 								{this.message()}
-								<input className="form-control" type="email" name="email" onChange={this.onChange} placeholder="required" value={this.state.email} required />
+								<input className='form-control' type='email' name='email' onChange={this.onChange} placeholder='required' value={this.state.email} required />
 							</Modal.Body>
 						)}
 						<Modal.Footer>
-							<Button variant="danger" onClick={this.handleClose}>
+							<Button variant='danger' onClick={this.handleClose}>
 								Close
 							</Button>
-							<Button variant="primary" onClick={this.onSubmit}>
+							<Button variant='primary' onClick={this.onSubmit}>
 								Delete it
 							</Button>
 						</Modal.Footer>
@@ -256,31 +254,26 @@ export class foundItems extends Component {
 
 	render() {
 		return (
-			<div className="col-sm-9 col-lg-6 m-auto lostfound">
-				<div className="card card-body mt-4 mb-4 ">
-					<div className="btn-group">
-						<Button variant="btn btn-primary top-buttons" onClick={() => history.push("/LostItems")}>
+			<div className='col-sm-9 col-lg-6 m-auto lostfound'>
+				<div className='card card-body mt-4 mb-4 '>
+					<div className='btn-group'>
+						<Button variant='btn btn-primary top-buttons' onClick={() => history.push('/LostItems')}>
 							all lost items
 						</Button>
-						<Button variant="btn top-buttons shadow-none py-1 px-3 disabled activated" onClick={() => history.push("/FoundItems")}>
+						<Button variant='btn top-buttons shadow-none py-1 px-3 disabled activated' onClick={() => history.push('/FoundItems')}>
 							all found items
 						</Button>
 					</div>
 					{this.state.isLoading ? (
-						<div className="loader_center" style={{'marginBottom': '20rem'}}>
-							<Spinner animation="border" variant="info" />
+						<div className='loader_center' style={{ marginBottom: '20rem' }}>
+							<Spinner animation='border' variant='info' />
 						</div>
 					) : (
 						<>
 							{this.testFunc()}
-						
-							<div className='announce_load_more' style={this.state.hideLoadMore ? {'display': 'none'} : {'display': 'block'}}>
-								<Button 
-									disabled={this.state.isLoadMore} 
-									loading={this.state.isLoadMore} 
-									color="linkedin" 
-									onClick={this.loadData}
-								>
+
+							<div className='announce_load_more' style={this.state.hideLoadMore ? { display: 'none' } : { display: 'block' }}>
+								<Button disabled={this.state.isLoadMore} loading={this.state.isLoadMore} color='linkedin' onClick={this.loadData}>
 									Load More
 								</Button>
 							</div>
@@ -292,5 +285,4 @@ export class foundItems extends Component {
 	}
 }
 
-
-export default (foundItems);
+export default foundItems;
